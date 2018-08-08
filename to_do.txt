@@ -1,0 +1,32 @@
+***Input cells***
+
+Would like to be able selectively to hide input code cells. Optimally, would have a button which toggles a hide option, which should be preset to “hidden” for some cells and “visible” for other cells.
+
+
+***Accordion widget***
+
+We use accordion (dropdown) widgets to display extra proofs. A function is used to read latex from a txt file and create an accordion widget, rendering the latex within the widget, e.g.
+
+dropdown_math('Derivatives in more detail', file = r'lin_reg_der.txt')
+
+There are some issues with this:
+
+- Math inside of the widget is not centered even when using the {align} environment. This is because when MathJax renders the latex, it places the CSS styling feature .div.output_area.MathJax_Display{text-align: left !important;} which messes things up. I’ve tried to fix this by running an HTML script to change the CSS through the notebook but haven’t managed to make it work.
+
+- It would be great if users can directly edit the contents of the accordion from the notebook instead of having to write latex on a different txt file. This might be too difficult to make however and is an “optimal” feature.
+
+- Centering the notebook outputs using an HTML script (to have plots and tables centered) causes the accordion to be centered and shrieked to wrap its title. It would be great if we can fix this (or use a better way to center the outputs).
+
+
+***MathJax and fonts***
+
+To my understanding, Jupyter uses MathJax to render latex. Current issues with this are:
+
+- Rendered latex font/size looks different (for the worse) from the standard Latex font and we would like to use the standard latex font instead.
+
+- It seems that MathJax (without any modifications) doesn’t support some basic latex environments like {center} and commands like \centering. It would be great if we can fix this and also find a way to include additional latex packages (as we usually do with \usepackage{…}). Perhaps there is a straightforward fix but I haven’t had the time to figure it out.
+
+***Video/Lecture slide widget***
+
+We would like to have a widget at the top of the notebook, which displays (i) a video on one side (ii) lecture notes on the other side, and (iii) clickable timestamps at the bottom (which jump to the selected time on the video), like the one in videolectures.net: http://videolectures.net/gpip06_mackay_gpb/?q=mackay
+

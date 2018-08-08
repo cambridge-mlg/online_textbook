@@ -1,0 +1,32 @@
+Starting from the expression
+
+\begin{align}
+\mathcal{L} &= \sum_{n = 1}^N \sum_{k = 1}^K y_{nk} \text{log}~s_{nk},
+\end{align}
+
+and taking the derivative w.r.t. $\mathbf{w}_j$ we see:
+
+
+\begin{align}
+\frac{\partial \mathcal{L}}{\partial \mathbf{w}_j} &= \sum_{n = 1}^N\sum_{k = 1}^K y_{nk} \frac{1}{s_{nk}} \frac{\partial s_{nk}}{\partial \mathbf{w}_j} = \sum_{n = 1}^N\sum_{k = 1}^K y_{nk} \frac{1}{s_{nk}} \frac{\partial s_{nk}}{\partial a_{nj}} \frac{\partial a_{nj}}{\mathbf{w}_j}\\
+~\\
+&= \sum_{n = 1}^N\sum_{k = 1}^K y_{nk} (I_{kj} - s_{nj}) \mathbf{x}_n\\
+~\\
+\end{align}
+
+where we have used the expression
+
+\begin{align}
+\frac{\partial s_{nk}}{ \partial a_{nj}} = s_{nk}(I_{kj} - s_{nj}).
+\end{align}
+
+Then considering that for each $n$, $y_{nk}$ is $1$ for a single value of $k$ and $0$ for all other values of $k$:
+
+
+\begin{align}
+\frac{\partial \mathcal{L}}{\partial \mathbf{w}_j} &= \sum_{n = 1}^N\sum_{k = 1}^K y_{nk}(I_{kj} - s_{nj})\mathbf{x}_n\\
+~\\
+&= \sum_{n = 1}^N\sum_{k = 1}^K (y_{nj} - s_{nj})\mathbf{x}_n\\
+\end{align}
+
+arriving at the final result.

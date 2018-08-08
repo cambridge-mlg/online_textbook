@@ -1,0 +1,10 @@
+Since $p(x|\lambda)$ is a probability distribution in $x$, it must be normalized:
+$$\\$$
+$$
+\int^{x_{max}}_{x_{min}} p(x|\lambda) dx = \frac{1}{Z(\lambda)}\int^{x_{max}}_{x_{min}} \text{exp}\bigg(-\frac{x}{\lambda}\bigg) dx = 1\\
+$$
+$$\\$$
+$$
+\implies Z(\lambda) = \int^{x_{max}}_{x_{min}} \text{exp}\bigg(-\frac{x}{\lambda}\bigg) dx = \lambda \bigg[\text{exp}\bigg(-\frac{x_{min}}{\lambda}\bigg) - \text{exp}\bigg(-\frac{x_{max}}{\lambda}\bigg) \bigg]\\
+$$
+$$\\$$
