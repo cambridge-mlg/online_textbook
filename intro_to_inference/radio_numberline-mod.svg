@@ -25,7 +25,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -42,14 +42,14 @@
      inkscape:window-height="1000"
      id="namedview162"
      showgrid="false"
-     inkscape:zoom="0.98412698"
-     inkscape:cx="348.71022"
+     inkscape:zoom="0.69588286"
+     inkscape:cx="172.9199"
      inkscape:cy="88.185484"
      inkscape:window-x="91"
      inkscape:window-y="5"
      inkscape:window-maximized="0"
-     inkscape:current-layer="matplotlib.axis_1"
-     showguides="true"
+     inkscape:current-layer="figure_1"
+     showguides="false"
      inkscape:guide-bbox="true">
     <sodipodi:guide
        position="100.39355,99.37742"
@@ -699,14 +699,14 @@
     </g>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12px;line-height:125%;font-family:times;-inkscape-font-specification:times;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:12px;line-height:125%;font-family:Arial;-inkscape-font-specification:Arial;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;"
        x="233.73138"
        y="-24.511406"
        id="text4392"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan4394"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:times;-inkscape-font-specification:times;stroke-linecap:butt;stroke-linejoin:round"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial;stroke-linecap:butt;stroke-linejoin:round;"
          x="233.73138"
          y="-24.511406">detector</tspan></text>
   </g>

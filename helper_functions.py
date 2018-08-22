@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from IPython.display import Math, HTML, display, Latex, YouTubeVideo, clear_output
 import matplotlib
 import numpy as np
-
+import time
 
 def embed_video(url, labels = {}):
     
@@ -40,7 +40,7 @@ def toggle_code(title = "code"):
     <form action="javascript:code_toggle()"><input type="submit" value ='Show """ + title  + """'class='toggle_button'></form>
     """
     return string
-    
+
 def dropdown_math(title, text = None, file = None):
     out = widgets.Output()
     with out:
@@ -73,18 +73,14 @@ def set_notebook_preferences():
     display(HTML("""
     <style>
     .output {
-        font-family: "Georgia", serif;
+        font-family: ariel;
         align-items: normal;
         text-align: normal;
     }
     
     div.output_svg div { margin : auto; }
-
     .div.output_area.MathJax_Display{ text-align: center; }
-
-    div.text_cell_render { font-family: "Georgia", serif; }
-    
-    
+    div.text_cell_render { font-family: sans-serif; }
     
     details {
         margin: 20px 0px;
@@ -94,9 +90,7 @@ def set_notebook_preferences():
         border-color: black;
         border-width: 2px;
     }
-
     details div{padding: 20px 30px;}
-
     details summary{font-size: 18px;}
     
     table { margin: auto !important; }
@@ -112,7 +106,7 @@ def set_notebook_preferences():
     """))
 
     matplotlib.rcParams['mathtext.fontset'] = 'stix'
-    matplotlib.rcParams['font.family'] = 'Georgia'
+    matplotlib.rcParams['font.family'] = 'sans-serif'
 
     matplotlib.rc('axes', titlesize = 18)
     matplotlib.rc('axes', labelsize = 16)
@@ -210,3 +204,49 @@ def PCA(x):
     eig_values, eig_vectors = eig_values[sort_idx], eig_vectors[:, sort_idx]
     
     return np.real(eig_values), np.real(eig_vectors)
+
+def PCA_N(x):
+    
+    
+    S = ((x - x.mean(axis = 0)).T).dot(x - x.mean(axis = 0))/x.shape[0]
+    
+    t = time.time()
+    eig_values, eig_vectors = np.linalg.eig(S)
+    print('Time taken for high-dimensional approach:', np.round((time.time() - t), 3), 'sec')
+    
+    sort_idx = (-eig_values).argsort()
+    eig_values, eig_vectors = eig_values[sort_idx], eig_vectors[:, sort_idx]
+    
+    return np.real(eig_values), np.real(eig_vectors)
+
+def k_means(x, K, max_steps, mu_init):
+    N, D = x.shape
+    mu = mu_init.copy()
+
+    s = np.zeros(shape = (N, K))
+    assignments = np.random.choice(np.arange(0, K), N)
+    s[np.arange(s.shape[0]), assignments] = 1
+    
+    x_stacked = np.stack([x]*K, axis = 1)
+    losses = [np.sum(s*np.sum((x_stacked - mu)**2, axis = 2))]
+    converged = False
+    
+    for i in range(max_steps):
+
+        mus = (s.T).dot(x)
+        s_sum = s.sum(axis = 0).reshape((-1, 1))
+        s_sum[np.where(s_sum < 1)] = 1
+        mus /= s_sum
+
+        distances = np.sum((x_stacked - mus)**2, axis = 2)
+        min_idx = np.argmin(distances, axis = 1)
+        s_prev = s.copy()
+        s = np.zeros_like(s)
+        s[np.arange(s.shape[0]), min_idx] = 1
+
+        losses.append(np.sum(s*np.sum((x_stacked - mus)**2, axis = 2)))
+        
+        if np.prod(np.argmax(s, axis = 1) == np.argmax(s_prev, axis = 1)):
+            break
+        
+    return s, mus, losses

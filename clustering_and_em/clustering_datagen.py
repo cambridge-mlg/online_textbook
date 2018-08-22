@@ -39,10 +39,5 @@ xs = np.array(xs)
 xs[:, 0] = (xs[:, 0] - xs[:, 0].mean())/xs[:, 0].var()**0.5
 xs[:, 1] = (xs[:, 1] - xs[:, 1].mean())/xs[:, 1].var()**0.5
 
-xs[-1] = 0.5, -2
-
-plt.scatter(xs[:, 0], xs[:, 1])
-plt.show()
-
-np.save('clustering_2d.npy', xs)
-np.save('clustering_2d_classes.npy', np.array(rs))
+#np.save('clustering_2d.npy', xs)
+#np.save('clustering_2d_classes.npy', np.array(rs))

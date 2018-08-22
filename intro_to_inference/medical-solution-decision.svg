@@ -24,8 +24,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.49497475"
-     inkscape:cx="440.76367"
-     inkscape:cy="196.70859"
+     inkscape:cx="657.77738"
+     inkscape:cy="310.9943"
      inkscape:document-units="px"
      inkscape:current-layer="g8054"
      showgrid="false"
@@ -2016,7 +2016,7 @@
                d="m -870.51181,5622.2057 -54.4563,0 0,-14.3978 68.8541,0 0,628.0904 -68.8541,0 0,-14.3977 54.4563,0 0,-599.2949" />
             <text
                xml:space="preserve"
-               style="font-style:normal;font-weight:normal;font-size:219.47874451px;line-height:125%;font-family:Times;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#007c00;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;-inkscape-font-specification:Times;font-stretch:normal;font-variant:normal;"
+               style="font-style:normal;font-weight:normal;font-size:219.47874451px;line-height:125%;font-family:Arial;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#007c00;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;-inkscape-font-specification:Arial;font-stretch:normal;font-variant:normal;"
                x="-8316.417"
                y="-6608.0571"
                id="text8664"
@@ -2028,7 +2028,7 @@
                  y="-6608.0571">posterior</tspan></text>
             <text
                xml:space="preserve"
-               style="font-style:normal;font-weight:normal;font-size:219.47874451px;line-height:125%;font-family:times;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff008a;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;-inkscape-font-specification:times;font-stretch:normal;font-variant:normal;"
+               style="font-style:normal;font-weight:normal;font-size:219.47874451px;line-height:125%;font-family:Arial;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff008a;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;-inkscape-font-specification:Arial;font-stretch:normal;font-variant:normal;"
                x="-3482.0671"
                y="-6627.9761"
                id="text8664-1"
@@ -2040,19 +2040,19 @@
                  y="-6627.9761">reward</tspan></text>
             <text
                xml:space="preserve"
-               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:219.47874451px;line-height:125%;font-family:times;-inkscape-font-specification:times;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-               x="-8526.3877"
+               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:219.47874451px;line-height:125%;font-family:Arial;-inkscape-font-specification:Arial;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+               x="-8698.835"
                y="-4905.7432"
                id="text8664-1-8"
                sodipodi:linespacing="125%"
                transform="scale(1,-1)"><tspan
                  sodipodi:role="line"
                  id="tspan8666-5-3"
-                 x="-8526.3877"
+                 x="-8698.835"
                  y="-4905.7432">conditional reward</tspan></text>
             <text
                xml:space="preserve"
-               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:164.60905457px;line-height:125%;font-family:Times;-inkscape-font-specification:Times;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:164.60905457px;line-height:125%;font-family:Arial;-inkscape-font-specification:Arial;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff0000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;"
                x="-6207.2168"
                y="-2957.9846"
                id="text8664-1-8-9"
@@ -2068,7 +2068,7 @@
                  id="tspan8762">possible worlds</tspan></text>
             <text
                xml:space="preserve"
-               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:164.60905457px;line-height:125%;font-family:times;-inkscape-font-specification:times;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff008a;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:164.60905457px;line-height:125%;font-family:Arial;-inkscape-font-specification:Arial;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#ff008a;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;"
                x="-5426.9956"
                y="-4804.3994"
                id="text8664-1-8-9-9"
@@ -2084,7 +2084,7 @@
                  id="tspan8760">in that world </tspan></text>
             <text
                xml:space="preserve"
-               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:164.60905457px;line-height:125%;font-family:times;-inkscape-font-specification:times;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#007c00;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:164.60905457px;line-height:125%;font-family:Arial;-inkscape-font-specification:Arial;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#007c00;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;"
                x="-4191.9072"
                y="-3240.498"
                id="text8664-1-8-9-9-9"
@@ -2100,7 +2100,7 @@
                  id="tspan8758">of world</tspan></text>
             <text
                xml:space="preserve"
-               style="font-style:normal;font-weight:normal;font-size:164.60905457px;line-height:125%;font-family:times;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#0000ff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;-inkscape-font-specification:times;font-stretch:normal;font-variant:normal;"
+               style="font-style:normal;font-weight:normal;font-size:164.60905457px;line-height:125%;font-family:Arial;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#0000ff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;-inkscape-font-specification:Arial;font-stretch:normal;font-variant:normal;"
                x="-8034.6318"
                y="-3234.0566"
                id="text8664-1-8-9-9-6"
@@ -2112,7 +2112,7 @@
                  id="tspan8760-8">action </tspan></text>
             <text
                xml:space="preserve"
-               style="font-style:normal;font-weight:normal;font-size:219.47874451px;line-height:125%;font-family:times;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;-inkscape-font-specification:times;font-stretch:normal;font-variant:normal;"
+               style="font-style:normal;font-weight:normal;font-size:219.47874451px;line-height:125%;font-family:Arial;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;-inkscape-font-specification:Arial;font-stretch:normal;font-variant:normal;"
                x="-1971.0304"
                y="-4200.2759"
                id="text8664-1-8-7"
@@ -2132,27 +2132,27 @@
                  id="tspan8807">decision making</tspan></text>
             <text
                xml:space="preserve"
-               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:219.47874451px;line-height:125%;font-family:times;-inkscape-font-specification:times;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-               x="-7832.6782"
+               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:219.47874451px;line-height:125%;font-family:Arial;-inkscape-font-specification:Arial;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+               x="-7986.3125"
                y="-2306.488"
                id="text8664-1-8-8"
                sodipodi:linespacing="125%"
                transform="scale(1,-1)"><tspan
                  sodipodi:role="line"
                  id="tspan8666-5-3-0"
-                 x="-7832.6782"
+                 x="-7986.3125"
                  y="-2306.488">conditional reward for not treating</tspan></text>
             <text
                xml:space="preserve"
-               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:219.47874451px;line-height:125%;font-family:times;-inkscape-font-specification:times;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-               x="-8005.2334"
+               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:219.47874451px;line-height:125%;font-family:Arial;-inkscape-font-specification:Arial;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+               x="-8158.8677"
                y="-1264.8562"
                id="text8664-1-8-8-5"
                sodipodi:linespacing="125%"
                transform="scale(1,-1)"><tspan
                  sodipodi:role="line"
                  id="tspan8666-5-3-0-4"
-                 x="-8005.2334"
+                 x="-8158.8677"
                  y="-1264.8562">conditional reward for treating</tspan></text>
             <path
                style="fill:none;fill-rule:evenodd;stroke:#0000ff;stroke-width:21.94787407;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#marker4987)"
