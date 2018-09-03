@@ -24,22 +24,41 @@ def embed_video(url, labels = {}):
     display(YouTubeVideo('ARJ8cAGm6JE',autoplay=False))
     display(button_box)
 
-def toggle_code(title = "code"):
-    string = """
+def toggle_code(title = "code", on_load_hide = True):
+    display_string = """
     <script>
-      function get_new_label() {
-          var shown = $('div.cell.code_cell.rendered.selected div.input').is(':visible')
-          var title = $('div.cell.code_cell.rendered.selected').find('.toggle_button').val().substring(5)
+      function get_new_label(butn, hide) {
+          var shown = !($(hide).is(':visible'))
+          var title = $(butn).val().substr($(butn).val().indexOf(" ") + 1)
           return ((shown) ? 'Hide ' : 'Show ') + title
       }
-      function code_toggle() {
-          $('div.cell.code_cell.rendered.selected div.input').toggle();
-          $('div.cell.code_cell.rendered.selected').find('.toggle_button').val(get_new_label());
+      function code_toggle(butn, hide) {
+          $(butn).val(get_new_label(butn,hide));
+          $(hide).slideToggle();
       };
     </script>
-    <form action="javascript:code_toggle()"><input type="submit" value ='Show """ + title  + """'class='toggle_button'></form>
+    <input type="submit" value='initiated' class='toggle_button'>
+    <script>
+        $(".toggle_button[value='initiated']").click(function(){
+            code_toggle(this, $(this).parents('div.cell.code_cell').find('div.input'))
+        }); 
+        
+$(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($(".toggle_button[value='initiated']").parents("div.output").find('div.output_area').first());
+    var shown = $(".toggle_button[value='initiated']").parents("div.cell.code_cell").find('div.input').is(':visible');
+    var title = ((shown) ? 'Hide ' : 'Show ') + '""" + title + """'; 
     """
-    return string
+    if on_load_hide:
+        display_string += """ $(".toggle_button[value='initiated']").addClass("init_show");
+        $(".toggle_button[value='initiated']").parents('div.code_cell').find('div.input').addClass("init_hidden"); """
+    else:
+        display_string += """ $(".toggle_button[value='initiated']").addClass("init_hide");
+        $(".toggle_button[value='initiated']").parents('div.code_cell').find('div.input').addClass("init_shown"); """
+        
+    display_string += """ $(".toggle_button[value='initiated']").val(title);
+    </script>"""
+
+    display(HTML(display_string))
+    
 
 def dropdown_math(title, text = None, file = None):
     out = widgets.Output()
@@ -70,38 +89,32 @@ def remove_axes(which_axes = ''):
 
 def set_notebook_preferences():
 
+    css = open("../notebook.css","r").read()
+    
     display(HTML("""
     <style>
-    .output {
-        font-family: ariel;
-        align-items: normal;
-        text-align: normal;
-    }
-    
-    div.output_svg div { margin : auto; }
-    .div.output_area.MathJax_Display{ text-align: center; }
-    div.text_cell_render { font-family: sans-serif; }
-    
-    details {
-        margin: 20px 0px;
-        padding: 0px 10px;
-        border-radius: 3px;
-        border-style: solid;
-        border-color: black;
-        border-width: 2px;
-    }
-    details div{padding: 20px 30px;}
-    details summary{font-size: 18px;}
-    
-    table { margin: auto !important; }
-    
+  """ + css + """
     </style>
+     <input type="submit" value='Home' class='home_button' onclick='window.location="../index.html"' style='float: right; margin-right: 40px;'>
     <script>
-    $('iframe').parents('div.cell.code_cell').find('div.input').hide()
-    $('.toggle_button').parents('div.cell.code_cell').find('div.input').hide()
+    $('.home_button').not(':first').remove();
+    $(".home_button").insertBefore($("div.cell").first());
+    console.log($('div.input.init_hidden'))
+    $('div.input.init_hidden').hide()
+    $('div.input.init_shown').show()
     $('.toggle_button').each(function( index, element ) {
-       $(this).val('Show ' + $(this).val().substring(5))
+       var prefix;
+       if (this.classList.contains('init_show')) {
+           prefix = 'Show '
+       }
+       else if (this.classList.contains('init_hide')) {
+           prefix = 'Hide '
+       };
+       $(this).val(prefix + $(this).val().substr($(this).val().indexOf(" ") + 1))
     });
+    IPython.OutputArea.prototype._should_scroll = function(lines) {
+        return false;
+    }
     </script>
     """))
 

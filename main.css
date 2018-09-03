@@ -1,0 +1,47 @@
+body {
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  font-weight: 300;
+  background-color: #ffffff;
+  margin: 0;
+}
+.header_div {
+  height:75px;
+  position: sticky;
+  margin-top: 0;
+  background:	#ADD8E6;
+  text-align: center;
+}
+.content_div {
+  top: 75px;
+  left:15px;
+  right:0px;
+  bottom:0px;
+  overflow-y:scroll;     
+  position:absolute;
+}
+pre{
+  width: 800px;
+  background-color: #e8e8e8;
+}
+ol {
+  counter-reset: item
+}
+ol li {
+  display: block
+}
+ol li:before {
+  content: counters(item, ".") " ";
+  counter-increment: item
+}
+#bottom_p {
+  padding-bottom: 100
+}
+h1 {
+  vertical-align: middle;
+  display: inline-block; width: 90%
+}
+#home_button {
+  vertical-align: middle;
+}
