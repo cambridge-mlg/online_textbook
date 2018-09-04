@@ -45,3 +45,33 @@ h1 {
 #home_button {
   vertical-align: middle;
 }
+
+.further_box {
+  width: 80%;
+  background-color:rgb(230, 230, 230);
+  border-style: solid;
+  margin: 10px 10px 10px 0px;
+  padding: 10px;
+  left:calc(auto - 20px);
+}
+
+.question_box {
+  width: 80%;
+  background-color:rgb(255, 255, 225);
+  border-style: solid;
+  margin: 10px 10px 10px 0px;
+  padding: 10px;
+  left:calc(auto - 20px);
+}
+
+details {
+  width: 80%;
+  margin: 20px 0px;
+  padding: 0px 10px;
+  border-radius: 3px;
+  border-style: solid;
+  border-color: black;
+  border-width: 2px;
+}
+details div{padding: 20px 30px;}
+details summary{font-size: 18px;}
