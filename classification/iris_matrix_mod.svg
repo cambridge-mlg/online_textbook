@@ -16,7 +16,7 @@
    width="432pt"
    id="svg18028"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="iris_matrix.svg">
+   sodipodi:docname="iris_matrix_mod.svg">
   <metadata
      id="metadata25518">
     <rdf:RDF>
@@ -25,6 +25,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
