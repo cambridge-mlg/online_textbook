@@ -4,6 +4,7 @@ from IPython.display import Math, HTML, display, Latex, YouTubeVideo, clear_outp
 import matplotlib
 import numpy as np
 import time
+from os import path
 
 
 def embed_video(url, labels={}):
@@ -34,9 +35,9 @@ def toggle_code(title="code", on_load_hide=True, above=1):
         display_string = """
     <script>
       function get_new_label(butn, hide) {
-          var shown = 
+          var shown = $(butn).parents("div.cell.code_cell").find('div.input').is(':visible');
           var title = $(butn).val().substr($(butn).val().indexOf(" ") + 1)
-          return ((shown) ? 'Hide ' : 'Show ') + title
+          return ((shown) ? 'Show ' : 'Hide ') + title
       }
       function code_toggle(butn, hide) {
         $(butn).val(get_new_label(butn,hide));
@@ -96,18 +97,25 @@ def remove_axes(which_axes=''):
     return
 
 
-def set_notebook_preferences():
+def set_notebook_preferences(home_button = True):
 
-    css = open("../notebook.css", "r").read()
+    css_file = path.join(path.dirname(__file__), 'notebook.css')
+    css = open(css_file, "r").read()
 
-    display(HTML("""
-    <style>
-  """ + css + """
-    </style>
-     <input type="submit" value='Home' class='home_button' onclick='window.location="../index.html"' style='float: right; margin-right: 40px;'>
+    display_string = "<style>" + css + "</style>"
+
+    if (home_button):
+        display_string += """
+     <input type="submit" value='Home' class='home_button' onclick='window.location="../index.ipynb"' style='float: right; margin-right: 40px;'>
     <script>
     $('.home_button').not(':first').remove();
     $(".home_button").insertBefore($("div.cell").first());
+    """
+
+    else: 
+        display_string += "<script>$('.home_button').remove();"
+
+    display_string += """
     $('div.input.init_hidden').hide()
     $('div.input.init_shown').show()
     $('.toggle_button').each(function( index, element ) {
@@ -124,7 +132,8 @@ def set_notebook_preferences():
         return false;
     }
     </script>
-    """))
+    """
+    display(HTML(display_string))
 
     matplotlib.rcParams['mathtext.fontset'] = 'stix'
     matplotlib.rcParams['font.family'] = 'sans-serif'
