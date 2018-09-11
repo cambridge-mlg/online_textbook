@@ -34,9 +34,9 @@ def toggle_code(title="code", on_load_hide=True, above=1):
         display_string = """
     <script>
       function get_new_label(butn, hide) {
-          var shown = 
+          var shown = $(butn).parents("div.cell.code_cell").find('div.input').is(':visible');
           var title = $(butn).val().substr($(butn).val().indexOf(" ") + 1)
-          return ((shown) ? 'Hide ' : 'Show ') + title
+          return ((shown) ? 'Show ' : 'Hide ') + title
       }
       function code_toggle(butn, hide) {
         $(butn).val(get_new_label(butn,hide));
