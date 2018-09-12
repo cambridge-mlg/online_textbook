@@ -17,11 +17,11 @@ def update(k):
         w1 = np.sin(1/2*np.pi*frame/11)
 
     # calculate x matrix
-    x = np.zeros([no_increments,no_increments])
+    y = np.zeros([no_increments,no_increments])
 
     for i in range(no_increments):
         for j in range(no_increments):
-            x[i][j] = 1/(1 + np.exp(-(w1*z1[j]) - (w2*z2[i])))
+            y[i][j] = 1/(1 + np.exp(-(w1*x1[j]) - (w2*x2[i])))
 
     # plot graphs
     ax1.clear()
@@ -29,24 +29,24 @@ def update(k):
     ax1.set_ylim(-5.05,5.05)
     ax1.set_xlim(-5.05,5.05)
     ax1.set_title("w = [" + str(round(w1,1)) + "," + str(round(w2,1)) + "]")
-    Z1,Z2 = np.meshgrid(z1,z2)
-    surf = ax1.plot_surface(Z1, Z2, x, rstride=1, cstride=1,
+    X1,X2 = np.meshgrid(x1,x2)
+    surf = ax1.plot_surface(X1, X2, y, rstride=1, cstride=1,
                 cmap=cm.coolwarm, edgecolor='black', linewidths=0.2)
 
     ax2.clear()
-    ax2.contourf(z1, z2, x, cmap = cm.coolwarm, alpha = 0.5)
+    ax2.contourf(x1, x2, y, cmap = cm.coolwarm, alpha = 0.5)
     
     # add colorbar if not already added
     if not cb:
         cb = fig.colorbar(surf, shrink=0.5, aspect=5)
         cb = True
 
-    ax2.set_xlabel('z1')
-    ax2.set_ylabel('z2')
+    ax2.set_xlabel('x1')
+    ax2.set_ylabel('x2')
 
-    ax1.set_xlabel('z1')
-    ax1.set_ylabel('z2')
-    ax1.set_zlabel('x')
+    ax1.set_xlabel('x1')
+    ax1.set_ylabel('x2')
+    ax1.set_zlabel('a')
 
     # increment frame number
     frame = (frame + 1)%16
@@ -65,8 +65,8 @@ ax2 = fig.add_subplot(1, 2, 2)
 no_increments = 20
 
 # initialise variables
-z1 = np.linspace(-5,5,no_increments)
-z2 = np.linspace(-5,5,no_increments)
+x1 = np.linspace(-5,5,no_increments)
+x2 = np.linspace(-5,5,no_increments)
 
 frame = 0
 

@@ -21,10 +21,16 @@ def update(k):
 
     for i in range(no_increments):
         for j in range(no_increments):
-            entry = w1*x1[j] + w2*x2[i]
-            if -7 <= entry <= 7:
-                y[i][j] = entry
+            y[i][j] = w1*x1[j] + w2*x2[i]
 
+    ax2.clear()
+    ax2.contourf(x1, x2, y, cmap = cm.coolwarm, alpha = 0.5)
+
+    for i in range(no_increments):
+        for j in range(no_increments):
+            if not -7 <= y[i][j] <=7:
+                y[i][j] = np.nan
+                
     # plot graphs
     ax1.clear()
     ax1.set_zlim(-7.05, 7.05)
@@ -35,8 +41,6 @@ def update(k):
     surf = ax1.plot_surface(X1, X2, y, rstride=1, cstride=1,
                 cmap=cm.coolwarm, edgecolor='black', linewidths=0.1, vmin=-5, vmax=5)
 
-    ax2.clear()
-    ax2.contourf(x1, x2, y, cmap = cm.coolwarm, alpha = 0.5)
 
     # add colorbar if not already added
     if not cb:
