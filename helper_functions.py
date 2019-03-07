@@ -292,3 +292,13 @@ def k_means(x, K, max_steps, mu_init):
             break
 
     return s, mus, losses
+
+
+def magic_covariance(x, scale = 1, sigma = 1):
+    x_ = np.array([x])
+    repeated_xs = np.repeat(x_, [x_.shape[-1]], axis = 0)
+    x_diffs = repeated_xs - repeated_xs.T
+    
+    return sigma**2*np.exp(-0.5*(x_diffs)**2/scale**2)
+
+
