@@ -22,6 +22,7 @@ details summary{font-size: 18px;}
 table {
      margin: calc(auto + 10px) !important;
      border: solid !important;
+     text-align:center;
  }
 
  th, td {
