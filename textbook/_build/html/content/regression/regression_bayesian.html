@@ -1,0 +1,868 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bayesian linear regression &#8212; OMLT</title>
+    
+  <link rel="stylesheet" href="../../_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom_style.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/.ipynb_checkpoints/custom_style-checkpoint.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../../_static/js/index.3da636dd464baa7582d2.js">
+
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../../index.html">
+  
+  <img src="../../_static/logo.png" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">OMLT</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../home.html">
+   Online Machine Learning Textbook
+  </a>
+ </li>
+</ul>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="regression-intro.html">
+   Regression
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="regression-linear.html">
+     Linear regression
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../../_sources/content/regression/regression_bayesian.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+        <!-- Source interaction buttons -->
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/stratisMarkou/random-walks/master?urlpath=tree/./content/regression/regression_bayesian.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Bayesian linear regression
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#probabilistic-model">
+     1. Probabilistic model
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#probabilistic-inference-for-the-weights">
+     2.1 Probabilistic inference for the weights
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#begin-align-p-mathbf-w-mathbf-y-mathbf-x-sigma-mathbf-w-2-sigma-y-2-frac-1-p-mathbf-y-mathbf-x-sigma-mathbf-w-2-sigma-y-2-p-mathbf-w-sigma-mathbf-w-2-p-mathbf-x-p-mathbf-y-mathbf-x-mathbf-w-sigma-y-2">
+   \begin{align}
+p(\mathbf{w}|\mathbf{y}, \mathbf{X}, \sigma_{\mathbf{w}}^2, \sigma_{y}^2) &amp; =
+\frac{1}{
+p(\mathbf{y}, \mathbf{X}| \sigma_{\mathbf{w}}^2, \sigma_{y}^2)
+}
+p(\mathbf{w}| \sigma_{\mathbf{w}}^2) p(\mathbf{X}) p(\mathbf{y}|\mathbf{X}, \mathbf{w}, \sigma_y^2)
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#probabilistic-inference-for-prediction">
+     2.2 Probabilistic inference for prediction
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#summary">
+     Summary
+    </a>
+   </li>
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#questions">
+     Questions
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+        </nav>
+        
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">config</span> InlineBackend.figure_format = &#39;svg&#39; # change output plot display format to &#39;svg&#39;
+
+<span class="c1"># import the required modules for this notebook</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="c1"># import the helper functions from the parent directory,</span>
+<span class="c1"># these help with things like graph plotting and notebook layout</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;..&#39;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">helper_functions</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c1"># set things like fonts etc - comes from helper_functions</span>
+<span class="n">set_notebook_preferences</span><span class="p">()</span>
+
+<span class="c1"># add a show/hide code button - also from helper_functions</span>
+<span class="n">toggle_code</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;setup code&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><style>.output {
+    font-family: ariel;
+    align-items: normal;
+    text-align: normal;
+}
+
+div.output_svg div { margin : auto; }
+.div.output_area.MathJax_Display{ text-align: center; }
+div.text_cell_render { font-family: sans-serif; }
+
+details {
+    margin: 20px 0px;
+    padding: 0px 10px;
+    border-radius: 3px;
+    border-style: solid;
+    border-color: black;
+    border-width: 2px;
+}
+details div{padding: 20px 30px;}
+details summary{font-size: 18px;}
+
+table {
+     margin: calc(auto + 10px) !important;
+     border: solid !important;
+ }
+
+ th, td {
+    text-align: left !important;
+ }
+
+ .further_box {
+    background-color:rgb(230, 230, 230);
+    border-style: solid;
+    margin: 10px 10px 10px 0px;
+    padding: 10px;
+    left:calc(auto - 20px);
+ }
+
+ .question_box {
+    background-color:rgb(255, 255, 225);
+    border-style: solid;
+    margin: 10px 10px 10px 0px;
+    padding: 10px;
+    left:calc(auto - 20px);
+ }</style>
+     <input type="submit" value='Home' id="initiated" class='home_button' onclick='window.location="../index.ipynb"' style='float: right; margin-right: 40px;'>
+    <script>
+    $('.home_button').not('#initiated').remove();
+    $('.home_button').removeAttr('id');
+    $(".home_button").insertBefore($("div.cell").first());
+
+    $('div.input.init_hidden').hide()
+    $('div.input.init_shown').show()
+    $('.toggle_button').each(function( index, element ) {
+       var prefix;
+       if (this.classList.contains('init_show')) {
+           prefix = 'Show '
+       }
+       else if (this.classList.contains('init_hide')) {
+           prefix = 'Hide '
+       };
+       $(this).val(prefix + $(this).val().substr($(this).val().indexOf(" ") + 1))
+    });
+    IPython.OutputArea.prototype._should_scroll = function(lines) {
+        return false;
+    }
+    </script>
+</div><div class="output text_html">
+    <script>
+      function get_new_label(butn, hide) {
+          var shown = $(butn).parents("div.cell.code_cell").find('div.input').is(':visible');
+          var title = $(butn).val().substr($(butn).val().indexOf(" ") + 1)
+          return ((shown) ? 'Show ' : 'Hide ') + title
+      }
+      function code_toggle(butn, hide) {
+        $(butn).val(get_new_label(butn,hide));
+        $(hide).slideToggle();
+      };
+    </script>
+    <input type="submit" value='initiated' class='toggle_button'>
+    <script>
+        var hide_area = $(".toggle_button[value='initiated']").parents('div.cell').prevAll().addBack().slice(-1)
+        hide_area = $(hide_area).find("div.input").add($(hide_area).filter("div.text_cell"))
+        $(".toggle_button[value='initiated']").prop("hide_area", hide_area)
+        $(".toggle_button[value='initiated']").click(function(){
+            code_toggle(this, $(this).prop("hide_area"))
+        }); 
+$(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($(".toggle_button[value='initiated']").parents("div.output").find('div.output_area').first());
+    var shown = $(".toggle_button[value='initiated']").parents("div.cell.code_cell").find('div.input').is(':visible');
+    var title = ((shown) ? 'Hide ' : 'Show ') + 'setup code'; 
+     $(".toggle_button[value='initiated']").addClass("init_show");
+            $(hide_area).addClass("init_hidden");  $(".toggle_button[value='initiated']").val(title);
+    </script></div></div>
+</div>
+<div class="section" id="bayesian-linear-regression">
+<h1>Bayesian linear regression<a class="headerlink" href="#bayesian-linear-regression" title="Permalink to this headline">¶</a></h1>
+<p>We have seen <a class="reference internal" href="regression_regularisation.html"><span class="doc std std-doc">previously</span></a> how i) regularisation can be intrepreted in terms of a probabilistic prior over the regression weights, and ii) how MAP estimation of the weights mitigates some of the effects of overfitting. However, the approaches we have considered so far have not returned uncertainty estimates in the weights. Uncertainty estimates are key when, for example, making decisions and performing online incremental updates to the model.</p>
+<p>In this section we will consider Bayesian approaches to regression that return uncertainty in parameter estimates. The probabilisitc approach involves two phases. First we explicitly define our assumptions about how the data and parameters are generated. This is called the probabilistic model. Second, we use the rules of probability to manipulate the probabilistic model to perform the inferences we wish to make. Let’s walk through these two steps in detail.</p>
+<div class="section" id="probabilistic-model">
+<h2>1. Probabilistic model<a class="headerlink" href="#probabilistic-model" title="Permalink to this headline">¶</a></h2>
+<p>First we describe the probabilisitc model. You can think of this as a probabilistic recipe (or probabilistic program) for sampling datasets together with their underlying parameters. This recipe should encode knowledge about what we believe a typical dataset might look like before observing data.</p>
+<p>In the current case the probabilistic programme samples the regression weights from a Gaussian, forms the regression function, samples <span class="math notranslate nohighlight">\(N\)</span> input locations and then samples <span class="math notranslate nohighlight">\(N\)</span> outputs. (We have assumed the observation noise <span class="math notranslate nohighlight">\(\sigma_y^2\)</span> and prior variance on the weights <span class="math notranslate nohighlight">\(\sigma_{\mathbf{w}}^2\)</span> are known).</p>
+<ol class="simple">
+<li><p>sample the weights <span class="math notranslate nohighlight">\(\mathbf{w}^{(m)} \sim \mathcal{N}(\mathbf{0},\sigma_{\mathbf{w}}^2 \mathrm{I})\)</span> for <span class="math notranslate nohighlight">\(m=1...M\)</span></p></li>
+<li><p>define the regression function <span class="math notranslate nohighlight">\(f_{\mathbf{w}}^{(m)}(\mathbf{x})=\boldsymbol{\phi}(\mathbf{x})^\top \mathbf{w}^{(m)}\)</span></p></li>
+<li><p>sample <span class="math notranslate nohighlight">\(N\)</span> input locations <span class="math notranslate nohighlight">\(\mathbf{x}^{(m)}_n \sim p(\mathbf{x})\)</span> for <span class="math notranslate nohighlight">\(n=1...N\)</span></p></li>
+<li><p>sample <span class="math notranslate nohighlight">\(N\)</span> output locations <span class="math notranslate nohighlight">\(y_n |\mathbf{w}^{(m)},\mathbf{x}^{(m)}_n,\sigma_{y}^2  \sim \mathcal{N}(f^{(m)}_{\mathbf{w}}(\mathbf{x}^{(m)}_n),\sigma_{y}^2)\)</span> for <span class="math notranslate nohighlight">\(n=1...N\)</span></p></li>
+</ol>
+<p>Here are four datasets produced from this probabilistic model using linear basis functions and scalar inputs:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">D</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># order of polynomial</span>
+<span class="n">M</span> <span class="o">=</span> <span class="mi">4</span> <span class="c1"># number of samples of model</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">7</span> <span class="c1"># number of data points per model</span>
+
+<span class="n">var_w</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># a priori variance of weights</span>
+<span class="n">var_y</span> <span class="o">=</span> <span class="mf">0.01</span> <span class="c1"># observation noise variance</span>
+
+<span class="c1"># input locations</span>
+<span class="n">xs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="c1"># 100 points equispaced between 0 and 1</span>
+
+<span class="c1"># polynomial basis functions</span>
+<span class="n">phi_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x_</span> <span class="o">**</span> <span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="k">for</span> <span class="n">x_</span> <span class="ow">in</span> <span class="n">xs</span><span class="p">])</span> 
+
+
+<span class="c1"># Gaussian basis functions</span>
+<span class="c1"># var_phi = 0.05;</span>
+<span class="c1"># phi_pred = np.array( [[ np.exp(-1/(2*var_phi)*np.power(x_-d/D,2))  for d in range(D + 1) ]  for x_ in xs]) </span>
+<span class="c1"># phi_samp = np.array( [[ np.exp(-1/(2*var_phi)*np.power(x_-d/D,2))  for d in range(D + 1) ]  for x_ in x_samp])</span>
+
+<span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">M</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+    
+    <span class="c1"># input locations</span>
+    <span class="n">x_samp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span> 
+
+    <span class="c1"># polynomial basis functions</span>
+    <span class="n">phi_samp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x_</span> <span class="o">**</span> <span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="k">for</span> <span class="n">x_</span> <span class="ow">in</span> <span class="n">x_samp</span><span class="p">])</span> 
+
+
+    
+    <span class="c1"># sample weights</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">var_w</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="n">D</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># plot function at input locations</span>
+    <span class="n">fs</span> <span class="o">=</span> <span class="n">phi_pred</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="c1"># output of the model at the points above</span>
+    
+    <span class="n">y_samp</span> <span class="o">=</span> <span class="n">phi_samp</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">var_y</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="n">N</span><span class="p">)</span>
+    
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">M</span><span class="p">,</span><span class="n">m</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">fs</span><span class="p">)</span> <span class="c1"># plot predictions</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_samp</span><span class="p">,</span> <span class="n">y_samp</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">)</span> <span class="c1"># plot predictions</span>
+   
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="o">-</span><span class="mf">3.1</span><span class="p">,</span> <span class="mf">3.1</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">m</span>  <span class="ow">is</span> <span class="ow">not</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">remove_axes</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+    
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">toggle_code</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/regression_bayesian_2_0.svg" src="../../_images/regression_bayesian_2_0.svg" /><div class="output text_html">
+    <script>
+      function get_new_label(butn, hide) {
+          var shown = $(butn).parents("div.cell.code_cell").find('div.input').is(':visible');
+          var title = $(butn).val().substr($(butn).val().indexOf(" ") + 1)
+          return ((shown) ? 'Show ' : 'Hide ') + title
+      }
+      function code_toggle(butn, hide) {
+        $(butn).val(get_new_label(butn,hide));
+        $(hide).slideToggle();
+      };
+    </script>
+    <input type="submit" value='initiated' class='toggle_button'>
+    <script>
+        var hide_area = $(".toggle_button[value='initiated']").parents('div.cell').prevAll().addBack().slice(-1)
+        hide_area = $(hide_area).find("div.input").add($(hide_area).filter("div.text_cell"))
+        $(".toggle_button[value='initiated']").prop("hide_area", hide_area)
+        $(".toggle_button[value='initiated']").click(function(){
+            code_toggle(this, $(this).prop("hide_area"))
+        }); 
+$(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($(".toggle_button[value='initiated']").parents("div.output").find('div.output_area').first());
+    var shown = $(".toggle_button[value='initiated']").parents("div.cell.code_cell").find('div.input').is(':visible');
+    var title = ((shown) ? 'Hide ' : 'Show ') + 'code'; 
+     $(".toggle_button[value='initiated']").addClass("init_show");
+            $(hide_area).addClass("init_hidden");  $(".toggle_button[value='initiated']").val(title);
+    </script></div></div>
+</div>
+<p>The probabilistic model is a joint distribution over all of the random variables:
+\begin{align}
+p(\mathbf{w},\mathbf{y},\mathbf{X} | \sigma_{\mathbf{w}}^2,\sigma_{y}^2) &amp; = p(\mathbf{w}| \sigma_{\mathbf{w}}^2)  p(\mathbf{X}) p(\mathbf{y}|\mathbf{X},\sigma_{y}^2) = p(\mathbf{w} | \sigma_{\mathbf{w}}^2) \prod_{n=1}^N p(x_n) p(y_n |\mathbf{w},\mathbf{x}<em>n,\sigma</em>{y}^2)\
+&amp; = \mathcal{N}(\mathbf{w} ; \mathbf{0},\sigma_{\mathbf{w}}^2 \mathrm{I}) \prod_{n=1}^N p(\mathbf{x}<em>n) \mathcal{N}(y_n; f^{(m)}</em>{\mathbf{w}}(\mathbf{x}),\sigma_{y}^2)
+\end{align}</p>
+<p>All aspects of this model can be critiqued:</p>
+<p>The assumption of <strong>independent Gaussian observation noise</strong> can be appropriate, e.g. if there are many independent noise sources and the central limit theorem has kicked in, and it leads to analytic inference. However, it may be inappropriate if the output noise is correlated or if there are outliers in the data (e.g. see <span class="xref myst">question 1B</span> and <a class="reference internal" href="regression_regularisation.html"><span class="doc std std-doc">question 2</span></a>).</p>
+<p>The <strong>zero mean Gaussian prior over the weights</strong> encodes the fact that <em>a priori</em> we expect the weight values to take values within a few standard deviations <span class="math notranslate nohighlight">\(\sigma_{\mathbf{w}}\)</span> of zero. We will see in a moment that the use of a Gaussian distribution leads to tractable inference schemes. However, other distributions might be appropriate depending on the circumstances. For example, you might have reason to suspect that only a small number of the features <span class="math notranslate nohighlight">\(\phi_d(\mathbf{x})\)</span> affect the output, in which case distributions that put more probability mass at zero and in the tails than a Gaussian might be more appropriate. Such distributions are called sparse distribtions and examples include the <a class="reference external" href="https://en.wikipedia.org/wiki/Laplace_distribution">Laplace</a> and <a class="reference external" href="https://en.wikipedia.org/wiki/Student%27s_t-distribution">Student’s t-distribution</a>.</p>
+<p>Notice here that our probabilistic model includes a <strong>distribution over the input locations</strong> are sampled. This is required to sample datasets, but it is not something that we encountered when we <a class="reference internal" href="regression_regularisation.html"><span class="doc std std-doc">interpreted regularisation in terms of MAP inference in a probabilistic model</span></a>. We will see that the distribution over the inputs does not affect the inference for the weights. This is why we have not specified a distributional family for <span class="math notranslate nohighlight">\(p(x)\)</span>.</p>
+</div>
+<div class="section" id="probabilistic-inference-for-the-weights">
+<h2>2.1 Probabilistic inference for the weights<a class="headerlink" href="#probabilistic-inference-for-the-weights" title="Permalink to this headline">¶</a></h2>
+<p>Now let’s perform probabilistic inference for the weights. This involves computing the probability of the weights given the observed inputs and outputs <span class="math notranslate nohighlight">\(p(\mathbf{w}|\mathbf{y}, \mathbf{X}, \sigma_{\mathbf{w}}^2, \sigma_{y}^2)\)</span>, or for shorthand the posterior distribution of the weights.</p>
+<p>Applying the product rule to the probabilistic model we find that the posterior can be computed by multiplying the prior <span class="math notranslate nohighlight">\(p(\mathbf{w}| \sigma_{\mathbf{w}}^2)\)</span> (what we knew about the parameters before seeing data) with the likelihood of the parameters <span class="math notranslate nohighlight">\(p(\mathbf{y}|\mathbf{X}, \mathbf{w}, \sigma_y^2)\)</span> (what the data tell us about the parameters), and renormalising to ensure the density integrates to 1:</p>
+<p>\begin{align}
+p(\mathbf{w}|\mathbf{y}, \mathbf{X}, \sigma_{\mathbf{w}}^2, \sigma_{y}^2)  \propto p(\mathbf{w}| \sigma_{\mathbf{w}}^2)  p(\mathbf{y}|\mathbf{X}, \mathbf{w}, \sigma_y^2)
+\end{align}</p>
+<details>
+<summary>Detailed derivation for the posterior over the weights</summary>
+<p>Starting from the posterior distribution, <span class="math notranslate nohighlight">\(p(\mathbf{w}|\mathbf{y}, \mathbf{X}, \sigma_{\mathbf{w}}^2, \sigma_{y}^2)\)</span>. we first apply the product rule,</p>
+<p>\begin{align}
+p(\mathbf{w}|\mathbf{y}, \mathbf{X}, \sigma_{\mathbf{w}}^2, \sigma_{y}^2) =
+\frac{1}{
+p(\mathbf{y}, \mathbf{X}| \sigma_{\mathbf{w}}^2, \sigma_{y}^2)
+}
+p(\mathbf{w},\mathbf{y}, \mathbf{X}| \sigma_{\mathbf{w}}^2, \sigma_{y}^2).
+\end{align}</p>
+<p>Now substituing in the joint distribution specified by the probabilistic model yields</p>
+</div>
+</div>
+<div class="section" id="begin-align-p-mathbf-w-mathbf-y-mathbf-x-sigma-mathbf-w-2-sigma-y-2-frac-1-p-mathbf-y-mathbf-x-sigma-mathbf-w-2-sigma-y-2-p-mathbf-w-sigma-mathbf-w-2-p-mathbf-x-p-mathbf-y-mathbf-x-mathbf-w-sigma-y-2">
+<h1>\begin{align}
+p(\mathbf{w}|\mathbf{y}, \mathbf{X}, \sigma_{\mathbf{w}}^2, \sigma_{y}^2) &amp; =
+\frac{1}{
+p(\mathbf{y}, \mathbf{X}| \sigma_{\mathbf{w}}^2, \sigma_{y}^2)
+}
+p(\mathbf{w}| \sigma_{\mathbf{w}}^2) p(\mathbf{X}) p(\mathbf{y}|\mathbf{X}, \mathbf{w}, \sigma_y^2)<a class="headerlink" href="#begin-align-p-mathbf-w-mathbf-y-mathbf-x-sigma-mathbf-w-2-sigma-y-2-frac-1-p-mathbf-y-mathbf-x-sigma-mathbf-w-2-sigma-y-2-p-mathbf-w-sigma-mathbf-w-2-p-mathbf-x-p-mathbf-y-mathbf-x-mathbf-w-sigma-y-2" title="Permalink to this headline">¶</a></h1>
+<p>\frac{1}{
+p(\mathbf{y} | \mathbf{X}, \sigma_{\mathbf{w}}^2, \sigma_{y}^2)
+}
+p(\mathbf{w}| \sigma_{\mathbf{w}}^2)  p(\mathbf{y}|\mathbf{X}, \mathbf{w}, \sigma_y^2) \
+&amp; \propto p(\mathbf{w}| \sigma_{\mathbf{w}}^2)  p(\mathbf{y}|\mathbf{X}, \mathbf{w}, \sigma_y^2).
+\end{align}</p>
+<p>In the last line we have dropped the term that does not depend on the weights: this is a normalising constant that we can recompute later by ensuring the distribution integrates to one.</p>
+<div>
+</div>
+</details>
+<p>The next step is to substitute the distributional forms for the prior and the likelihood. The prior is a Gaussian distribution over the weights. The likelihood  also takes a Gaussian form when viewed as a <em>function of the weights</em>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+p(\mathbf{w}| \sigma_{\mathbf{w}}^2) &amp;= \frac{1}{(2\pi \sigma_{\mathbf{w}}^2)^{D/2}}\text{exp}\big(-\frac{1}{2\sigma_w^2}\mathbf{w}^\top \mathbf{w}\big)\\
+p(\mathbf{y}|\mathbf{X}, \mathbf{w}, \sigma_y^2) &amp;= \frac{1}{(2\pi \sigma_y^2)^{N/2}}\text{exp}\big(-\frac{1}{2\sigma_y^2}(\mathbf{y} - \boldsymbol{\Phi}\mathbf{w})^\top (\mathbf{y} - \boldsymbol{\Phi}\mathbf{w})\big)
+\end{align}\end{split}\]</div>
+<p>Since the product of two Gaussians yield another Gaussian function the posterior will also be a Gaussian distribution,</p>
+<p>\begin{align}
+p(\mathbf{w}|\mathbf{y}, \mathbf{X}, \sigma_{\mathbf{w}}^2, \sigma_{y}^2) = \mathcal{N}(\mathbf{w}; \mathbf{\mu}<em>{\mathbf{w} | \mathbf{y}, \mathbf{X} },\Sigma</em>{\mathbf{w} | \mathbf{y}, \mathbf{X} }).
+\end{align}</p>
+<p>where</p>
+<p>\begin{align}
+\Sigma_{\mathbf{w} | \mathbf{y}, \mathbf{X} }  = \left( \frac{1}{\sigma_y^2} \boldsymbol{\Phi}^\top \boldsymbol{\Phi} + \frac{1}{\sigma_{\mathbf{w}}^2} \mathrm{I} \right)^{-1} ;;; \text{and} ;;;
+\mathbf{\mu}<em>{\mathbf{w} | \mathbf{y}, \mathbf{X} } =  \Sigma</em>{\mathbf{w} | \mathbf{y}, \mathbf{X} } \frac{1}{\sigma_y^2}  \boldsymbol{\Phi}^\top \mathbf{y}.
+\end{align}</p>
+<details>
+<summary>Detailed derivation for the posterior mean and covariance</summary>
+<div>
+In order to find the posterior mean and covariance, we i) multiply together the prior and likelihood and expand the result in terms of an exponentiated quadratic in $\mathbf{w}$,  and then ii) compare coefficients to identify the posterior mean and covariance.
+<p>Step (i): Multiplying prior and likelihood</p>
+<p>\begin{align}
+p(\mathbf{w}|\mathbf{y}, \mathbf{X}, \sigma_{\mathbf{w}}^2, \sigma_y^2) &amp;\propto \text{exp}\big(-\frac{1}{2\sigma_y^2}(\mathbf{y} - \boldsymbol{\Phi}\mathbf{w})^\top (\mathbf{y} - \boldsymbol{\Phi}\mathbf{w}) -\frac{1}{2 \sigma_{\mathbf{w}}^2}\mathbf{w}^\top  \mathbf{w}  \big)\
+&amp; \propto \text{exp}\left( - \frac{1}{2}\mathbf{w}^\top \left( \frac{1}{\sigma_y^2} \boldsymbol{\Phi}^\top \boldsymbol{\Phi} + \frac{1}{\sigma_{\mathbf{w}}^2} \mathrm{I} \right)\mathbf{w} + \frac{1}{\sigma_y^2} \mathbf{w}^\top \boldsymbol{\Phi}^\top \mathbf{y} \right)
+\end{align}</p>
+<p>Step (ii): comparing coefficients to a Gaussian</p>
+<p>\begin{align}
+p(\mathbf{w}|\mathbf{y}, \mathbf{X}, \sigma_{\mathbf{w}}^2, \sigma_y^2) &amp;= \mathcal{N}(\mathbf{w}; \mathbf{\mu}<em>{\mathbf{w} | \mathbf{y}, \mathbf{X} },\Sigma</em>{\mathbf{w} | \mathbf{y}, \mathbf{X} }), \
+&amp; \propto \text{exp}\left( - \frac{1}{2}\mathbf{w}^\top \Sigma^{-1}<em>{\mathbf{w} | \mathbf{y}, \mathbf{X} }\mathbf{w} + \mathbf{w}^\top \Sigma^{-1}</em>{\mathbf{w} | \mathbf{y}, \mathbf{X} } \mathbf{\mu}_{\mathbf{w} | \mathbf{y}, \mathbf{X} } \right).
+\end{align}</p>
+<p>Hence the posterior covariance and mean are given by:</p>
+<p>\begin{align}
+\Sigma_{\mathbf{w} | \mathbf{y}, \mathbf{X} }  = \left( \frac{1}{\sigma_y^2} \boldsymbol{\Phi}^\top \boldsymbol{\Phi} + \frac{1}{\sigma_{\mathbf{w}}^2} \mathrm{I} \right)^{-1}, ;;;
+\mathbf{\mu}<em>{\mathbf{w} | \mathbf{y}, \mathbf{X} } =  \Sigma</em>{\mathbf{w} | \mathbf{y}, \mathbf{X} } \frac{1}{\sigma_y^2}  \boldsymbol{\Phi}^\top \mathbf{y}.
+\end{align}</p>
+</div>
+</details>
+<p>In a moment we will derive the probabilistic approach to prediction. Before we do this, let’s take some time to consider the results above.</p>
+<p>First, notice that the mean of the posterior distribution over the weights can be expressed as</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbf{\mu}_{\mathbf{w} | \mathbf{y}, \mathbf{X} }  = (\sigma^{-2}\boldsymbol{\Phi}^\top \boldsymbol{\Phi} + \lambda \mathbf{I})\boldsymbol{\Phi}^\top \mathbf{y}
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\lambda = \sigma^2_\mathbf{w} / \sigma^2_y \)</span>. This recovers the solution from regularised least squares fitting which we previously interpreted as finding the <em>maximum a posteriori</em> setting of the weights given the data,</p>
+<p>\begin{align}
+\mathbf{w}^{\text{MAP}} &amp; = \underset{\mathbf{w}}{\mathrm{arg,max}} ; p(\mathbf{w} | \mathbf{y},\mathbf{X},\sigma_y^2,\sigma_{\mathbf{w}}^2).
+\end{align}</p>
+<p>This all adds up because the posterior is Gaussian and the most probable weight under a Gaussian is the mean value.</p>
+<p>\begin{align}
+\mathbf{w}^{\text{MAP}} &amp; = \underset{\mathbf{w}}{\mathrm{arg,max}} ; p(\mathbf{w} | \mathbf{y},\mathbf{X},\sigma_y^2,\sigma_{\mathbf{w}}^2) = \mathbf{\mu}<em>{\mathbf{w} | \mathbf{y}, \mathbf{X} } = \mathbb{E}</em>{p(\mathbf{w} | \mathbf{y},\mathbf{X},\sigma_y^2,\sigma_{\mathbf{w}}^2)}(\mathbf{w}).
+\end{align}</p>
+<p>Second, notice that the <strong>prior</strong> distribution and the <strong>posterior</strong> distribution belong to the same family (i.e. Gaussian). When a model has this property, the prior and likelihood are said to be <strong>conjugate</strong>, or for short it is said to have a <strong>conjugate prior</strong>. Conjugate priors lead to tractable and convenient analytic posterior distributions.</p>
+<div class="section" id="probabilistic-inference-for-prediction">
+<h2>2.2 Probabilistic inference for prediction<a class="headerlink" href="#probabilistic-inference-for-prediction" title="Permalink to this headline">¶</a></h2>
+<p>Now let’s consider how to use probabilistic inference to make predictions for an unseen output <span class="math notranslate nohighlight">\(y^*\)</span> at input location <span class="math notranslate nohighlight">\(\mathbf{x}^*\)</span>. The MAP and maximum likelihood methods use a point estimate for the weights, <span class="math notranslate nohighlight">\(\hat{\mathbf{w}}\)</span>, simply computing <span class="math notranslate nohighlight">\(p(y^* | \mathbf{x}^*, \hat{\mathbf{w}},\sigma_y^2,\sigma_{\mathbf{w}}^2\)</span>. This is equivalent to assuning that the weights are known to take the value <span class="math notranslate nohighlight">\(\hat{\mathbf{w}}\)</span>. The full probabilistic approach considers undertainty in <span class="math notranslate nohighlight">\(\mathbf{w}\)</span> and is therefore more complex. The full solution is a probability distribution over the unseen output, give the input and the training data, <span class="math notranslate nohighlight">\(p(y^* | \mathbf{x}^*, \mathbf{y},\mathbf{X},\sigma_y^2,\sigma_{\mathbf{w}}^2)\)</span>, which can be computed by
+$<span class="math notranslate nohighlight">\(
+p(y^* | \mathbf{x}^*, \mathbf{y},\mathbf{X},\sigma_y^2,\sigma_{\mathbf{w}}^2) = \int p(y^* | \mathbf{x}^*, \mathbf{w},\sigma_y^2) p(\mathbf{w}|\mathbf{y},\mathbf{X},\sigma_y^2,\sigma_{\mathbf{w}}^2) d\mathbf{w}.
+\)</span>$</p>
+<p>So, the predictive is formed by considering every possible setting of the underlying weights, computing the associated prediction <span class="math notranslate nohighlight">\(p(y^* | \mathbf{x}^*, \mathbf{w})\)</span>,  weighting this by the posterior probability of the weight taking that value <span class="math notranslate nohighlight">\(p(\mathbf{w}|\mathbf{y},\mathbf{X},\sigma_y^2,\sigma_{\mathbf{w}}^2)\)</span>, and averaging these weighted predictions together. The form of the predictive distribution may seem intuitively obvious, but for a full derivation see below.</p>
+<details>
+<summary>Detailed derivation for the predictive distribution</summary>
+<div>
+First we apply the sum rule to introduce the weight back into the expression. The sum rule states  $p(A|C) = \int p(A,B|C) \text{d}B$ and we use $A = y^* $, $B = \mathbf{w}$ and $C = \{x^*, \mathbf{y},\mathbf{X},\sigma_y^2,\sigma_{\mathbf{w}}^2\}$ so
+<p>\begin{align}
+p(y^* | \mathbf{x}^<em>, \mathbf{y},\mathbf{X},\sigma_y^2,\sigma_{\mathbf{w}}^2)  = \int p(y^</em>,\mathbf{w} | \mathbf{x}^*, \mathbf{y},\mathbf{X},\sigma_y^2,\sigma_{\mathbf{w}}^2) \mathrm{d} \mathbf{w}
+\end{align}</p>
+<p>Second we apply the product rule. The product rule states <span class="math notranslate nohighlight">\(p(A,B|C) = p(B|C)p(A|B,C)\)</span> and we use the same variable associations as above to give</p>
+<p>\begin{align}
+p(y^* | \mathbf{x}^<em>, \mathbf{y},\mathbf{X},\sigma_y^2,\sigma_{\mathbf{w}}^2)  = \int p( \mathbf{w} | \mathbf{x}^</em>, \mathbf{y},\mathbf{X},\sigma_y^2,\sigma_{\mathbf{w}}^2) p(y^* | \mathbf{w} , \mathbf{x}^*, \mathbf{y},\mathbf{X},\sigma_y^2,\sigma_{\mathbf{w}}^2) \mathrm{d} \mathbf{w}
+\end{align}</p>
+<p>Third, we use the structure of the probabilistic model to simplify the above expression (more precisely the conditional independencies implied by the model). By themselves, the test inputs <span class="math notranslate nohighlight">\(\mathbf{x}^*\)</span> provide no information about the weights <span class="math notranslate nohighlight">\(\mathbf{w}\)</span> so <span class="math notranslate nohighlight">\(p( \mathbf{w} | \mathbf{x}^*, \mathbf{y},\mathbf{X},\sigma_y^2,\sigma_{\mathbf{w}}^2) = p( \mathbf{w} | \mathbf{y},\mathbf{X},\sigma_y^2,\sigma_{\mathbf{w}}^2)\)</span>. Moreover, if the weights <span class="math notranslate nohighlight">\(\mathbf{w}\)</span> are known then the training data provide no additional useful information for prediction so <span class="math notranslate nohighlight">\(p(y^* | \mathbf{w} , \mathbf{x}^*, \mathbf{y},\mathbf{X},\sigma_y^2,\sigma_{\mathbf{w}}^2) = p(y^* | \mathbf{w} , \mathbf{x}^*, \sigma_y^2,\sigma_{\mathbf{w}}^2)\)</span>.</p>
+<p>Together these simplifications yield the expression for the predictive,</p>
+<p>\begin{align}
+p(y^* | \mathbf{x}^<em>, \mathbf{y},\mathbf{X},\sigma_y^2,\sigma_{\mathbf{w}}^2)  = \int p( \mathbf{w} |  \mathbf{y},\mathbf{X},\sigma_y^2,\sigma_{\mathbf{w}}^2) p(y^</em> | \mathbf{w} , \mathbf{x}^*, \sigma_y^2,\sigma_{\mathbf{w}}^2) \mathrm{d} \mathbf{w}.
+\end{align}</p>
+</div>
+</details>
+<p>There are long winded ways of performing the integral over the weights required to compute the predictive. Fortunately there is one simple route to the solution that involves no explicit integration at all.</p>
+<p>The posterior <span class="math notranslate nohighlight">\(p( \mathbf{w} |  \mathbf{y},\mathbf{X},\sigma_y^2,\sigma_{\mathbf{w}}^2)\)</span> is Gaussian. The test ouputs are a linear transformation of the weights plus Gaussian noise. Since Gaussians are closed under linear transforms and under the addition of Gaussian noise, the predictive distribution will also be Gaussian,</p>
+<p>\begin{align}
+p(y^* | \mathbf{x}^<em>, \mathbf{y},\mathbf{X},\sigma_y^2,\sigma_{\mathbf{w}}^2)  = \mathcal{N}(y^</em> ; \mu_{y^<em>|\mathbf{y},\mathbf{X}},\sigma^2_{y^</em>| \mathbf{y},\mathbf{X}}).
+\end{align}</p>
+<p>The expectation and variance of the predictive are then fairly simple to compute depending on the mean <span class="math notranslate nohighlight">\(\mu_{\mathbf{w}| \mathbf{y},\mathbf{X}}\)</span> and covariance <span class="math notranslate nohighlight">\(\Sigma_{\mathbf{w}| \mathbf{y},\mathbf{X}}\)</span> of the posterior distribution over the weights and the basis functions at the test locations <span class="math notranslate nohighlight">\(\boldsymbol{\phi}_*\)</span>,</p>
+<p>\begin{align}
+\mu_{y^<em>|\mathbf{y},\mathbf{X}} = \boldsymbol{\phi}<em>{\ast}^\top \mu</em>{\mathbf{w}| \mathbf{y},\mathbf{X}}\
+\sigma^2_{y^</em>| \mathbf{y},\mathbf{X}} = \boldsymbol{\phi}<em>*^\top \Sigma</em>{\mathbf{w}| \mathbf{y},\mathbf{X}} \boldsymbol{\phi}<em>*  + \sigma</em>{y}^2.
+\end{align}</p>
+<details>
+<summary>Detailed derivation for the mean and variance of the predictive distribution</summary>
+<div>
+We know that the mean of the posterior predictive distribution is defined as $\mu_{y^*|\mathbf{y},\mathbf{X}} =  \mathbb{E}_{p(y^* | \mathbf{x}^*, \mathbf{y},\mathbf{X},\sigma_y^2,\sigma_{\mathbf{w}}^2)}[y^*]$.     
+<p>We also know that we can write the posterior predictive distribution as</p>
+<p>\begin{align}
+p(y^* | \mathbf{x}^<em>, \mathbf{y},\mathbf{X},\sigma_y^2,\sigma_{\mathbf{w}}^2)  = \int p( \mathbf{w} |  \mathbf{y},\mathbf{X},\sigma_y^2,\sigma_{\mathbf{w}}^2) p(y^</em> | \mathbf{w} , \mathbf{x}^*, \sigma_y^2,\sigma_{\mathbf{w}}^2) \mathrm{d} \mathbf{w}.
+\end{align}</p>
+<p>So the mean of the poserior predictive can also be written</p>
+<p>\begin{align}
+\mu_{y^<em>|\mathbf{y},\mathbf{X}} =  \mathbb{E}_{p(y^</em> | \mathbf{x}^<em>, \mathbf{y},\mathbf{X},\sigma_y^2,\sigma_{\mathbf{w}}^2)}[y^</em>] = \mathbb{E}<em>{p( \mathbf{w} |  \mathbf{y},\mathbf{X},\sigma_y^2,\sigma</em>{\mathbf{w}}^2)}[ \mathbb{E}<em>{p(y^* | \mathbf{w} , \mathbf{x}^*, \sigma_y^2,\sigma</em>{\mathbf{w}}^2)}  [y^*] ]
+\end{align}</p>
+<p>The inner expectation is simple to compute <span class="math notranslate nohighlight">\(\mathbb{E}_{p(y^* | \mathbf{w} , \mathbf{x}^*, \sigma_y^2,\sigma_{\mathbf{w}}^2)}  [y^*] = \boldsymbol{\phi}_*^\top \mathbf{w}\)</span> where we have used the fact that   <span class="math notranslate nohighlight">\(p(y^* | \mathbf{w} , \mathbf{x}^*, \sigma_y^2,\sigma_{\mathbf{w}}^2) = \mathcal{N}(y^*; \boldsymbol{\phi}_*^\top \mathbf{w}, \sigma_y^2)\)</span>.</p>
+<p>Now we can compute the outer expectation</p>
+<p>\begin{align}
+\mu_{y^<em>|\mathbf{y},\mathbf{X}} =  \mathbb{E}<em>{p( \mathbf{w} |  \mathbf{y},\mathbf{X},\sigma_y^2,\sigma</em>{\mathbf{w}}^2)}[ \boldsymbol{\phi}_</em>^\top \mathbf{w} ]= \boldsymbol{\phi}<em>*^\top\mathbb{E}</em>{p( \mathbf{w} |  \mathbf{y},\mathbf{X},\sigma_y^2,\sigma_{\mathbf{w}}^2)}[\mathbf{w}] = \boldsymbol{\phi}<em>*^\top \mu</em>{\mathbf{w}| \mathbf{y},\mathbf{X}}\
+\end{align}</p>
+<p>This result is essentially leveraging the <a class="reference external" href="https://en.wikipedia.org/wiki/Law_of_total_expectation">law of total expectation</a>.</p>
+<p>The variance of the predictive distribution <span class="math notranslate nohighlight">\(\sigma^2_{y^*| \mathbf{y},\mathbf{X}} =  \mathbb{E}_{p(y^* | \mathbf{x}^*, \mathbf{y},\mathbf{X},\sigma_y^2,\sigma_{\mathbf{w}}^2)}[(y^* )^2]- \mu_{y^*|\mathbf{y},\mathbf{X}}^2\)</span> can be computed in an identical way</p>
+<p>\begin{align}
+\sigma^2_{y^<em>| \mathbf{y},\mathbf{X}} &amp; =  \mathbb{E}<em>{p( \mathbf{w} |  \mathbf{y},\mathbf{X},\sigma_y^2,\sigma</em>{\mathbf{w}}^2)}[ \mathbb{E}_{p(y^</em> | \mathbf{w} , \mathbf{x}^<em>, \sigma_y^2,\sigma_{\mathbf{w}}^2)}  (y^</em>)^2] - \mu_{y^<em>|\mathbf{y},\mathbf{X}}^2 \
+&amp; = \mathbb{E}<em>{p( \mathbf{w} |  \mathbf{y},\mathbf{X},\sigma_y^2,\sigma</em>{\mathbf{w}}^2)}[ (\boldsymbol{\phi}_</em>^\top \mathbf{w})^2 +\sigma_y^2 ]  - \mu_{y^<em>|\mathbf{y},\mathbf{X}}^2\ &amp; = \mathbb{E}<em>{p( \mathbf{w} |  \mathbf{y},\mathbf{X},\sigma_y^2,\sigma</em>{\mathbf{w}}^2)}[ (\boldsymbol{\phi}_</em>^\top \mathbf{w})^2 ] - \mu_{y^<em>|\mathbf{y},\mathbf{X}}^2 +\sigma_y^2 \
+&amp; = \mathbb{E}<em>{p( \mathbf{w} |  \mathbf{y},\mathbf{X},\sigma_y^2,\sigma</em>{\mathbf{w}}^2)}[ (\boldsymbol{\phi}_</em>^\top \mathbf{w} - \mu_{y^<em>|\mathbf{y},\mathbf{X}})^2 ] +\sigma_y^2\
+&amp; = \boldsymbol{\phi}_</em>^\top \mathbb{E}<em>{p( \mathbf{w} |  \mathbf{y},\mathbf{X},\sigma_y^2,\sigma</em>{\mathbf{w}}^2)}[(\mathbf{w} - {\mu}<em>{\mathbf{w}| \mathbf{y},\mathbf{X}})(\mathbf{w} - {\mu}</em>{\mathbf{w}| \mathbf{y},\mathbf{X}})^\top] \boldsymbol{\phi}<em>*  + \sigma_y^2\
+&amp; = \boldsymbol{\phi}</em><em>^\top \Sigma_{\mathbf{w}| \mathbf{y},\mathbf{X}} \boldsymbol{\phi}_</em>  + \sigma_{y}^2
+\end{align}</p>
+<p>There’s a more simple lens through which to view these results. Consider the following result:</p>
+<p>If <span class="math notranslate nohighlight">\(z_3 = A z_1 + z_2\)</span> where <span class="math notranslate nohighlight">\( z_1 \sim \mathcal{N}(\mu_1,\Sigma_1)\)</span> and <span class="math notranslate nohighlight">\(z_2 \sim \mathcal{N}(0,\Sigma_2)\)</span>, then the marginal distribution induced over <span class="math notranslate nohighlight">\(z_3\)</span> is <span class="math notranslate nohighlight">\(z_3 \sim \mathcal{N}(A \mu_1,A \Sigma_1 A^{\top} + \Sigma_2)\)</span>.</p>
+<p>Now notice that this is precisely mirrors the result above. We had: <span class="math notranslate nohighlight">\(y^* = \boldsymbol{\phi}_*^\top \mathbf{w} + \epsilon'\)</span> where <span class="math notranslate nohighlight">\(\mathbf{w} | \mathbf{y},\mathbf{X} \sim \mathcal{N}(\mu_{\mathbf{w}| \mathbf{y},\mathbf{X}}, \Sigma_{\mathbf{w}| \mathbf{y},\mathbf{X}})\)</span> and <span class="math notranslate nohighlight">\(\epsilon' \sim \mathcal{N}(0,\sigma_y^2)\)</span>. So identifying: <span class="math notranslate nohighlight">\(A = \phi_*\)</span>, <span class="math notranslate nohighlight">\(\mu_1 = \mu_{\mathbf{w}| \mathbf{y},\mathbf{X}} \)</span>, <span class="math notranslate nohighlight">\(\Sigma_1 = \Sigma_{\mathbf{w}| \mathbf{y},\mathbf{X}}\)</span> and <span class="math notranslate nohighlight">\(\Sigma_2 = \sigma_y^2\)</span> recovers the same result as above.</p>
+<p>Let’s implement these results on the linear and non-linear datasets, starting with the linear dataset.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_lin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;reg_lin_x.npy&#39;</span><span class="p">)</span>  
+<span class="n">y_lin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;reg_lin_y.npy&#39;</span><span class="p">)</span> <span class="c1"># loading the linear regression dataset into numpy arrays</span>
+
+<span class="n">var_w</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">var_y</span> <span class="o">=</span> <span class="mf">0.03</span>
+
+<span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x_</span> <span class="o">**</span> <span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)]</span> <span class="k">for</span> <span class="n">x_</span> <span class="ow">in</span> <span class="n">x_lin</span><span class="p">])</span> <span class="c1"># X instantiated more elegantly here</span>
+
+<span class="n">pre_w</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">var_w</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="c1"># prior covariance matrix to include in MAP solution</span>
+
+<span class="n">S</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">((</span><span class="n">phi</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span> <span class="o">/</span> <span class="n">var_y</span> <span class="o">+</span> <span class="n">pre_w</span><span class="p">)</span> <span class="c1"># posterior distribution covariance matrix</span>
+<span class="n">mu</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">phi</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">y_lin</span><span class="p">)</span><span class="o">/</span><span class="n">var_y</span> <span class="c1"># MAP weights to use in mean(y*)</span>
+
+
+<span class="n">x_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">X_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x_</span> <span class="o">**</span> <span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)]</span> <span class="k">for</span> <span class="n">x_</span> <span class="ow">in</span> <span class="n">x_pred</span><span class="p">])</span>
+
+<span class="n">mu_pred</span> <span class="o">=</span> <span class="n">X_pred</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">mu</span><span class="p">)</span> <span class="c1"># calculate mean(y*)</span>
+<span class="n">stdev_pred</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">X_pred</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">S</span><span class="p">)</span> <span class="o">*</span> <span class="n">X_pred</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">var_y</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.5</span> <span class="c1"># calculate Var(y*)^0.5</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">x_pred</span><span class="p">,</span> <span class="n">mu_pred</span> <span class="o">+</span> <span class="n">stdev_pred</span><span class="p">,</span> <span class="n">mu_pred</span> <span class="o">-</span> <span class="n">stdev_pred</span><span class="p">,</span> <span class="n">facecolor</span> <span class="o">=</span> <span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">)</span> <span class="c1"># plot confidence intervals = +/- Var(y*)^0.5</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_lin</span><span class="p">,</span> <span class="n">y_lin</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">)</span> <span class="c1"># plot data</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_pred</span><span class="p">,</span> <span class="n">mu_pred</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">)</span> <span class="c1"># plot mean(y*)</span>
+<span class="n">beautify_plot</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span><span class="s2">&quot;Bayesian regression predictive&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span><span class="s2">&quot;$x$&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="s1">&#39;$y$&#39;</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">toggle_code</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/regression_bayesian_6_0.svg" src="../../_images/regression_bayesian_6_0.svg" /><div class="output text_html">
+    <script>
+      function get_new_label(butn, hide) {
+          var shown = $(butn).parents("div.cell.code_cell").find('div.input').is(':visible');
+          var title = $(butn).val().substr($(butn).val().indexOf(" ") + 1)
+          return ((shown) ? 'Show ' : 'Hide ') + title
+      }
+      function code_toggle(butn, hide) {
+        $(butn).val(get_new_label(butn,hide));
+        $(hide).slideToggle();
+      };
+    </script>
+    <input type="submit" value='initiated' class='toggle_button'>
+    <script>
+        var hide_area = $(".toggle_button[value='initiated']").parents('div.cell').prevAll().addBack().slice(-1)
+        hide_area = $(hide_area).find("div.input").add($(hide_area).filter("div.text_cell"))
+        $(".toggle_button[value='initiated']").prop("hide_area", hide_area)
+        $(".toggle_button[value='initiated']").click(function(){
+            code_toggle(this, $(this).prop("hide_area"))
+        }); 
+$(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($(".toggle_button[value='initiated']").parents("div.output").find('div.output_area').first());
+    var shown = $(".toggle_button[value='initiated']").parents("div.cell.code_cell").find('div.input').is(':visible');
+    var title = ((shown) ? 'Hide ' : 'Show ') + 'code'; 
+     $(".toggle_button[value='initiated']").addClass("init_show");
+            $(hide_area).addClass("init_hidden");  $(".toggle_button[value='initiated']").val(title);
+    </script></div></div>
+</div>
+<p>The solid black line shows the mean of the predictive distribution <span class="math notranslate nohighlight">\(
+\mu_{y^*|\mathbf{y},\mathbf{X}}\)</span>, and the grey area shows one standard deviation around this <span class="math notranslate nohighlight">\(\pm 
+\sigma_{y^*| \mathbf{y},\mathbf{X}}\)</span>. Notice how the uncertainty grows away from the region where we have seen data. This seems reasonable, as uncertainty in the gradient of a straight line fit would have a larger effect as we move away from the data region.</p>
+<p>Let’s apply this method to the non-linear dataset.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># exactly the same process with the linear case, except phi is different</span>
+
+<span class="n">x_nonlin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;reg_nonlin_x.npy&#39;</span><span class="p">)</span> 
+<span class="n">y_nonlin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;reg_nonlin_y.npy&#39;</span><span class="p">)</span> <span class="c1"># loading the non-linear dataset</span>
+
+<span class="n">var_w</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">var_y</span> <span class="o">=</span> <span class="mf">0.01</span>
+<span class="n">D</span> <span class="o">=</span> <span class="mi">11</span><span class="p">;</span>
+
+<span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x_</span> <span class="o">**</span> <span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="k">for</span> <span class="n">x_</span> <span class="ow">in</span> <span class="n">x_nonlin</span><span class="p">])</span>
+<span class="n">pre_w</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="n">var_w</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">D</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># prior covariance matrix to include in MAP solution</span>
+
+<span class="n">S</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">((</span><span class="n">phi</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span> <span class="o">/</span> <span class="n">var_y</span> <span class="o">+</span> <span class="n">pre_w</span><span class="p">)</span> <span class="c1"># posterior distribution covariance matrix</span>
+<span class="n">mu</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">phi</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">y_nonlin</span><span class="p">)</span><span class="o">/</span><span class="n">var_y</span> <span class="c1"># MAP weights to use in mean(y*)</span>
+
+<span class="n">x_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">phi_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x_</span> <span class="o">**</span> <span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="k">for</span> <span class="n">x_</span> <span class="ow">in</span> <span class="n">x_pred</span><span class="p">])</span>
+
+<span class="n">mu_pred</span> <span class="o">=</span> <span class="n">phi_pred</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">mu</span><span class="p">)</span>
+<span class="n">stdev_pred</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">phi_pred</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">S</span><span class="p">)</span> <span class="o">*</span> <span class="n">phi_pred</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">var_y</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.5</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">x_pred</span><span class="p">,</span> <span class="n">mu_pred</span> <span class="o">+</span> <span class="n">stdev_pred</span><span class="p">,</span> <span class="n">mu_pred</span> <span class="o">-</span> <span class="n">stdev_pred</span><span class="p">,</span>
+                 <span class="n">facecolor</span> <span class="o">=</span> <span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_nonlin</span><span class="p">,</span> <span class="n">y_nonlin</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_pred</span><span class="p">,</span> <span class="n">mu_pred</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">)</span>
+<span class="n">beautify_plot</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span><span class="s2">&quot;Bayesian regression predictive&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span><span class="s2">&quot;$x$&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="s1">&#39;$y$&#39;</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="o">-</span><span class="mf">0.25</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">toggle_code</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/regression_bayesian_8_0.svg" src="../../_images/regression_bayesian_8_0.svg" /><div class="output text_html">
+    <script>
+      function get_new_label(butn, hide) {
+          var shown = $(butn).parents("div.cell.code_cell").find('div.input').is(':visible');
+          var title = $(butn).val().substr($(butn).val().indexOf(" ") + 1)
+          return ((shown) ? 'Show ' : 'Hide ') + title
+      }
+      function code_toggle(butn, hide) {
+        $(butn).val(get_new_label(butn,hide));
+        $(hide).slideToggle();
+      };
+    </script>
+    <input type="submit" value='initiated' class='toggle_button'>
+    <script>
+        var hide_area = $(".toggle_button[value='initiated']").parents('div.cell').prevAll().addBack().slice(-1)
+        hide_area = $(hide_area).find("div.input").add($(hide_area).filter("div.text_cell"))
+        $(".toggle_button[value='initiated']").prop("hide_area", hide_area)
+        $(".toggle_button[value='initiated']").click(function(){
+            code_toggle(this, $(this).prop("hide_area"))
+        }); 
+$(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($(".toggle_button[value='initiated']").parents("div.output").find('div.output_area').first());
+    var shown = $(".toggle_button[value='initiated']").parents("div.cell.code_cell").find('div.input').is(':visible');
+    var title = ((shown) ? 'Hide ' : 'Show ') + 'code'; 
+     $(".toggle_button[value='initiated']").addClass("init_show");
+            $(hide_area).addClass("init_hidden");  $(".toggle_button[value='initiated']").val(title);
+    </script></div></div>
+</div>
+<p>In the next <a class="reference internal" href="regression_bayesian-online-visualisations.html"><span class="doc std std-doc">notebook</span></a> we will look at how to visualise and better understand the posterior distribution over the weights using a process called <em>online learning</em>.</p>
+</div>
+<div class="section" id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<p>Having covered bayesian linear regression, you should now understand:</p>
+<ol class="simple">
+<li><p>Why finding the <span class="math notranslate nohighlight">\(\mathbf{w}\)</span> using MAP with a gaussian likelihood and prior is equivalent to doing least-squares with <span class="math notranslate nohighlight">\(\mathbf{L2}\)</span> regularization</p></li>
+<li><p>How to take a bayesian inference approach to regression problems, including how to calculate <span class="math notranslate nohighlight">\(\mathbb{E}\)</span>(y) and Var(y) for your fitted model.</p></li>
+</ol>
+</div>
+<div class="section" id="questions">
+<h2>Questions<a class="headerlink" href="#questions" title="Permalink to this headline">¶</a></h2>
+<p>1a. Consider the the Bayesian regression described above. Show that, in addition to the number of datapoints <span class="math notranslate nohighlight">\(N\)</span>, the posterior distribution only requires the following statistics to be computed from the training data,</p>
+<p>\begin{align}
+\mu^{(N)}<em>{d} &amp;= \frac{1}{N}\sum</em>{n=1}^N \phi_d(\mathbf{x}<em>n) y_n, ;; \text{and} ;;
+\Sigma^{(N)}</em>{d,d’} = \frac{1}{N}\sum_{n=1}^N \phi_d(\mathbf{x}<em>n) \phi</em>{d’}(\mathbf{x}_n).
+\end{align}</p>
+<details>
+<summary>Answer</summary>
+<div>
+Computing the posterior distribution requires the following two statistics $\boldsymbol{\Phi}^\top \mathbf{y}$   and $\boldsymbol{\Phi}^\top \boldsymbol{\Phi}$. Dividing these two statistics by $N$ and expanding them using index notation yields the expressions above.
+<p>The fact that the inference depends only on the empirical average of a small number of simple functions of the data is an example of <strong>suffiecnt statistics</strong>. Sufficient statistics arise when employing probabilistic models with elements that employ <a class="reference external" href="https://en.wikipedia.org/wiki/Exponential_family">exponential family distributions</a> like the Gaussian.</p>
+</div>
+</details>
+<p>1b. Consider applying Bayesian regression on streaming data where one datapoint <span class="math notranslate nohighlight">\(\{ \mathbf{x}_n, y_n\}\)</span> arrives at a time and the posterior is continually updated as data come in.</p>
+<p>Derive an update where the statistics (<span class="math notranslate nohighlight">\(\mu^{(N)}_{d}\)</span> and <span class="math notranslate nohighlight">\(\Sigma^{(N)}_d\)</span>) are recomputed using the old values of the statitics (<span class="math notranslate nohighlight">\(\mu^{(N-1)}_{d}\)</span> and <span class="math notranslate nohighlight">\(\Sigma^{(N-1)}_d\)</span>) and the current datapoint (<span class="math notranslate nohighlight">\(\{ \mathbf{x}_n, y_n\}\)</span>).</p>
+<p>What advantage does this have for very long data streams <span class="math notranslate nohighlight">\(N \rightarrow \infty\)</span>?</p>
+<details>
+<summary>Answer</summary> 
+<div>
+    Consider the update for $\mu^{(N)}_{d}$. Splitting out the contribution from the $N$th datapoint, we have  
+<p>\begin{align}
+\mu^{(N)}<em>{d} &amp;= \frac{1}{N}\sum</em>{n=1}^N \phi_d(\mathbf{x}_n) y_n = \frac{1}{N} \left(\phi_d(\mathbf{x}<em>N) y_N + \sum</em>{n=1}^{N-1} \phi_d(\mathbf{x}_n) y_n \right )\
+&amp;  = \frac{1}{N} \left(\phi_d(\mathbf{x}<em>N) y_N + \frac{N-1}{N-1}\sum</em>{n=1}^{N-1} \phi_d(\mathbf{x}_n) y_n \right)\
+&amp;  = \frac{1}{N} \phi_d(\mathbf{x}_N) y_N + \frac{N-1}{N} \mu^{(N-1)}_d
+\end{align}</p>
+<p>This is the idea of a ‘running average’. Similarly for <span class="math notranslate nohighlight">\(\Sigma^{(N)}_{d,d'}\)</span></p>
+<p>\begin{align}
+\Sigma^{(N)}_{d,d’} &amp;= \frac{1}{N} \phi_d(\mathbf{x}<em>N) \phi</em>{d’}(\mathbf{x}<em>N) + \frac{N-1}{N} \Sigma^{(N-1)}</em>{d,d’}.
+\end{align}</p>
+<p>These updates do not require the entire dataset to be retained. They just require the old statistics and the current datapoint, which can be much more efficient in terms of memory. This idea relates to <a class="reference internal" href="regression_bayesian-online-visualisations.html"><span class="doc std std-doc">online inference</span></a>.</p>
+</div>
+</details></div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./content/regression"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Stratis Markou, Rich Turner<br/>
+        
+            &copy; Copyright 2021.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../../_static/js/index.3da636dd464baa7582d2.js"></script>
+
+
+    
+    <!-- Google Analytics -->
+    <script>
+      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+      ga('create', 'UA-168728006-1', 'auto');
+      ga('set', 'anonymizeIp', true);
+      ga('send', 'pageview');
+    </script>
+    <script async src='https://www.google-analytics.com/analytics.js'></script>
+    <!-- End Google Analytics -->
+    
+  </body>
+</html>

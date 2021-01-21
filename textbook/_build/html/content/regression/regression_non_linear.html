@@ -1,0 +1,697 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Non-linear regression using basis functions &#8212; OMLT</title>
+    
+  <link rel="stylesheet" href="../../_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom_style.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/.ipynb_checkpoints/custom_style-checkpoint.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../../_static/js/index.3da636dd464baa7582d2.js">
+
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../../index.html">
+  
+  <img src="../../_static/logo.png" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">OMLT</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../home.html">
+   Online Machine Learning Textbook
+  </a>
+ </li>
+</ul>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="regression-intro.html">
+   Regression
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="regression-linear.html">
+     Linear regression
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../../_sources/content/regression/regression_non_linear.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+        <!-- Source interaction buttons -->
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/stratisMarkou/random-walks/master?urlpath=tree/./content/regression/regression_non_linear.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   Non-linear regression using basis functions
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h2 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#least-squares-and-maximum-likelihood-fitting">
+     Least squares and maximum likelihood fitting
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#summary">
+   Summary
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#questions">
+   Questions
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">config</span> InlineBackend.figure_format = &#39;svg&#39; # change output plot display format to &#39;svg&#39;
+
+<span class="c1"># import the required modules for this notebook</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="c1"># import the helper functions from the parent directory,</span>
+<span class="c1"># these help with things like graph plotting and notebook layout</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;..&#39;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">helper_functions</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c1"># set things like fonts etc - comes from helper_functions</span>
+<span class="n">set_notebook_preferences</span><span class="p">()</span>
+
+<span class="c1"># add a show/hide code button - also from helper_functions</span>
+<span class="n">toggle_code</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;setup code&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><style>.output {
+    font-family: ariel;
+    align-items: normal;
+    text-align: normal;
+}
+
+div.output_svg div { margin : auto; }
+.div.output_area.MathJax_Display{ text-align: center; }
+div.text_cell_render { font-family: sans-serif; }
+
+details {
+    margin: 20px 0px;
+    padding: 0px 10px;
+    border-radius: 3px;
+    border-style: solid;
+    border-color: black;
+    border-width: 2px;
+}
+details div{padding: 20px 30px;}
+details summary{font-size: 18px;}
+
+table {
+     margin: calc(auto + 10px) !important;
+     border: solid !important;
+ }
+
+ th, td {
+    text-align: left !important;
+ }
+
+ .further_box {
+    background-color:rgb(230, 230, 230);
+    border-style: solid;
+    margin: 10px 10px 10px 0px;
+    padding: 10px;
+    left:calc(auto - 20px);
+ }
+
+ .question_box {
+    background-color:rgb(255, 255, 225);
+    border-style: solid;
+    margin: 10px 10px 10px 0px;
+    padding: 10px;
+    left:calc(auto - 20px);
+ }</style>
+     <input type="submit" value='Home' id="initiated" class='home_button' onclick='window.location="../index.ipynb"' style='float: right; margin-right: 40px;'>
+    <script>
+    $('.home_button').not('#initiated').remove();
+    $('.home_button').removeAttr('id');
+    $(".home_button").insertBefore($("div.cell").first());
+
+    $('div.input.init_hidden').hide()
+    $('div.input.init_shown').show()
+    $('.toggle_button').each(function( index, element ) {
+       var prefix;
+       if (this.classList.contains('init_show')) {
+           prefix = 'Show '
+       }
+       else if (this.classList.contains('init_hide')) {
+           prefix = 'Hide '
+       };
+       $(this).val(prefix + $(this).val().substr($(this).val().indexOf(" ") + 1))
+    });
+    IPython.OutputArea.prototype._should_scroll = function(lines) {
+        return false;
+    }
+    </script>
+</div><div class="output text_html">
+    <script>
+      function get_new_label(butn, hide) {
+          var shown = $(butn).parents("div.cell.code_cell").find('div.input').is(':visible');
+          var title = $(butn).val().substr($(butn).val().indexOf(" ") + 1)
+          return ((shown) ? 'Show ' : 'Hide ') + title
+      }
+      function code_toggle(butn, hide) {
+        $(butn).val(get_new_label(butn,hide));
+        $(hide).slideToggle();
+      };
+    </script>
+    <input type="submit" value='initiated' class='toggle_button'>
+    <script>
+        var hide_area = $(".toggle_button[value='initiated']").parents('div.cell').prevAll().addBack().slice(-1)
+        hide_area = $(hide_area).find("div.input").add($(hide_area).filter("div.text_cell"))
+        $(".toggle_button[value='initiated']").prop("hide_area", hide_area)
+        $(".toggle_button[value='initiated']").click(function(){
+            code_toggle(this, $(this).prop("hide_area"))
+        }); 
+$(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($(".toggle_button[value='initiated']").parents("div.output").find('div.output_area').first());
+    var shown = $(".toggle_button[value='initiated']").parents("div.cell.code_cell").find('div.input').is(':visible');
+    var title = ((shown) ? 'Hide ' : 'Show ') + 'setup code'; 
+     $(".toggle_button[value='initiated']").addClass("init_show");
+            $(hide_area).addClass("init_hidden");  $(".toggle_button[value='initiated']").val(title);
+    </script></div></div>
+</div>
+<div class="section" id="non-linear-regression-using-basis-functions">
+<h1>Non-linear regression using basis functions<a class="headerlink" href="#non-linear-regression-using-basis-functions" title="Permalink to this headline">¶</a></h1>
+<p>In the <span class="xref myst">previous section</span> we showed how linear regression can be used to make predictions in datasets where the underlying input-output relation is linear. In this section we show how to extend linear regression to handle underyling functions that are non-linear.</p>
+<p>We will use the following dataset, which appears to have a non-linear underlying function, as a running example:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_nonlin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;reg_nonlin_x.npy&#39;</span><span class="p">)</span> <span class="c1"># load inputs from a prepared non-linear dataset</span>
+<span class="n">y_nonlin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;reg_nonlin_y.npy&#39;</span><span class="p">)</span> <span class="c1"># load corresponding outputs</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_nonlin</span><span class="p">,</span> <span class="n">y_nonlin</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">)</span>
+<span class="n">beautify_plot</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span><span class="s2">&quot;Non-linear dataset&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span><span class="s2">&quot;$x$&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span><span class="s2">&quot;$y$&quot;</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">toggle_code</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/regression_non_linear_2_0.svg" src="../../_images/regression_non_linear_2_0.svg" /><div class="output text_html">
+    <script>
+      function get_new_label(butn, hide) {
+          var shown = $(butn).parents("div.cell.code_cell").find('div.input').is(':visible');
+          var title = $(butn).val().substr($(butn).val().indexOf(" ") + 1)
+          return ((shown) ? 'Show ' : 'Hide ') + title
+      }
+      function code_toggle(butn, hide) {
+        $(butn).val(get_new_label(butn,hide));
+        $(hide).slideToggle();
+      };
+    </script>
+    <input type="submit" value='initiated' class='toggle_button'>
+    <script>
+        var hide_area = $(".toggle_button[value='initiated']").parents('div.cell').prevAll().addBack().slice(-1)
+        hide_area = $(hide_area).find("div.input").add($(hide_area).filter("div.text_cell"))
+        $(".toggle_button[value='initiated']").prop("hide_area", hide_area)
+        $(".toggle_button[value='initiated']").click(function(){
+            code_toggle(this, $(this).prop("hide_area"))
+        }); 
+$(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($(".toggle_button[value='initiated']").parents("div.output").find('div.output_area').first());
+    var shown = $(".toggle_button[value='initiated']").parents("div.cell.code_cell").find('div.input').is(':visible');
+    var title = ((shown) ? 'Hide ' : 'Show ') + 'code'; 
+     $(".toggle_button[value='initiated']").addClass("init_show");
+            $(hide_area).addClass("init_hidden");  $(".toggle_button[value='initiated']").val(title);
+    </script></div></div>
+</div>
+<p>In this section we will make use of the insight that we can retain much of the machinery developed earlier by modelling the underlying non-linear function as a linear combination of non-linear basis functions \(\phi_d(x), d = 0, 1, …, D\).</p>
+<p>\[y_n = f(x_n) + \epsilon_n ~\text{where}~ \epsilon_n \sim \mathcal{N}(0, \sigma_{y}^2) ~\text{and}\
+f(x_n) = w_0 + w_1 \phi_{1}(x_n) + w_2 \phi_{2}(x_n) + … w_D \phi_{D}(x_n).
+\]</p>
+<p>Suitable choices for the non-linear basis functions might include polynomials <span class="math notranslate nohighlight">\(\phi_{d}(x) = x^d\)</span>, sinusoids <span class="math notranslate nohighlight">\(\phi_{d}(x) = \cos(\omega_d x + \phi_d)\)</span>, or Gaussian bumps <span class="math notranslate nohighlight">\(\phi_d(x) = \exp(-(x - \mu_d)^2/(2\sigma^2) )\)</span>. Here’s an example of a non-linear function constructed from a linear combination of 10 Gaussian bumps.</p>
+<div class="row">
+  <div class="column">
+    <img src="non-linear-schematic.svg" alt="Snow" style="width:80%; float: center; padding: 0px; padding : 20px">
+  </div>
+</div>
+<div class="section" id="least-squares-and-maximum-likelihood-fitting">
+<h2>Least squares and maximum likelihood fitting<a class="headerlink" href="#least-squares-and-maximum-likelihood-fitting" title="Permalink to this headline">¶</a></h2>
+<p>The beauty of this approach to non-linear regression is that <strong>the model is still linear in the parameters</strong> and so fitting proceeds in an analogous manner to the linear case. First, we rewrite the model in terms of a <span class="math notranslate nohighlight">\(D+1\)</span> dimensional vector of parameters <span class="math notranslate nohighlight">\(\mathbf{w} = [w_0,...,w_{D}]^\top\)</span> and similarly for the basis functions <span class="math notranslate nohighlight">\(\boldsymbol{\phi}(x_n) = [1,\phi_1(x_n)...,\phi_{D}(x_n)]^\top\)</span> so that</p>
+<p>\[y_n = w_0 + w_1 \phi_{1}(x_n) + w_2 \phi_{2}(x_n) + … w_D \phi_{D}(x_n) + \epsilon_n = \boldsymbol{\phi}(x_n)^\top \mathbf{w} + \epsilon_n.\]</p>
+<p>Second, we can collect all of the observations and observation noise variables into  <span class="math notranslate nohighlight">\(N\)</span> dimensional vectors <span class="math notranslate nohighlight">\(\mathbf{y} = [y_1,...,y_{N}]^\top\)</span> and <span class="math notranslate nohighlight">\(\boldsymbol{\epsilon} = [\epsilon_1,...,\epsilon_{N}]^\top\)</span> giving</p>
+<p>\[\mathbf{y} = \boldsymbol{\Phi}\mathbf{w} + \boldsymbol{\epsilon}.\]</p>
+<p>Here \(\boldsymbol{\Phi}\) is called the <strong>design matrix</strong> whose entry at the \(d^{th}\) row and \(n^{th}\) column is \(\phi_d(x_n)\),</p>
+<p>\begin{equation}
+\boldsymbol{\Phi} =  \begin{pmatrix}
+1 &amp; \phi_1(x_1) &amp; \cdots &amp; \phi_D(x_1)\<br />
+1 &amp; \phi_1(x_2) &amp; \cdots &amp; \phi_D(x_2)\<br />
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \<br />
+1 &amp; \phi_1(x_N) &amp; \cdots &amp; \phi_D(x_N)
+\end{pmatrix}.
+\end{equation}</p>
+<p>Notice that we have assumed that the \(0^{th}\) basis function is <span class="math notranslate nohighlight">\(1\)</span> to recover the constant \(w_0\) term when multiplied by \(\mathbf{w}\). You should convince yourself that this matrix gives the correct linear combination when acting on \(\mathbf{w}\).</p>
+<p>We can now proceed either by applying the least squares approach with error:</p>
+<p>\[C_2 = \big|\big| \mathbf{y} - \boldsymbol{\Phi}\mathbf{w}\big|\big|^2 = \big(\mathbf{y} - \boldsymbol{\Phi}\mathbf{w}\big)^\top \big(\mathbf{y} - \boldsymbol{\Phi}\mathbf{w}\big),\]</p>
+<p>or by minimising the negative log-likelihood:</p>
+<p>\[- \mathcal{L}(\mathbf{w}) = - \text{log}~ p(\mathbf{y}|\boldsymbol{\Phi}, \mathbf{w}, \sigma_y^2) = \frac{N}{2}\text{log}(2\pi \sigma^2) + \frac{1}{2\sigma^2}(\mathbf{y} - \boldsymbol{\Phi}\mathbf{w})^\top (\mathbf{y} - \boldsymbol{\Phi}\mathbf{w})\]</p>
+<p>with respect to <span class="math notranslate nohighlight">\(\mathbf{w}\)</span>. Again it is easy to convince yourself that the two approaches are equivalent, and that the maximum-likelihood weights are:</p>
+<p>\begin{align}
+\boxed{\mathbf{w} = \big( \boldsymbol{\Phi}^\top\boldsymbol{\Phi}\big)^{-1}\boldsymbol{\Phi}^\top \mathbf{y}}.
+\end{align}</p>
+<p>So, the only change we need to make to our old implementation is to compute the design matrix <span class="math notranslate nohighlight">\(\boldsymbol{\Phi}\)</span>.</p>
+<p>Let’s fit the model to the toy dataset above using some different choices of basis function. First, we use polynomial basis functions \(\phi_d(x) = x^d\) selecting the order <span class="math notranslate nohighlight">\(D = 5\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">D</span> <span class="o">=</span> <span class="mi">5</span>
+
+<span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x_</span> <span class="o">**</span> <span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="k">for</span> <span class="n">x_</span> <span class="ow">in</span> <span class="n">x_nonlin</span><span class="p">])</span> <span class="c1"># build the design matrix Phi</span>
+
+<span class="c1"># compute the optimal w using the Moore-Penrose pseudoinverse</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span> <span class="p">(</span><span class="n">phi</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span> <span class="p">,</span> <span class="p">(</span><span class="n">phi</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">y_nonlin</span><span class="p">)</span> <span class="p">)</span>
+
+<span class="c1"># As with linear regression, the line above is numerically stable version of line commented line below (e.g. it works with D&gt;N)</span>
+<span class="c1"># w = np.linalg.inv((phi.T).dot(phi)).dot(phi.T).dot(y_nonlin) # apply the Moore-Penrose pseudoinverse using Phi</span>
+
+<span class="n">xs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="c1"># 100 points equispaced between 0 and 1</span>
+
+<span class="n">phi_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x_</span> <span class="o">**</span> <span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="k">for</span> <span class="n">x_</span> <span class="ow">in</span> <span class="n">xs</span><span class="p">])</span> <span class="c1"># design matrix for points at which to plot</span>
+
+<span class="n">ys</span> <span class="o">=</span> <span class="n">phi_pred</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="c1"># output of the model at the points above</span>
+
+
+<span class="c1">######## Plotting code #######</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Sum squared errors for polynomial of order </span><span class="si">{}</span><span class="s1">:&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">D</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">phi</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">-</span> <span class="n">y_nonlin</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_nonlin</span><span class="p">,</span> <span class="n">y_nonlin</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">)</span> <span class="c1"># plot model predictions</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">)</span> <span class="c1"># plot dataset</span>
+<span class="n">beautify_plot</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span><span class="s2">&quot;Polynomial fit (D = </span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">D</span><span class="p">),</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span><span class="s2">&quot;y&quot;</span><span class="p">})</span>
+
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+
+
+
+<span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">D</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+    <span class="n">str_d</span> <span class="o">=</span> <span class="s1">&#39;d=&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">w</span><span class="p">[</span><span class="n">d</span><span class="p">]</span><span class="o">*</span><span class="n">phi_pred</span><span class="p">[:,</span><span class="n">d</span><span class="p">],</span><span class="n">label</span><span class="o">=</span><span class="n">str_d</span><span class="p">)</span> <span class="c1"># plot coefficients</span>
+
+<span class="n">beautify_plot</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span><span class="s2">&quot;Components&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">D</span><span class="p">),</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span><span class="s2">&quot;$w_d  \phi_d(x)$&quot;</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">toggle_code</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sum squared errors for polynomial of order 5: 0.091
+</pre></div>
+</div>
+<img alt="../../_images/regression_non_linear_5_1.svg" src="../../_images/regression_non_linear_5_1.svg" /><div class="output text_html">
+    <script>
+      function get_new_label(butn, hide) {
+          var shown = $(butn).parents("div.cell.code_cell").find('div.input').is(':visible');
+          var title = $(butn).val().substr($(butn).val().indexOf(" ") + 1)
+          return ((shown) ? 'Show ' : 'Hide ') + title
+      }
+      function code_toggle(butn, hide) {
+        $(butn).val(get_new_label(butn,hide));
+        $(hide).slideToggle();
+      };
+    </script>
+    <input type="submit" value='initiated' class='toggle_button'>
+    <script>
+        var hide_area = $(".toggle_button[value='initiated']").parents('div.cell').prevAll().addBack().slice(-1)
+        hide_area = $(hide_area).find("div.input").add($(hide_area).filter("div.text_cell"))
+        $(".toggle_button[value='initiated']").prop("hide_area", hide_area)
+        $(".toggle_button[value='initiated']").click(function(){
+            code_toggle(this, $(this).prop("hide_area"))
+        }); 
+$(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($(".toggle_button[value='initiated']").parents("div.output").find('div.output_area').first());
+    var shown = $(".toggle_button[value='initiated']").parents("div.cell.code_cell").find('div.input').is(':visible');
+    var title = ((shown) ? 'Hide ' : 'Show ') + 'code'; 
+     $(".toggle_button[value='initiated']").addClass("init_show");
+            $(hide_area).addClass("init_hidden");  $(".toggle_button[value='initiated']").val(title);
+    </script></div></div>
+</div>
+<p>Next we use <span class="math notranslate nohighlight">\(D=5\)</span> Gaussian basis functions, \(\phi_d(x) = \exp(-(x - \mu_d)^2/(2 \sigma^2_{\phi}))\), with centres <span class="math notranslate nohighlight">\(\mu_d\)</span> uniformly spaced between 0 and 1, and with widths <span class="math notranslate nohighlight">\(\sigma^2_{\phi} = 0.05\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">D</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">var_phi</span> <span class="o">=</span> <span class="mf">0.05</span>
+
+<span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span> <span class="p">[[</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">var_phi</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">x_</span><span class="o">-</span><span class="n">d</span><span class="o">/</span><span class="n">D</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>  <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="p">]</span>  <span class="k">for</span> <span class="n">x_</span> <span class="ow">in</span> <span class="n">x_nonlin</span><span class="p">])</span>
+
+<span class="c1"># compute the optimal w using the Moore-Penrose pseudoinverse</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span> <span class="p">(</span><span class="n">phi</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span> <span class="p">,</span> <span class="p">(</span><span class="n">phi</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">y_nonlin</span><span class="p">)</span> <span class="p">)</span>
+
+<span class="c1"># As with linear regression, the line above is numerically stable version of line commented line below (e.g. it works with D&gt;N)</span>
+<span class="c1"># w = np.linalg.inv((phi.T).dot(phi)).dot(phi.T).dot(y_nonlin) # apply the Moore-Penrose pseudoinverse using Phi</span>
+
+<span class="n">xs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="c1"># 100 points equispaced between 0 and 1</span>
+
+<span class="n">phi_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span> <span class="p">[[</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">var_phi</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">x_</span><span class="o">-</span><span class="n">d</span><span class="o">/</span><span class="n">D</span><span class="p">,</span><span class="mi">2</span><span class="p">))</span>  <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="p">]</span>  <span class="k">for</span> <span class="n">x_</span> <span class="ow">in</span> <span class="n">xs</span><span class="p">])</span> <span class="c1"># design matrix for points at which to plot</span>
+
+<span class="n">ys</span> <span class="o">=</span> <span class="n">phi_pred</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="c1"># output of the model at the points above</span>
+
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Sum squared errors for D =  </span><span class="si">{}</span><span class="s1"> Gaussian basis functions:&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">D</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">phi</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">-</span> <span class="n">y_nonlin</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_nonlin</span><span class="p">,</span> <span class="n">y_nonlin</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">)</span> <span class="c1"># plot model predictions</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">)</span> <span class="c1"># plot dataset</span>
+<span class="n">beautify_plot</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span><span class="s2">&quot;Gaussain fit (D = </span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">D</span><span class="p">),</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span><span class="s2">&quot;y&quot;</span><span class="p">})</span>
+
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">D</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+    <span class="n">str_d</span> <span class="o">=</span> <span class="s1">&#39;d=&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">w</span><span class="p">[</span><span class="n">d</span><span class="p">]</span><span class="o">*</span><span class="n">phi_pred</span><span class="p">[:,</span><span class="n">d</span><span class="p">],</span><span class="n">label</span><span class="o">=</span><span class="n">str_d</span><span class="p">)</span> <span class="c1"># plot coefficients</span>
+
+<span class="n">beautify_plot</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span><span class="s2">&quot;Components&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">D</span><span class="p">),</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span><span class="s2">&quot;$w_d  \phi_d(x)$&quot;</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">toggle_code</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Sum squared errors for D =  5 Gaussian basis functions: 0.106
+</pre></div>
+</div>
+<img alt="../../_images/regression_non_linear_7_1.svg" src="../../_images/regression_non_linear_7_1.svg" /><div class="output text_html">
+    <script>
+      function get_new_label(butn, hide) {
+          var shown = $(butn).parents("div.cell.code_cell").find('div.input').is(':visible');
+          var title = $(butn).val().substr($(butn).val().indexOf(" ") + 1)
+          return ((shown) ? 'Show ' : 'Hide ') + title
+      }
+      function code_toggle(butn, hide) {
+        $(butn).val(get_new_label(butn,hide));
+        $(hide).slideToggle();
+      };
+    </script>
+    <input type="submit" value='initiated' class='toggle_button'>
+    <script>
+        var hide_area = $(".toggle_button[value='initiated']").parents('div.cell').prevAll().addBack().slice(-1)
+        hide_area = $(hide_area).find("div.input").add($(hide_area).filter("div.text_cell"))
+        $(".toggle_button[value='initiated']").prop("hide_area", hide_area)
+        $(".toggle_button[value='initiated']").click(function(){
+            code_toggle(this, $(this).prop("hide_area"))
+        }); 
+$(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($(".toggle_button[value='initiated']").parents("div.output").find('div.output_area').first());
+    var shown = $(".toggle_button[value='initiated']").parents("div.cell.code_cell").find('div.input').is(':visible');
+    var title = ((shown) ? 'Hide ' : 'Show ') + 'code'; 
+     $(".toggle_button[value='initiated']").addClass("init_show");
+            $(hide_area).addClass("init_hidden");  $(".toggle_button[value='initiated']").val(title);
+    </script></div></div>
+</div>
+<p>The two models make very similar predictions at the training data with similar training costs <span class="math notranslate nohighlight">\(\mathcal{C}_2 \approx 0.1\)</span>. The models interpolate very similarly, but extrapolate rather differently (compare the predictions around <span class="math notranslate nohighlight">\(x_2 = 1.2\)</span>).</p>
+<p>How sensitive are these properties to the hyper parameters? In the code above, <strong>experiment with the model hyperparameters</strong> to see how the fits depend upon:</p>
+<ol class="simple">
+<li><p>the order of the polynomial (what happens as <span class="math notranslate nohighlight">\(D\)</span> gets large?)</p></li>
+<li><p>the number of Gaussian basis functions (what happens as <span class="math notranslate nohighlight">\(D\)</span> grows for this model?)</p></li>
+<li><p>the width of the basis functions <span class="math notranslate nohighlight">\(\sigma^2_{\phi}\)</span> (explore the effect of narrow and wide basis functions)</p></li>
+</ol>
+<p>By exploring these settings you should be able to find regimes in which the fitted function is overly simple (under-fitting) and where it is overly complex (over-fitting). These concepts are explored in the next <a class="reference internal" href="regression_overfitting.html"><span class="doc std std-doc">notebook</span></a>.</p>
+</div>
+</div>
+<div class="section" id="summary">
+<h1>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h1>
+<p>Linear regression can be converted into non-linear regression by replacing the inputs <span class="math notranslate nohighlight">\(\mathbf{x}\)</span> with <span class="math notranslate nohighlight">\(D\)</span> basis functions <span class="math notranslate nohighlight">\(\phi_d(\mathbf{x})\)</span> (also called features).</p>
+<p>The choice of basis function will effect how the model interpolates and extrapolates. One general approach to extrapolation is to turn it into an interpolation problem in the space defined by the basis functions, by a clever choice of <span class="math notranslate nohighlight">\(\phi_d(\mathbf{x})\)</span>.</p>
+</div>
+<div class="section" id="questions">
+<h1>Questions<a class="headerlink" href="#questions" title="Permalink to this headline">¶</a></h1>
+<ol class="simple">
+<li><p>How do the polynomial and Gaussian basis function models generalise far outside of the region of the data?</p></li>
+</ol>
+<details>
+<summary>Answer</summary>
+<div>
+The polynomial model extrapolations explode according to the highest order term in the polynomial, $f(x) \rightarrow w_D x^D$. The Gaussian basis function model decays away to the constant function $f(x) \rightarrow w_0$ with a length scale related to the width of the basis functions $\approx \sigma_{\phi}$. These are very different behaviours. The extreme extrapolation of polynomials is often inappropriate. Although the extrapolation of the Gaussian model is benign, it limits the extrapolation ability to simple smoothing. 
+<p>You might like to alter the code to fit sinusoidal basis functions and compare how this class of basis function extropolates.</p>
+</div>
+</details>
+<ol class="simple">
+<li><p>Consider a data set whose inputs live in <span class="math notranslate nohighlight">\(\text{dim}(\mathbf{x}) = K\)</span> dimensions. Each input dimension is real valued and bounded, lying in the range <span class="math notranslate nohighlight">\(-L/2 &lt; x_k &lt; L/2\)</span>. The inputs are uniformly and densely sampled over the input domain and the outputs are measured. The output function is known to change significantly according to a length-scale <span class="math notranslate nohighlight">\(l\)</span>. That is, two function values <span class="math notranslate nohighlight">\(f(\mathbf{x})\)</span> and <span class="math notranslate nohighlight">\(f(\mathbf{x}+\boldsymbol{\delta})\)</span> will typically be very different when <span class="math notranslate nohighlight">\(|\boldsymbol{\delta}|\ge l\)</span>.</p></li>
+</ol>
+<p>Estimate how many Gaussian basis functions are required to fit these data. Think about the volume of space you will need to cover with basis functions and what the width and spacing of these functions will have to be.</p>
+<details>
+<summary>Answer</summary>
+<div>
+$\mathcal{O}((L/l)^K)$ basis functions will be needed. This is a combinatorial number. Fixed basis function models suffer from this _curse of dimensionality_. 
+</div>
+</details>
+<ol class="simple">
+<li><p>In order to side step the curse of dimensionality (see question 2), a machine learner would like to use adaptive basis functions. What’s a simple data dependent way of selecting the centres <span class="math notranslate nohighlight">\(\mu_d\)</span> and widths <span class="math notranslate nohighlight">\(\sigma_d^2\)</span> of the Gaussian basis functions?</p></li>
+</ol>
+<details>
+<summary>Answer</summary>
+<div>
+For $\mu_d$ one idea is to place the centres at a randomly selected subset of the data points or to use a clustering algorithm like k-means. For the width, often the median distance between the centres and each data point is used. These simple approaches can mitigate the curse of dimensionality to some extent. A different flavour of approach is to use an infinite number of basis functions as utilised by kernel machines such as Gaussian processes.
+</div>
+</details>
+<ol class="simple">
+<li><p>Modifiy the code above to fit the data with sinusoidal basis functions, <span class="math notranslate nohighlight">\(\phi_d(x) = \sin(\omega_d x + \psi_d)\)</span>. It is sensible to use pairs of sines and cosines (<span class="math notranslate nohighlight">\(\psi_d = 0\)</span>, <span class="math notranslate nohighlight">\(\psi_{d+1} = \pi/2\)</span>) with the same frequency? Is there a relationship to Fourier transforms?</p></li>
+</ol>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./content/regression"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Stratis Markou, Rich Turner<br/>
+        
+            &copy; Copyright 2021.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../../_static/js/index.3da636dd464baa7582d2.js"></script>
+
+
+    
+    <!-- Google Analytics -->
+    <script>
+      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+      ga('create', 'UA-168728006-1', 'auto');
+      ga('set', 'anonymizeIp', true);
+      ga('send', 'pageview');
+    </script>
+    <script async src='https://www.google-analytics.com/analytics.js'></script>
+    <!-- End Google Analytics -->
+    
+  </body>
+</html>

@@ -1,0 +1,5 @@
+- file: content/home
+
+- file: content/regression/regression-intro
+  sections:
+      - file: content/regression/regression-linear
