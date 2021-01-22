@@ -1,0 +1,1289 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Avoiding overfitting using regularisation &#8212; OMLT</title>
+    
+  <link rel="stylesheet" href="../../_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom_style.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/.ipynb_checkpoints/custom_style-checkpoint.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../../_static/js/index.3da636dd464baa7582d2.js">
+
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../../index.html">
+  
+  <img src="../../_static/logo.png" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">OMLT</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../home.html">
+   Online Machine Learning Textbook
+  </a>
+ </li>
+</ul>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="regression-intro.html">
+   Regression
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="regression-linear.html">
+     Linear regression
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../../_sources/content/regression/regression_regularisation.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+        <!-- Source interaction buttons -->
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/stratisMarkou/random-walks/master?urlpath=tree/./content/regression/regression_regularisation.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#the-effect-of-overfitting-on-the-weight-estimates">
+   The effect of overfitting on the weight estimates
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#regularising-least-squares">
+   Regularising least squares
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#regularised-least-squares-as-maximum-a-posteriori-fitting">
+   Regularised least squares as maximum a posteriori fitting
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#summary">
+   Summary
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#questions">
+   Questions
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">config</span> InlineBackend.figure_format = &#39;svg&#39; # change output plot display format to &#39;svg&#39;
+
+<span class="c1"># import the required modules for this notebook</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="c1"># import the helper functions from the parent directory,</span>
+<span class="c1"># these help with things like graph plotting and notebook layout</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;..&#39;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">helper_functions</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c1"># set things like fonts etc - comes from helper_functions</span>
+<span class="n">set_notebook_preferences</span><span class="p">()</span>
+
+<span class="c1"># add a show/hide code button - also from helper_functions</span>
+<span class="n">toggle_code</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;setup code&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><style>.output {
+    font-family: ariel;
+    align-items: normal;
+    text-align: normal;
+}
+
+div.output_svg div { margin : auto; }
+.div.output_area.MathJax_Display{ text-align: center; }
+div.text_cell_render { font-family: sans-serif; }
+
+details {
+    margin: 20px 0px;
+    padding: 0px 10px;
+    border-radius: 3px;
+    border-style: solid;
+    border-color: black;
+    border-width: 2px;
+}
+details div{padding: 20px 30px;}
+details summary{font-size: 18px;}
+
+table {
+     margin: calc(auto + 10px) !important;
+     border: solid !important;
+ }
+
+ th, td {
+    text-align: left !important;
+ }
+
+ .further_box {
+    background-color:rgb(230, 230, 230);
+    border-style: solid;
+    margin: 10px 10px 10px 0px;
+    padding: 10px;
+    left:calc(auto - 20px);
+ }
+
+ .question_box {
+    background-color:rgb(255, 255, 225);
+    border-style: solid;
+    margin: 10px 10px 10px 0px;
+    padding: 10px;
+    left:calc(auto - 20px);
+ }</style>
+     <input type="submit" value='Home' id="initiated" class='home_button' onclick='window.location="../index.ipynb"' style='float: right; margin-right: 40px;'>
+    <script>
+    $('.home_button').not('#initiated').remove();
+    $('.home_button').removeAttr('id');
+    $(".home_button").insertBefore($("div.cell").first());
+
+    $('div.input.init_hidden').hide()
+    $('div.input.init_shown').show()
+    $('.toggle_button').each(function( index, element ) {
+       var prefix;
+       if (this.classList.contains('init_show')) {
+           prefix = 'Show '
+       }
+       else if (this.classList.contains('init_hide')) {
+           prefix = 'Hide '
+       };
+       $(this).val(prefix + $(this).val().substr($(this).val().indexOf(" ") + 1))
+    });
+    IPython.OutputArea.prototype._should_scroll = function(lines) {
+        return false;
+    }
+    </script>
+</div><div class="output text_html">
+    <script>
+      function get_new_label(butn, hide) {
+          var shown = $(butn).parents("div.cell.code_cell").find('div.input').is(':visible');
+          var title = $(butn).val().substr($(butn).val().indexOf(" ") + 1)
+          return ((shown) ? 'Show ' : 'Hide ') + title
+      }
+      function code_toggle(butn, hide) {
+        $(butn).val(get_new_label(butn,hide));
+        $(hide).slideToggle();
+      };
+    </script>
+    <input type="submit" value='initiated' class='toggle_button'>
+    <script>
+        var hide_area = $(".toggle_button[value='initiated']").parents('div.cell').prevAll().addBack().slice(-1)
+        hide_area = $(hide_area).find("div.input").add($(hide_area).filter("div.text_cell"))
+        $(".toggle_button[value='initiated']").prop("hide_area", hide_area)
+        $(".toggle_button[value='initiated']").click(function(){
+            code_toggle(this, $(this).prop("hide_area"))
+        }); 
+$(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($(".toggle_button[value='initiated']").parents("div.output").find('div.output_area').first());
+    var shown = $(".toggle_button[value='initiated']").parents("div.cell.code_cell").find('div.input').is(':visible');
+    var title = ((shown) ? 'Hide ' : 'Show ') + 'setup code'; 
+     $(".toggle_button[value='initiated']").addClass("init_show");
+            $(hide_area).addClass("init_hidden");  $(".toggle_button[value='initiated']").val(title);
+    </script></div></div>
+</div>
+<div class="section" id="avoiding-overfitting-using-regularisation">
+<h1>Avoiding overfitting using regularisation<a class="headerlink" href="#avoiding-overfitting-using-regularisation" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference internal" href="regression_overfitting.html"><span class="doc std std-doc">Overfitting</span></a> can plague the maximum likelihood approach to model fitting. For example, polynomial fits to the simple 1D regression dataset showed pathalogical behaviour for <span class="math notranslate nohighlight">\(D&gt;7\)</span> (see plots below). In this section we will discuss how to mitigate overfitting using regularisation.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_nonlin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;reg_nonlin_x.npy&#39;</span><span class="p">)</span> <span class="c1"># load inputs from a prepared non-linear dataset</span>
+<span class="n">y_nonlin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;reg_nonlin_y.npy&#39;</span><span class="p">)</span> <span class="c1"># load corresponding outputs</span>
+<span class="n">xs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="c1"># 100 points equispaced between 0 and 1</span>
+
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span> <span class="c1"># figure on which to plot the subfigures - you don&#39;t have to worry about this</span>
+
+<span class="k">for</span> <span class="n">D</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">):</span>
+
+    <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x_</span> <span class="o">**</span> <span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="k">for</span> <span class="n">x_</span> <span class="ow">in</span> <span class="n">x_nonlin</span><span class="p">])</span> <span class="c1"># training design matrix, as before</span>
+    
+    <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">((</span><span class="n">phi</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">phi</span><span class="p">))</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">phi</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">y_nonlin</span><span class="p">)</span> <span class="c1"># Moore-Penrose pseudoinverse</span>
+    
+    <span class="n">phi_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x_</span> <span class="o">**</span> <span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="k">for</span> <span class="n">x_</span> <span class="ow">in</span> <span class="n">xs</span><span class="p">])</span> <span class="c1"># design matrix of evaluation points as before</span>
+    
+    <span class="n">ys</span> <span class="o">=</span> <span class="n">phi_pred</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="c1"># model predictions as before</span>
+    
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">D</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_nonlin</span><span class="p">,</span> <span class="n">y_nonlin</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">)</span> <span class="c1"># plot </span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">0.25</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.4</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;D = &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">D</span><span class="p">),</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">12</span><span class="p">,</span>
+             <span class="n">horizontalalignment</span> <span class="o">=</span> <span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">verticalalignment</span> <span class="o">=</span> <span class="s1">&#39;bottom&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="o">-</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">D</span> <span class="o">%</span> <span class="mi">3</span> <span class="ow">is</span> <span class="ow">not</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">remove_axes</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">D</span> <span class="o">&lt;</span> <span class="mi">7</span><span class="p">:</span>
+        <span class="n">remove_axes</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">toggle_code</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/regression_regularisation_2_0.svg" src="../../_images/regression_regularisation_2_0.svg" /><div class="output text_html">
+    <script>
+      function get_new_label(butn, hide) {
+          var shown = $(butn).parents("div.cell.code_cell").find('div.input').is(':visible');
+          var title = $(butn).val().substr($(butn).val().indexOf(" ") + 1)
+          return ((shown) ? 'Show ' : 'Hide ') + title
+      }
+      function code_toggle(butn, hide) {
+        $(butn).val(get_new_label(butn,hide));
+        $(hide).slideToggle();
+      };
+    </script>
+    <input type="submit" value='initiated' class='toggle_button'>
+    <script>
+        var hide_area = $(".toggle_button[value='initiated']").parents('div.cell').prevAll().addBack().slice(-1)
+        hide_area = $(hide_area).find("div.input").add($(hide_area).filter("div.text_cell"))
+        $(".toggle_button[value='initiated']").prop("hide_area", hide_area)
+        $(".toggle_button[value='initiated']").click(function(){
+            code_toggle(this, $(this).prop("hide_area"))
+        }); 
+$(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($(".toggle_button[value='initiated']").parents("div.output").find('div.output_area').first());
+    var shown = $(".toggle_button[value='initiated']").parents("div.cell.code_cell").find('div.input').is(':visible');
+    var title = ((shown) ? 'Hide ' : 'Show ') + 'code'; 
+     $(".toggle_button[value='initiated']").addClass("init_show");
+            $(hide_area).addClass("init_hidden");  $(".toggle_button[value='initiated']").val(title);
+    </script></div></div>
+</div>
+<div class="section" id="the-effect-of-overfitting-on-the-weight-estimates">
+<h2>The effect of overfitting on the weight estimates<a class="headerlink" href="#the-effect-of-overfitting-on-the-weight-estimates" title="Permalink to this headline">¶</a></h2>
+<p>In order to motivate the new approach, let’s view effects of overfitting from another perspective by inspecting the estimated weights for each model fit:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">toggle_code</span><span class="p">()</span>
+
+<span class="n">weights</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">D</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    
+    <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x_</span> <span class="o">**</span> <span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="k">for</span> <span class="n">x_</span> <span class="ow">in</span> <span class="n">x_nonlin</span><span class="p">])</span>
+    
+    <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">((</span><span class="n">phi</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">phi</span><span class="p">))</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">phi</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">y_nonlin</span><span class="p">)</span>
+    
+    <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span> <span class="o">-</span> <span class="n">w</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="s1">&#39;constant&#39;</span><span class="p">,</span> <span class="n">constant_values</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="c1"># pad with 0&#39;s for unused weights</span>
+    
+    <span class="n">weights</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> 
+
+<span class="kn">import</span> <span class="nn">pandas</span>
+<span class="n">row_names</span><span class="p">,</span> <span class="n">column_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)],</span> <span class="p">[</span><span class="s1">&#39;$w_</span><span class="si">{}</span><span class="s1">$&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)]</span>
+<span class="n">table</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">row_names</span><span class="p">,</span> <span class="n">column_names</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">table</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;D&quot;</span>
+<span class="n">table</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">
+    <script>
+      function get_new_label(butn, hide) {
+          var shown = $(butn).parents("div.cell.code_cell").find('div.input').is(':visible');
+          var title = $(butn).val().substr($(butn).val().indexOf(" ") + 1)
+          return ((shown) ? 'Show ' : 'Hide ') + title
+      }
+      function code_toggle(butn, hide) {
+        $(butn).val(get_new_label(butn,hide));
+        $(hide).slideToggle();
+      };
+    </script>
+    <input type="submit" value='initiated' class='toggle_button'>
+    <script>
+        var hide_area = $(".toggle_button[value='initiated']").parents('div.cell').prevAll().addBack().slice(-1)
+        hide_area = $(hide_area).find("div.input").add($(hide_area).filter("div.text_cell"))
+        $(".toggle_button[value='initiated']").prop("hide_area", hide_area)
+        $(".toggle_button[value='initiated']").click(function(){
+            code_toggle(this, $(this).prop("hide_area"))
+        }); 
+$(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($(".toggle_button[value='initiated']").parents("div.output").find('div.output_area').first());
+    var shown = $(".toggle_button[value='initiated']").parents("div.cell.code_cell").find('div.input').is(':visible');
+    var title = ((shown) ? 'Hide ' : 'Show ') + 'code'; 
+     $(".toggle_button[value='initiated']").addClass("init_show");
+            $(hide_area).addClass("init_hidden");  $(".toggle_button[value='initiated']").val(title);
+    </script></div><div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>D</th>
+      <th>$w_0$</th>
+      <th>$w_1$</th>
+      <th>$w_2$</th>
+      <th>$w_3$</th>
+      <th>$w_4$</th>
+      <th>$w_5$</th>
+      <th>$w_6$</th>
+      <th>$w_7$</th>
+      <th>$w_8$</th>
+      <th>$w_9$</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.23</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.52</td>
+      <td>-0.78</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.43</td>
+      <td>0.11</td>
+      <td>-0.92</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>-0.03</td>
+      <td>9.83</td>
+      <td>-30.05</td>
+      <td>20.61</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>-0.07</td>
+      <td>11.05</td>
+      <td>-36.72</td>
+      <td>32.37</td>
+      <td>-6.38</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>0.00</td>
+      <td>7.98</td>
+      <td>-11.57</td>
+      <td>-43.34</td>
+      <td>87.70</td>
+      <td>-40.80</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>-0.08</td>
+      <td>12.52</td>
+      <td>-64.96</td>
+      <td>193.72</td>
+      <td>-387.43</td>
+      <td>395.19</td>
+      <td>-149.15</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>-0.16</td>
+      <td>17.64</td>
+      <td>-154.12</td>
+      <td>796.59</td>
+      <td>-2322.57</td>
+      <td>3541.55</td>
+      <td>-2645.99</td>
+      <td>767.18</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>-1.25</td>
+      <td>102.89</td>
+      <td>-1982.45</td>
+      <td>17262.39</td>
+      <td>-77560.15</td>
+      <td>191624.23</td>
+      <td>-261578.47</td>
+      <td>184045.56</td>
+      <td>-51928.26</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>-4.06</td>
+      <td>375.17</td>
+      <td>-10262.16</td>
+      <td>131966.45</td>
+      <td>-901785.27</td>
+      <td>3495969.20</td>
+      <td>-7872783.54</td>
+      <td>10113533.15</td>
+      <td>-6827419.13</td>
+      <td>1870902.94</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>The estimated weights contain interesting structure: for low order polynomials, the weights take modest values. However, as the order of the polynomial increases the magnitudes of the high-order weight estimates increase dramatically and the signs oscillate. The large magnitude weights lead to polynomials with extreme gradients and the oscillating signs enable many zero crossings in the region of the observed data. The model is contorting to go through the observed data.</p>
+</div>
+<div class="section" id="regularising-least-squares">
+<h2>Regularising least squares<a class="headerlink" href="#regularising-least-squares" title="Permalink to this headline">¶</a></h2>
+<p>The observation that the well-fit models have estimated weight values whose magnitudes are modest, suggests that overfitting could be mitigated by penalising large weight magnitudes. For example, a simple approach takes the sum-of-square-errors cost and adds a quadratic term <span class="math notranslate nohighlight">\(\frac{\alpha}{2}\mathbf{w}^\top\mathbf{w}\)</span>,</p>
+<p>\[C_2^{(\text{reg})} = \big|\big|\mathbf{y} - \boldsymbol{\Phi}\mathbf{w}\big|\big|^2 +\frac{\alpha}{2}\mathbf{w}^\top\mathbf{w}. \]</p>
+<p>Here <span class="math notranslate nohighlight">\(\alpha &gt; 0\)</span> is a constant. Now, if a weight magnitude becomes large, the quadratic term penalises the fit with <span class="math notranslate nohighlight">\(\alpha\)</span> controlling the size of the penalty. This method discourages the weights from becoming large and is known as <strong>regularisation</strong>.</p>
+<p>Again, there is some arbitrariness in our choice of regularisation term <span class="math notranslate nohighlight">\(-\)</span> why use <span class="math notranslate nohighlight">\(\mathbf{w}^\top\mathbf{w} = ||\mathbf{w}||^2\)</span> and not <span class="math notranslate nohighlight">\(||\mathbf{w}||\)</span> or in fact <span class="math notranslate nohighlight">\(||\mathbf{w}||^p\)</span> for arbitrary <span class="math notranslate nohighlight">\(p\)</span>?</p>
+<div class="further_box">
+<p>Regularization using different powers <span class="math notranslate nohighlight">\(p\)</span> is known as <span class="math notranslate nohighlight">\(Lp\)</span> regularisation. With <span class="math notranslate nohighlight">\(L1 \implies ||\mathbf{w}||\)</span> and <span class="math notranslate nohighlight">\(~L2 \implies ||\mathbf{w}||^2\)</span>.</p>
+</div>
+</div>
+<div class="section" id="regularised-least-squares-as-maximum-a-posteriori-fitting">
+<h2>Regularised least squares as maximum a posteriori fitting<a class="headerlink" href="#regularised-least-squares-as-maximum-a-posteriori-fitting" title="Permalink to this headline">¶</a></h2>
+<p>Probabilistic approaches to fitting non-linear regression place a prior distribition on the weights, <span class="math notranslate nohighlight">\(p(\mathbf{w})\)</span>. Expecting functions to typically have rather modest coefficients with small numbers of zero crossings, we place an independent Gaussian prior on the weights <span class="math notranslate nohighlight">\(p(\mathbf{w}| \sigma_{\mathbf{w}}^2) = \mathcal{N}(\mathbf{w};\mathbf{0},\sigma_{\mathbf{w}}^2 \mathrm{I})\)</span>. Here the variance <span class="math notranslate nohighlight">\(\sigma_{\mathbf{w}}^2\)</span> controls the magnitude of the polynomials we expect to see before observing the data.</p>
+<p>Here are some samples from the resulting model produced by first sampling weights from the prior, <span class="math notranslate nohighlight">\(\mathbf{w}^{(m)} \sim \mathcal{N}(\mathbf{0},\sigma_{\mathbf{w}}^2 \mathrm{I})\)</span>,  and then computing the resulting function <span class="math notranslate nohighlight">\(f^{(m)}(x)=\boldsymbol{\phi}(x)^\top \mathbf{w}^{(m)}\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">D</span> <span class="o">=</span> <span class="mi">8</span> <span class="c1"># order of polynomial</span>
+<span class="n">var_w</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># a priori variance of weights</span>
+<span class="n">M</span> <span class="o">=</span> <span class="mi">5</span> <span class="c1"># number of samples</span>
+
+<span class="n">xs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="c1"># 100 points equispaced between 0 and 1</span>
+
+<span class="c1"># polynomial basis functions</span>
+<span class="n">phi_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x_</span> <span class="o">**</span> <span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="k">for</span> <span class="n">x_</span> <span class="ow">in</span> <span class="n">xs</span><span class="p">])</span> 
+
+<span class="c1"># Gaussian basis functions</span>
+<span class="c1"># var_phi = 0.05;</span>
+<span class="c1"># phi_pred = np.array( [[ np.exp(-1/(2*var_phi)*np.power(x_-d/D,2))  for d in range(D + 1) ]  for x_ in xs]) </span>
+
+<span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">M</span><span class="p">):</span>
+    
+    <span class="c1"># sample weights</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">var_w</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="n">D</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># plot function at input locations</span>
+    <span class="n">ys</span> <span class="o">=</span> <span class="n">phi_pred</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="c1"># output of the model at the points above</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">)</span> <span class="c1"># plot predictions</span>
+
+<span class="n">beautify_plot</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span><span class="s2">&quot;Samples from model (D = </span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">D</span><span class="p">),</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span><span class="s2">&quot;f(x)&quot;</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">toggle_code</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/regression_regularisation_6_0.svg" src="../../_images/regression_regularisation_6_0.svg" /><div class="output text_html">
+    <script>
+      function get_new_label(butn, hide) {
+          var shown = $(butn).parents("div.cell.code_cell").find('div.input').is(':visible');
+          var title = $(butn).val().substr($(butn).val().indexOf(" ") + 1)
+          return ((shown) ? 'Show ' : 'Hide ') + title
+      }
+      function code_toggle(butn, hide) {
+        $(butn).val(get_new_label(butn,hide));
+        $(hide).slideToggle();
+      };
+    </script>
+    <input type="submit" value='initiated' class='toggle_button'>
+    <script>
+        var hide_area = $(".toggle_button[value='initiated']").parents('div.cell').prevAll().addBack().slice(-1)
+        hide_area = $(hide_area).find("div.input").add($(hide_area).filter("div.text_cell"))
+        $(".toggle_button[value='initiated']").prop("hide_area", hide_area)
+        $(".toggle_button[value='initiated']").click(function(){
+            code_toggle(this, $(this).prop("hide_area"))
+        }); 
+$(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($(".toggle_button[value='initiated']").parents("div.output").find('div.output_area').first());
+    var shown = $(".toggle_button[value='initiated']").parents("div.cell.code_cell").find('div.input').is(':visible');
+    var title = ((shown) ? 'Hide ' : 'Show ') + 'code'; 
+     $(".toggle_button[value='initiated']").addClass("init_show");
+            $(hide_area).addClass("init_hidden");  $(".toggle_button[value='initiated']").val(title);
+    </script></div></div>
+</div>
+<p>We can now apply probabilistic inference for the weights using Bayes’ rule to find the maximum a posteriori setting of the weights given the observed data:</p>
+<p>\begin{align}
+\mathbf{w}^{\text{MAP}} &amp; = \underset{\mathbf{w}}{\mathrm{arg,max}} ; p(\mathbf{w} | {x_n,y_n}<em>{n=1}^N,\sigma_y^2,\sigma</em>{\mathbf{w}}^2)\
+&amp; = \underset{\mathbf{w}}{\mathrm{arg,min}} ;   (\mathbf{y} - \mathbf{X}\mathbf{w})^\top (\mathbf{y} - \mathbf{X}\mathbf{w}) - \alpha \mathbf{w}^\top \mathbf{w}  ;; \text{where} ;;\alpha = \frac{\sigma_y^2}{\sigma_\mathbf{w}^2}
+\end{align}</p>
+<details>
+<summary>Detailed derivation for the MAP weights</summary>
+<div>
+<p>First we apply Bayes’ rule</p>
+<p>\begin{align}
+p(\mathbf{w} | {x_n,y_n}<em>{n=1}^N,\sigma_y^2,\sigma</em>{\mathbf{w}}^2) &amp; = \frac{ p(\mathbf{w}| \sigma_{\mathbf{w}}^2) p(\mathbf{y}\mid\mathbf{X}, \mathbf{w}, \sigma_y^2) }{p(\mathbf{y}| \sigma_y^2,\sigma_{\mathbf{w}}^2)} \propto p(\mathbf{w}| \sigma_{\mathbf{w}}^2) p(\mathbf{y}\mid\mathbf{X}, \mathbf{w}, \sigma_y^2).
+\end{align}</p>
+<p>Next we substitute in for the likelihood and prior,</p>
+<p>\begin{align}
+p(\mathbf{w} | {x_n,y_n}<em>{n=1}^N,\sigma_y^2,\sigma</em>{\mathbf{w}}^2) = \frac{1}{(2\pi \sigma_\mathbf{w}^2)}\text{exp}\big(-\frac{1}{2\sigma_\mathbf{w}^2}\mathbf{w}^\top \mathbf{w} \big) \times \frac{1}{(2\pi \sigma_y^2)^{N/2}}\text{exp}\big(-\frac{1}{2\sigma_y^2}(\mathbf{y} - \mathbf{X}\mathbf{w})^\top (\mathbf{y} - \mathbf{X}\mathbf{w})\big).
+\end{align}</p>
+<p>Now pulling the prior and likelihood terms into a single exponential we have,</p>
+<p>\begin{align}
+p(\mathbf{w} | {x_n,y_n}<em>{n=1}^N,\sigma_y^2,\sigma</em>{\mathbf{w}}^2) &amp; = \frac{1}{(2\pi \sigma_\mathbf{w}^2) (2\pi \sigma_y^2)^{N/2}}\text{exp}\big(-\frac{1}{2\sigma_\mathbf{w}^2}\mathbf{w}^\top \mathbf{w} -\frac{1}{2\sigma_y^2}(\mathbf{y} - \mathbf{X}\mathbf{w})^\top (\mathbf{y} - \mathbf{X}\mathbf{w})\big)
+\end{align}</p>
+<p>Taking logs and combining terms that do not depend on <span class="math notranslate nohighlight">\(\mathbf{w}\)</span> into a constant,</p>
+<p>\begin{align}
+\log p(\mathbf{w} | {x_n,y_n}<em>{n=1}^N,\sigma_y^2,\sigma</em>{\mathbf{w}}^2) &amp; = -\frac{1}{2\sigma_\mathbf{w}^2}\mathbf{w}^\top \mathbf{w} -\frac{1}{2\sigma_y^2}(\mathbf{y} - \mathbf{X}\mathbf{w})^\top (\mathbf{y} - \mathbf{X}\mathbf{w}) + \text{const.}.
+\end{align}</p>
+<p>Now we see that maximising <span class="math notranslate nohighlight">\(p(\mathbf{w} | \{x_n,y_n\}_{n=1}^N,\sigma_y^2,\sigma_{\mathbf{w}}^2)\)</span> is the same as minimising <span class="math notranslate nohighlight">\(\frac{\sigma_y^2}{\sigma_\mathbf{w}^2}\mathbf{w}^\top \mathbf{w} +(\mathbf{y} - \mathbf{X}\mathbf{w})^\top (\mathbf{y} - \mathbf{X}\mathbf{w})\)</span>.</p>
+</div>
+</details>
+<p>So, the simple quadratic regularisation can be interpreted as arising from a Gaussian prior on the weights and <span class="math notranslate nohighlight">\(\alpha\)</span> is the ratio of the observation noise variance to the prior weight variance. Again the probabilistic approach reveals the hidden assumptions and makes it simple to assess their suitability.</p>
+<p>Let’s now optimise the new cost. The use of a quadratic penalty, or equivalently a Gaussian prior on the weights, leads to an analytic solution.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}\frac{\partial\mathcal{L}}{\partial \mathbf{w}} = - \boldsymbol{\Phi}^\top(\mathbf{y} - \boldsymbol{\Phi}\mathbf{w}) + \alpha\mathbf{w} = 0\\
+~\\
+- \boldsymbol{\Phi}^\top\mathbf{y} + \boldsymbol{\Phi}^\top\boldsymbol{\Phi}\mathbf{w} + \alpha \mathbf{I}\mathbf{w} = 0\\
+~\\
+\implies \boxed{\mathbf{w} = (\boldsymbol{\Phi}^\top\boldsymbol{\Phi} + \alpha\mathbf{I})^{-1}\boldsymbol{\Phi}^\top\mathbf{y}}\\
+\end{align}\end{split}\]</div>
+<p>Comparing this with the unregularized expression for <span class="math notranslate nohighlight">\(\mathbf{w}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+\mathbf{w} &amp;= (\boldsymbol{\Phi}^\top\boldsymbol{\Phi})^{-1}\boldsymbol{\Phi}^\top\mathbf{y},~\text{unregularized},\\
+~\\
+\mathbf{w} &amp;= (\boldsymbol{\Phi}^\top\boldsymbol{\Phi} + \alpha \mathbf{I})^{-1}\boldsymbol{\Phi}^\top\mathbf{y},~\text{regularized},\\
+\end{align}\end{split}\]</div>
+<p>we see that the only difference is the added <span class="math notranslate nohighlight">\(\alpha\mathbf{I}\)</span> term. Since this is inside the <span class="math notranslate nohighlight">\((\cdot)^{-1}\)</span> matrix inverse we can intuitively see that its effect is to reduce the magnitude of the matrix elements of <span class="math notranslate nohighlight">\((\boldsymbol{\Phi}^\top\boldsymbol{\Phi} + \alpha\mathbf{I})^{-1}\)</span> and hence those of <span class="math notranslate nohighlight">\(\mathbf{w}\)</span>. Consider for example the limiting case <span class="math notranslate nohighlight">\(\boldsymbol{\Phi}^\top\boldsymbol{\Phi} &lt;&lt; \alpha\mathbf{I}\)</span>. Then <span class="math notranslate nohighlight">\((\boldsymbol{\Phi}^\top\boldsymbol{\Phi} + \alpha\mathbf{I})^{-1} \approx \alpha^{-1}\mathbf{I}\)</span> and increasing <span class="math notranslate nohighlight">\(\alpha\)</span> results in smaller <span class="math notranslate nohighlight">\(\mathbf{w}\)</span>. Note that the value of <span class="math notranslate nohighlight">\(\alpha\)</span> is arbitrarily chosen (we will later address this point).</p>
+<p>Let’s have a look on how regularization affects the model. We’ll assume small observations noise <span class="math notranslate nohighlight">\(\sigma_{y} = 0.01\)</span> and a prior weight standard deviation of <span class="math notranslate nohighlight">\(\sigma_{\mathbf{w}} = 1\)</span> so that <span class="math notranslate nohighlight">\(\alpha = 10^{-4}\)</span>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span>
+<span class="n">alpha</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">**</span> <span class="o">-</span><span class="mi">4</span> <span class="c1"># arbitrarily chosen lambda</span>
+
+<span class="k">for</span> <span class="n">D</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">):</span>
+    <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x_</span> <span class="o">**</span> <span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="k">for</span> <span class="n">x_</span> <span class="ow">in</span> <span class="n">x_nonlin</span><span class="p">])</span>
+    
+    <span class="n">reg_term</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="c1"># regularization term = lambda * (indentity matrix)</span>
+    
+   <span class="c1"># w = np.linalg.inv((phi.T).dot(phi) + reg_term).dot(phi.T).dot(y_nonlin) # apply regularized pseudoinverse</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span> <span class="p">(</span><span class="n">phi</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span> <span class="o">+</span> <span class="n">reg_term</span> <span class="p">,</span> <span class="p">(</span><span class="n">phi</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">y_nonlin</span><span class="p">)</span> <span class="p">)</span>
+    
+    <span class="n">phi_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x_</span> <span class="o">**</span> <span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="k">for</span> <span class="n">x_</span> <span class="ow">in</span> <span class="n">xs</span><span class="p">])</span> <span class="c1"># design matrix for predictions</span>
+    
+    <span class="n">ys</span> <span class="o">=</span> <span class="n">phi_pred</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="c1"># model predictions as before</span>
+    
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">D</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_nonlin</span><span class="p">,</span> <span class="n">y_nonlin</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="o">-</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">D</span> <span class="o">%</span> <span class="mi">3</span> <span class="ow">is</span> <span class="ow">not</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">remove_axes</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">D</span> <span class="o">&lt;</span> <span class="mi">7</span><span class="p">:</span>
+        <span class="n">remove_axes</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">toggle_code</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/regression_regularisation_8_0.svg" src="../../_images/regression_regularisation_8_0.svg" /><div class="output text_html">
+    <script>
+      function get_new_label(butn, hide) {
+          var shown = $(butn).parents("div.cell.code_cell").find('div.input').is(':visible');
+          var title = $(butn).val().substr($(butn).val().indexOf(" ") + 1)
+          return ((shown) ? 'Show ' : 'Hide ') + title
+      }
+      function code_toggle(butn, hide) {
+        $(butn).val(get_new_label(butn,hide));
+        $(hide).slideToggle();
+      };
+    </script>
+    <input type="submit" value='initiated' class='toggle_button'>
+    <script>
+        var hide_area = $(".toggle_button[value='initiated']").parents('div.cell').prevAll().addBack().slice(-1)
+        hide_area = $(hide_area).find("div.input").add($(hide_area).filter("div.text_cell"))
+        $(".toggle_button[value='initiated']").prop("hide_area", hide_area)
+        $(".toggle_button[value='initiated']").click(function(){
+            code_toggle(this, $(this).prop("hide_area"))
+        }); 
+$(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($(".toggle_button[value='initiated']").parents("div.output").find('div.output_area').first());
+    var shown = $(".toggle_button[value='initiated']").parents("div.cell.code_cell").find('div.input').is(':visible');
+    var title = ((shown) ? 'Hide ' : 'Show ') + 'code'; 
+     $(".toggle_button[value='initiated']").addClass("init_show");
+            $(hide_area).addClass("init_hidden");  $(".toggle_button[value='initiated']").val(title);
+    </script></div></div>
+</div>
+<p>The plots show that overfitting is greatly diminished. This did involve introducing another free-parameter <span class="math notranslate nohighlight">\(\alpha\)</span> which has to be set.  <strong>Try altering the value of \(\boldsymbol{\alpha}\) to see how the fits change</strong>. One principled way to choose \(\alpha\) would be to try different values for it using training/test datasets, and pick the \(\alpha\) which results in the best test performance. Let’s also have a look at how regularisation affects the train/test errors.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_ext</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;reg_nonlin_x_extended.npy&#39;</span><span class="p">)</span>
+<span class="n">y_ext</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;reg_nonlin_y_extended.npy&#39;</span><span class="p">)</span>
+
+<span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">x_ext</span><span class="p">[:</span><span class="mi">10</span><span class="p">],</span> <span class="n">x_ext</span><span class="p">[</span><span class="mi">10</span><span class="p">:],</span> <span class="n">y_ext</span><span class="p">[:</span><span class="mi">10</span><span class="p">],</span> <span class="n">y_ext</span><span class="p">[</span><span class="mi">10</span><span class="p">:]</span>
+<span class="n">alpha</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">**</span> <span class="o">-</span><span class="mi">5</span>
+
+<span class="n">train_errors</span><span class="p">,</span> <span class="n">test_errors</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">D</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    
+    <span class="n">reg_term</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x_</span> <span class="o">**</span> <span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="k">for</span> <span class="n">x_</span> <span class="ow">in</span> <span class="n">x_train</span><span class="p">])</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">((</span><span class="n">phi</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span> <span class="o">+</span> <span class="n">reg_term</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">phi</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">y_train</span><span class="p">)</span>
+    <span class="n">y_trained</span> <span class="o">=</span> <span class="n">phi</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+    
+    <span class="n">train_rms_error</span> <span class="o">=</span> <span class="p">((</span><span class="n">y_trained</span> <span class="o">-</span> <span class="n">y_train</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">**</span> <span class="mf">0.5</span> <span class="c1">#  calculating rms error of the training data</span>
+    
+    <span class="n">phi_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x_</span> <span class="o">**</span> <span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="k">for</span> <span class="n">x_</span> <span class="ow">in</span> <span class="n">x_test</span><span class="p">])</span>
+    <span class="n">y_pred</span> <span class="o">=</span> <span class="n">phi_pred</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+    
+    <span class="n">test_rms_error</span> <span class="o">=</span> <span class="p">((</span><span class="n">y_pred</span> <span class="o">-</span> <span class="n">y_test</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">**</span> <span class="mf">0.5</span> <span class="c1"># calculating rms error of the test data</span>
+    
+    <span class="n">train_errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">train_rms_error</span><span class="p">)</span>
+    <span class="n">test_errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">test_rms_error</span><span class="p">)</span>
+    
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">train_errors</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;Train&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">test_errors</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;Test&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">beautify_plot</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span><span class="s2">&quot;Training and test errors (regularised)&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span><span class="s2">&quot;$D$&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="s1">&#39;$E_</span><span class="si">{rms}</span><span class="s1">$&#39;</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">toggle_code</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/regression_regularisation_10_0.svg" src="../../_images/regression_regularisation_10_0.svg" /><div class="output text_html">
+    <script>
+      function get_new_label(butn, hide) {
+          var shown = $(butn).parents("div.cell.code_cell").find('div.input').is(':visible');
+          var title = $(butn).val().substr($(butn).val().indexOf(" ") + 1)
+          return ((shown) ? 'Show ' : 'Hide ') + title
+      }
+      function code_toggle(butn, hide) {
+        $(butn).val(get_new_label(butn,hide));
+        $(hide).slideToggle();
+      };
+    </script>
+    <input type="submit" value='initiated' class='toggle_button'>
+    <script>
+        var hide_area = $(".toggle_button[value='initiated']").parents('div.cell').prevAll().addBack().slice(-1)
+        hide_area = $(hide_area).find("div.input").add($(hide_area).filter("div.text_cell"))
+        $(".toggle_button[value='initiated']").prop("hide_area", hide_area)
+        $(".toggle_button[value='initiated']").click(function(){
+            code_toggle(this, $(this).prop("hide_area"))
+        }); 
+$(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($(".toggle_button[value='initiated']").parents("div.output").find('div.output_area').first());
+    var shown = $(".toggle_button[value='initiated']").parents("div.cell.code_cell").find('div.input').is(':visible');
+    var title = ((shown) ? 'Hide ' : 'Show ') + 'code'; 
+     $(".toggle_button[value='initiated']").addClass("init_show");
+            $(hide_area).addClass("init_hidden");  $(".toggle_button[value='initiated']").val(title);
+    </script></div></div>
+</div>
+<p>As expected, the training error steadily decreases with <span class="math notranslate nohighlight">\(D\)</span>. The test error again reaches a minimum for <span class="math notranslate nohighlight">\(D = 3\)</span>, but unlike in the unregularised case, it doesn’t explode for large <span class="math notranslate nohighlight">\(D\)</span>, because the regularization term prevents the weights from becoming large. To verify this point, let’s check the values of the weights:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">toggle_code</span><span class="p">()</span>
+
+<span class="n">weights</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">alpha</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">**</span> <span class="o">-</span><span class="mi">5</span>
+
+<span class="k">for</span> <span class="n">D</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x_</span> <span class="o">**</span> <span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="k">for</span> <span class="n">x_</span> <span class="ow">in</span> <span class="n">x_nonlin</span><span class="p">])</span>
+    <span class="n">reg_term</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">((</span><span class="n">phi</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span> <span class="o">+</span> <span class="n">reg_term</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">phi</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">y_nonlin</span><span class="p">)</span>
+    
+    <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span> <span class="o">-</span> <span class="n">w</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="s1">&#39;constant&#39;</span><span class="p">,</span> <span class="n">constant_values</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="c1"># pad with 0&#39;s for unused weights</span>
+    <span class="n">weights</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> 
+
+<span class="kn">import</span> <span class="nn">pandas</span>
+<span class="n">row_names</span><span class="p">,</span> <span class="n">column_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)],</span> <span class="p">[</span><span class="s1">&#39;$w_</span><span class="si">{}</span><span class="s1">$&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)]</span>
+<span class="n">table</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">row_names</span><span class="p">,</span> <span class="n">column_names</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">table</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;D&quot;</span>
+<span class="n">table</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">
+    <script>
+      function get_new_label(butn, hide) {
+          var shown = $(butn).parents("div.cell.code_cell").find('div.input').is(':visible');
+          var title = $(butn).val().substr($(butn).val().indexOf(" ") + 1)
+          return ((shown) ? 'Show ' : 'Hide ') + title
+      }
+      function code_toggle(butn, hide) {
+        $(butn).val(get_new_label(butn,hide));
+        $(hide).slideToggle();
+      };
+    </script>
+    <input type="submit" value='initiated' class='toggle_button'>
+    <script>
+        var hide_area = $(".toggle_button[value='initiated']").parents('div.cell').prevAll().addBack().slice(-1)
+        hide_area = $(hide_area).find("div.input").add($(hide_area).filter("div.text_cell"))
+        $(".toggle_button[value='initiated']").prop("hide_area", hide_area)
+        $(".toggle_button[value='initiated']").click(function(){
+            code_toggle(this, $(this).prop("hide_area"))
+        }); 
+$(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($(".toggle_button[value='initiated']").parents("div.output").find('div.output_area').first());
+    var shown = $(".toggle_button[value='initiated']").parents("div.cell.code_cell").find('div.input').is(':visible');
+    var title = ((shown) ? 'Hide ' : 'Show ') + 'code'; 
+     $(".toggle_button[value='initiated']").addClass("init_show");
+            $(hide_area).addClass("init_hidden");  $(".toggle_button[value='initiated']").val(title);
+    </script></div><div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>D</th>
+      <th>$w_0$</th>
+      <th>$w_1$</th>
+      <th>$w_2$</th>
+      <th>$w_3$</th>
+      <th>$w_4$</th>
+      <th>$w_5$</th>
+      <th>$w_6$</th>
+      <th>$w_7$</th>
+      <th>$w_8$</th>
+      <th>$w_9$</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.23</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.52</td>
+      <td>-0.78</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.43</td>
+      <td>0.11</td>
+      <td>-0.92</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>-0.03</td>
+      <td>9.71</td>
+      <td>-29.70</td>
+      <td>20.36</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>-0.03</td>
+      <td>9.69</td>
+      <td>-29.58</td>
+      <td>20.15</td>
+      <td>0.12</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>-0.03</td>
+      <td>9.71</td>
+      <td>-27.33</td>
+      <td>7.47</td>
+      <td>21.62</td>
+      <td>-11.23</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>-0.02</td>
+      <td>9.07</td>
+      <td>-22.79</td>
+      <td>-0.78</td>
+      <td>16.24</td>
+      <td>12.76</td>
+      <td>-14.43</td>
+      <td>0.00</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>-0.00</td>
+      <td>8.61</td>
+      <td>-20.72</td>
+      <td>-1.09</td>
+      <td>9.45</td>
+      <td>11.75</td>
+      <td>4.11</td>
+      <td>-12.18</td>
+      <td>0.00</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>0.00</td>
+      <td>8.44</td>
+      <td>-20.44</td>
+      <td>0.75</td>
+      <td>6.62</td>
+      <td>7.89</td>
+      <td>5.54</td>
+      <td>-0.26</td>
+      <td>-8.68</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>0.01</td>
+      <td>8.41</td>
+      <td>-20.66</td>
+      <td>2.24</td>
+      <td>5.86</td>
+      <td>5.59</td>
+      <td>4.20</td>
+      <td>1.75</td>
+      <td>-1.70</td>
+      <td>-5.85</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>The weights are significantly decreased by regularization. <strong>You can change <span class="math notranslate nohighlight">\(\boldsymbol{\alpha}\)</span> to see how the weights are affected by the size of the regularization term</strong>.</p>
+</div>
+<div class="section" id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<p>Overfitting causes the weight estimates in a linear-in-the-parameters regression model to become extreme. Extreme settings of the weights can be discouraged by penalising their magnitude. This can be interpreted as placing a prior distribution that encodes knowledge before observing the data that the weights are likely to be small in magnitude.</p>
+<p>In the next section we will look at <a class="reference internal" href="regression_bayesian.html"><span class="doc std std-doc">bayesian</span></a> a bayesian approach to regression.</p>
+</div>
+<div class="section" id="questions">
+<h2>Questions<a class="headerlink" href="#questions" title="Permalink to this headline">¶</a></h2>
+<p>1a. Look at the plot of the functions sampled from the probabilistic model, <span class="math notranslate nohighlight">\(\mathbf{w}^{(m)} \sim \mathcal{N}(\mathbf{0},\sigma_{\mathbf{w}}^2 \mathrm{I})\)</span> and <span class="math notranslate nohighlight">\(f^{(m)}(x)=\boldsymbol{\phi}(x)^\top \mathbf{w}^{(m)}\)</span> in the case of i) polynomial and ii) Gaussian basis functions. Alter the code to draw a large number of samples. Averaging over samples, qualitatively, how does the mean and variance of the distribution over functions depend on <span class="math notranslate nohighlight">\(x\)</span>?</p>
+<p>1b. Derive an analytic expression for the mean and the variance of the function, that is <span class="math notranslate nohighlight">\(\mathbb{E}_{\mathbf{w}}(f_{\mathbf{w}}(x))\)</span> and <span class="math notranslate nohighlight">\(\mathbb{E}_{\mathbf{w}}(f_{\mathbf{w}}^2(x)) - \mathbb{E}_{\mathbf{w}}(f_{\mathbf{w}}(x))^2\)</span>. Compare what happens to these statistics for the two models in regions far away from the origin.</p>
+<p>1c. Do these results shed light on when it is appropriate to use i) polynomial basis functions and ii) Gaussian basis functions?</p>
+<details>
+<summary>Answer</summary>
+<div>
+The mean of the distribution over functions is defined as:
+<p><span class="math notranslate nohighlight">\(\mathbb{E}_{\mathbf{w}}(f_{\mathbf{w}}(x)) = \int f_{\mathbf{w}}(x) p(\mathbf{w}) \mathrm{d} \mathbf{w}\)</span>.</p>
+<p>Substituting in the definition of the function <span class="math notranslate nohighlight">\(f_{\mathbf{w}}(x) = \sum_{d=0}^D w_d \phi_d(x)\)</span>:</p>
+<p><span class="math notranslate nohighlight">\(\mathbb{E}_{\mathbf{w}}(f_{\mathbf{w}}(x)) = \int \sum_{d=0}^D w_d \phi_d(x) p(\mathbf{w}) \mathrm{d} \mathbf{w} =  \sum_{d=0}^D  \mathbb{E}_{\mathbf{w}} (w_d) \phi_d(x)  = 0\)</span></p>
+<p>So the average function is one which takes the value <span class="math notranslate nohighlight">\(0\)</span> everywhere. The variance is defined as</p>
+<p><span class="math notranslate nohighlight">\(\mathbb{E}_{\mathbf{w}}(f^2_{\mathbf{w}}(x)) = \int f^2_{\mathbf{w}}(x) p(\mathbf{w}) \mathrm{d} \mathbf{w}\)</span></p>
+<p>where we have used the fact that the mean is zero. Substituting in the definition of the function again yields</p>
+<p><span class="math notranslate nohighlight">\(\mathbb{E}_{\mathbf{w}}(f^2_{\mathbf{w}}(x)) = \int \sum_{d=0}^D \sum_{d'=0}^D w_d \phi_d(x) w_{d'} \phi_{d'}(x) p(\mathbf{w}) \mathrm{d} \mathbf{w} =  \sum_{d=0}^D \mathbb{E}_{\mathbf{w}}(w^2_d) \phi^2_d(x)\)</span></p>
+<p>where we used the fact that the weights are independent in the prior. Therefore</p>
+<p><span class="math notranslate nohighlight">\(\mathbb{E}_{\mathbf{w}}(f^2_{\mathbf{w}}(x)) =  \sigma_{\mathbf{w}}^2 \sum_{d=0}^D \phi^2_d(x)\)</span>.</p>
+<p>Notice that  in the case of polynomial regression the variance grows with the magnitude of the inputs <span class="math notranslate nohighlight">\(|x|\)</span>. That is, the functions will typically blow up once the magnitude of <span class="math notranslate nohighlight">\(x\)</span> is large enough. For Gaussian basis functions the variance shrinks to zero away from the basis functions. Both behaviours can be problematic for extrapolation.</p>
+</div>
+</details>
+<ol class="simple">
+<li><p>The plot below shows a dataset which has been fit with a linear model using the MAP method. Is the fit satisfactory? How would you modify the model to improve the fit?</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">D</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1"># order of polynomial</span>
+<span class="n">N</span> <span class="o">=</span> <span class="mi">10</span> <span class="c1"># number of data points per model</span>
+<span class="n">alpha</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">**</span> <span class="o">-</span><span class="mi">4</span> <span class="c1"># arbitrarily chosen alpha</span>
+
+<span class="n">var_w</span> <span class="o">=</span> <span class="mi">1000</span> <span class="c1"># a priori variance of weights</span>
+<span class="n">var_y</span> <span class="o">=</span> <span class="mf">0.01</span> <span class="c1"># observation noise variance</span>
+
+<span class="c1">### Sampling the data ###</span>
+
+<span class="c1"># input locations of true function / fitted function</span>
+<span class="n">xs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="c1"># 100 points equispaced between 0 and 1</span>
+
+<span class="c1"># polynomial basis functions</span>
+<span class="n">phi_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x_</span> <span class="o">**</span> <span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="k">for</span> <span class="n">x_</span> <span class="ow">in</span> <span class="n">xs</span><span class="p">])</span> 
+ 
+<span class="c1"># input locations of data</span>
+<span class="n">x_samp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span> 
+
+<span class="c1"># polynomial basis functions</span>
+<span class="n">phi_samp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x_</span> <span class="o">**</span> <span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="k">for</span> <span class="n">x_</span> <span class="ow">in</span> <span class="n">x_samp</span><span class="p">])</span> 
+    
+<span class="c1"># sample weights</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">var_w</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="n">D</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># plot function at input locations</span>
+<span class="n">f_true</span> <span class="o">=</span> <span class="n">phi_pred</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="c1"># output of the model at the points above</span>
+
+<span class="c1"># generate data</span>
+<span class="n">y_samp</span> <span class="o">=</span> <span class="n">phi_samp</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">var_y</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">standard_t</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+    
+<span class="c1">### Fitting data ###</span>
+
+<span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x_</span> <span class="o">**</span> <span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="k">for</span> <span class="n">x_</span> <span class="ow">in</span> <span class="n">x_samp</span><span class="p">])</span>
+<span class="n">reg_term</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="c1"># regularization term = alpha * (indentity matrix)</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span> <span class="p">(</span><span class="n">phi</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span> <span class="o">+</span> <span class="n">reg_term</span> <span class="p">,</span> <span class="p">(</span><span class="n">phi</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">y_samp</span><span class="p">)</span> <span class="p">)</span>
+<span class="n">f_est</span> <span class="o">=</span> <span class="n">phi_pred</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="c1"># model predictions as before</span>
+   
+    
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="c1">#plt.plot(xs, f_true) # plot true function</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_samp</span><span class="p">,</span> <span class="n">y_samp</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">)</span> <span class="c1"># plot predictions</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">f_est</span><span class="p">)</span> <span class="c1"># plot predictions</span>
+
+   
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mf">100.1</span><span class="p">])</span>
+    
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">toggle_code</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/regression_regularisation_16_0.svg" src="../../_images/regression_regularisation_16_0.svg" /><div class="output text_html">
+    <script>
+      function get_new_label(butn, hide) {
+          var shown = $(butn).parents("div.cell.code_cell").find('div.input').is(':visible');
+          var title = $(butn).val().substr($(butn).val().indexOf(" ") + 1)
+          return ((shown) ? 'Show ' : 'Hide ') + title
+      }
+      function code_toggle(butn, hide) {
+        $(butn).val(get_new_label(butn,hide));
+        $(hide).slideToggle();
+      };
+    </script>
+    <input type="submit" value='initiated' class='toggle_button'>
+    <script>
+        var hide_area = $(".toggle_button[value='initiated']").parents('div.cell').prevAll().addBack().slice(-1)
+        hide_area = $(hide_area).find("div.input").add($(hide_area).filter("div.text_cell"))
+        $(".toggle_button[value='initiated']").prop("hide_area", hide_area)
+        $(".toggle_button[value='initiated']").click(function(){
+            code_toggle(this, $(this).prop("hide_area"))
+        }); 
+$(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($(".toggle_button[value='initiated']").parents("div.output").find('div.output_area').first());
+    var shown = $(".toggle_button[value='initiated']").parents("div.cell.code_cell").find('div.input').is(':visible');
+    var title = ((shown) ? 'Hide ' : 'Show ') + 'code'; 
+     $(".toggle_button[value='initiated']").addClass("init_show");
+            $(hide_area).addClass("init_hidden");  $(".toggle_button[value='initiated']").val(title);
+    </script></div></div>
+</div>
+<details>
+<summary>Answer</summary>
+<div>
+The dataset contains an outlier which is causing the best fit line to deviate from the bulk of the data. This will likely lead to bad predictions on test data.
+<p>The assumption of Gaussian noise (or squared error cost) means that outliers will have significant effect.</p>
+<p>Instead, an alternative observation noise model should be used e.g. a <a class="reference external" href="https://en.wikipedia.org/wiki/Laplace_distribution">Laplace distribution</a> <span class="math notranslate nohighlight">\(p(w_d | \sigma_{w}) = \frac{1}{2 \sigma_{w}}\exp(-|w_d|/\sigma_{w})\)</span> (which results in a cost on the absolute value when using MAP or maximum-likelihood fitting) or a <a class="reference external" href="https://en.wikipedia.org/wiki/Student%27s_t-distribution">Student’s t-distribution</a> <span class="math notranslate nohighlight">\(p(w_d | \sigma_{w}) \propto (1 + \frac{v}{v-2} |w_d|^2/\sigma^2_{w})^{- (v+1)/2}\)</span> (this was the noise used to generate the data).</p>
+<p>These alternative observation noise models do not result in analytic fits when using maximum likelihood or MAP estimation. However optimisation based approaches can be used. This price is often worth paying as real datasets typically contain outliers and non-Gaussian noise models can make the predictions substantially more robust.</p>
+</div>
+</details></div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./content/regression"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Stratis Markou, Rich Turner<br/>
+        
+            &copy; Copyright 2021.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../../_static/js/index.3da636dd464baa7582d2.js"></script>
+
+
+    
+    <!-- Google Analytics -->
+    <script>
+      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+      ga('create', 'UA-168728006-1', 'auto');
+      ga('set', 'anonymizeIp', true);
+      ga('send', 'pageview');
+    </script>
+    <script async src='https://www.google-analytics.com/analytics.js'></script>
+    <!-- End Google Analytics -->
+    
+  </body>
+</html>

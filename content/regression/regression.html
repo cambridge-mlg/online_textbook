@@ -1,0 +1,971 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>2. Regression &#8212; OMLT</title>
+    
+  <link rel="stylesheet" href="../../_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom_style.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/.ipynb_checkpoints/custom_style-checkpoint.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../../_static/js/index.3da636dd464baa7582d2.js">
+
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../../index.html">
+  
+  <img src="../../_static/logo.png" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">OMLT</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../home.html">
+   Online Machine Learning Textbook
+  </a>
+ </li>
+</ul>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="regression-intro.html">
+   Regression
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="regression-linear.html">
+     Linear regression
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../../_sources/content/regression/regression.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+        <!-- Source interaction buttons -->
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/stratisMarkou/random-walks/master?urlpath=tree/./content/regression/regression.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#linear-regression">
+   2.1 Linear regression
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#non-linear-basis-regression">
+   2.2 Non-linear basis regression
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#bayesian-linear-regression">
+   2.3 Bayesian linear regression
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#update-learning-and-visualizations">
+   Update learning and visualizations
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="regression">
+<h1>2. Regression<a class="headerlink" href="#regression" title="Permalink to this headline">¶</a></h1>
+<p>In the previous section we used the method \(\texttt{stats.linregress}\) to perform least squares regression quite liberally and without explaining what the function does under the hood. We also deferred questions like our definition of error and lack of error bars. In this section we will look at regression in detail to address these issues. The term regression describes a broad class of problems where the aim is to predict a <strong>continuous output</strong> \(y^\star\) given its input \(x^\star\), and a set of example \({x_n, y_n}\) pairs. Such problems amount to finding a function \(y = f(x)\) which describes the data sufficiently well,  allowing us to make future predictions \(y^\star = f(x^\star)\).</p>
+<p>Many real tasks such as temperature forecasts, sales and stock price predictions are regression problems making regression methods relevant and very applicable. More importantly, regression serves as a good introduction to several recurrent concepts in inference and machine learning like <em>generative models</em>, <em>maximum likelihood approaches</em>, <em>overfitting</em> and <em>bayesian inference</em>. It is highly recommended that you take time to grasp the concepts in this section well \(-\) it will pay off later.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">config</span> InlineBackend.figure_format = &#39;svg&#39;
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">helper_functions</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">set_notebook_preferences</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="nn">&lt;ipython-input-1-70ccaa3b01fc&gt;</span> in <span class="ni">&lt;module&gt;</span><span class="nt">()</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="ne">----&gt; </span><span class="mi">4</span> <span class="kn">from</span> <span class="nn">helper_functions</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> 
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="n">set_notebook_preferences</span><span class="p">()</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;helper_functions&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="linear-regression">
+<h2>2.1 Linear regression<a class="headerlink" href="#linear-regression" title="Permalink to this headline">¶</a></h2>
+<p>Let’s start by looking at the details of linear fits using a prepared toy dataset, starting by plotting the dataset.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_lin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;reg_lin_x.npy&#39;</span><span class="p">)</span> <span class="c1"># np.load loads a prepared numpy array from the file &#39;reg_line_x.npy&#39;</span>
+<span class="n">y_lin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;reg_lin_y.npy&#39;</span><span class="p">)</span> <span class="c1"># same for &#39;reg_line_y.npy&#39;</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_lin</span><span class="p">,</span> <span class="n">y_lin</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">)</span> <span class="c1"># scatter plot of the inputs, x, and outputs, y</span>
+<span class="n">beautify_plot</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span><span class="s2">&quot;Linear dataset&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span><span class="s2">&quot;$x$&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span><span class="s2">&quot;$y$&quot;</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span> <span class="c1"># show the scatter plot</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We now want to find the straight line with slope <span class="math notranslate nohighlight">\(w_1\)</span> and intercept <span class="math notranslate nohighlight">\(w_0\)</span> which describes the data.</p>
+<p>\begin{align}
+y = w_1 x + w_0
+\end{align}</p>
+<p>A straight line clearly can’t pass through all the datapoints because they aren’t collinear so we must define what a good description of the data is. In the previous section we presented the sum-of-squares error as a candidate definition</p>
+<p>\begin{align}
+E_2 = \sum^N_{n = 1} \big[y_n - (w_1x_n + w_0)\big]^2 \geq 0
+\end{align}</p>
+<p>where equality with 0 holds only if \(~y_n = w_1x_n + w_0\) for every \(n\). We then define the optimal fit as that which minimises \(E_2\) <span class="math notranslate nohighlight">\(-\)</span> and proceed by finding the values of \(w_0, w_1\) which do so. However why minimize the sum-of-squares instead of</p>
+<p>\begin{align}
+E_{p} = \sum^N_{n = 1} \big|y_n - (w_1x_n + w_0)\big|^p,~\text{for some <span class="math notranslate nohighlight">\(p &gt; 0\)</span>}?
+\end{align}</p>
+<p>For the moment we’ll stick with \(p = 2\) and there are two good reasons for this:</p>
+<ul class="simple">
+<li><p>Minimizing \(E_2\) makes the maths easier and gives a closed-form solution for the \(w\)’s.</p></li>
+<li><p>It turns out that minimising \(E_2\) is equivalent to finding the \(w\)’s which are most likely, given the data, if we assume that some gaussian measurement noise has been added to each \(y_n\). This not only makes the use of \(E_2\) interpretable, but is the method one should employ for gaussian-noisy data.</p></li>
+</ul>
+<p>We will demonstrate both these points shortly. Skipping ahead slightly, let’s have a look at the following animation to get a feel for the problem. In the left plot, we have visualised the line in data space for different \((w_0, w_1)\) values and shown the (unsquared) errors in gray dashes. The right plot, is a contour of \(\text{ln}(E_2)\) in the weight space \(-\) blue means low and red means high log-error. The black cross shows the \((w_0, w_1)\) pair corresponding to the displayed line.</p>
+<div class="row">
+  <div class="column">
+    <img src="reg_lin_weight_excursion.gif" style="width:80%; float: center; padding: 0px">
+  </div>
+</div>
+<p>Our goal is to find the exact \((w_0, w_1)\) which minimise the error. We proceed by writing \(E_2\) in the more convenient notation</p>
+<p>\[
+E_2 = \big|\mathbf{y} - \mathbf{X}\mathbf{w}\big|^2 = \big(\mathbf{y} - \mathbf{X}\mathbf{w}\big)^\top \big(\mathbf{y} - \mathbf{X}\mathbf{w}\big)
+\]</p>
+<p>\begin{equation}
+\text{where}~~~
+\mathbf{y} = \begin{pmatrix}
+y_1\<br />
+y_2\<br />
+\vdots \<br />
+y_N\<br />
+\end{pmatrix}, ~~~
+\mathbf{X} =  \begin{pmatrix}
+1 &amp; x_1\<br />
+1 &amp; x_2\<br />
+\vdots &amp; \vdots \<br />
+1 &amp; x_N\<br />
+\end{pmatrix}, ~~~
+\mathbf{w} =  \begin{pmatrix}
+w_0\<br />
+w_1\<br />
+\end{pmatrix}
+\end{equation}</p>
+<details>
+<summary>Index notation in detail</summary>
+<div>
+\begin{align}
+    E_2 &= \sum^N_{n = 1} \big[y_n - (w_1x_n + w_0)\big]^2\\
+    ~\\
+    &= \sum^N_{n = 1} \big[\mathbf{y}_n - \sum^2_{j = 1}\mathbf{X}_{nj}\mathbf{w}_j\big]^2\\
+    ~\\
+    &= \sum^N_{n = 1} \big[\mathbf{y}_n - \left(\mathbf{X}\mathbf{w}\right)_n\big]^2\\
+    ~\\
+    &= \big(\mathbf{y} - \mathbf{X}\mathbf{w}\big)^\top \big(\mathbf{y} - \mathbf{X}\mathbf{w}\big)\\
+\end{align}
+</div>
+</details>
+<p>Also, introducing the notation for the derivative of a quantity \(f\) with respect to a vector \(\mathbf{v}\)</p>
+<p>\[
+\bigg(\frac{\partial f}{\partial \mathbf{v}}\bigg)_i = \frac{\partial f}{\partial \mathbf{v}_i}
+\]</p>
+<p>and using it to extremize \(E_2\), we obtain the closed form solution:</p>
+<p>\begin{align}\frac{\partial E_2}{\partial \mathbf{w}} &amp;= -2\mathbf{X}^\top\big(\mathbf{y} - \mathbf{X}\mathbf{w}\big)=0\
+~\<br />
+\implies &amp; \mathbf{X}^\top\mathbf{X}\mathbf{w} - \mathbf{X}^\top\mathbf{y} = 0\
+~\<br />
+\implies &amp;\boxed{\mathbf{w} = \big( \mathbf{X}^\top\mathbf{X}\big)^{-1}\mathbf{X}^\top \mathbf{y}}
+\end{align}</p>
+<details>
+<summary>Derivatives in detail</summary>
+<div>
+Here we show a more detailed derivation of the equality $\frac{\partial E_2}{\partial \mathbf{w}} = -2\mathbf{X}^\top\big(\mathbf{y} - \mathbf{X}\mathbf{w}\big)$ in case the vector notation of derivatives is not clear.
+<p>\begin{align}
+\bigg(\frac{\partial E_2}{\partial \mathbf{w}}\bigg)_i &amp;= \frac{\partial E_2}{\partial \mathbf{w}_i} = \frac{\partial}{\partial \mathbf{w}_i} \bigg[\big(\mathbf{y} - \mathbf{X}\mathbf{w}\big)^\top \big(\mathbf{y} - \mathbf{X}\mathbf{w}\big)\bigg] = \frac{\partial}{\partial \mathbf{w}_i} \sum_n \bigg[\big(\mathbf{y}<em>n - \sum_j\mathbf{X}</em>{nj}\mathbf{w}_j\big) \big(\mathbf{y}<em>n - \sum_j\mathbf{X}</em>{nj}\mathbf{w}_j\big)\bigg]\
+~\
+&amp;= 2\sum_n \bigg[\big(\mathbf{y}<em>n - \sum_j\mathbf{X}</em>{nj}\mathbf{w}_j\big) \frac{\partial}{\partial \mathbf{w}_i} \big(\mathbf{y}<em>n - \sum_j\mathbf{X}</em>{nj}\mathbf{w}_j\big)\bigg]\
+~\
+&amp;= -2\sum_n \bigg[\big(\mathbf{y}<em>n - \sum_j\mathbf{X}</em>{nj}\mathbf{w}<em>j\big) \big(\sum_j\mathbf{X}</em>{nj} \frac{\partial \mathbf{w}<em>j}{\partial \mathbf{w}<em>i}\big)\bigg]\
+~\
+&amp;= -2\sum_n \bigg[\big(\mathbf{y}<em>n - \sum_j\mathbf{X}</em>{nj}\mathbf{w}<em>j\big) \big(\sum_j\mathbf{X}</em>{nj} \delta</em>{ij}\big)\bigg]\
+~\
+&amp;= -2\sum_n \bigg[\big(\mathbf{y}<em>n - \sum_j\mathbf{X}</em>{nj}\mathbf{w}<em>j\big)\mathbf{X}</em>{ni}\bigg]\
+~\
+&amp;= -2\sum_n \bigg[\mathbf{X}^\top</em>{in}\big(\mathbf{y}<em>n - \sum_j\mathbf{X}</em>{nj}\mathbf{w}_j\big)\bigg]\
+~\
+&amp;= -2 \left[\mathbf{X}^\top \big(\mathbf{y} - \mathbf{X}\mathbf{w}\big)\right]_i\
+\end{align}</p>
+</div>
+</details>
+<p>As promised, we have a closed form solution for \(\mathbf{w}\) which extremizes \(E_2\). You can convince yourself this is a minimum either by taking a second derivative or by first considering the quadratic form of \(E_2\) and then what happens in the limit of large \(\mathbf{w}\). In this expression for \(\mathbf{w}\)</p>
+<div class="math notranslate nohighlight">
+\[\mathbf{w} = \big( \mathbf{X}^\top\mathbf{X}\big)^{-1}\mathbf{X}^\top \mathbf{y}\]</div>
+<p>it is interesting to note that the matrix <span class="math notranslate nohighlight">\(\big( \mathbf{X}^\top\mathbf{X}\big)^{-1}\mathbf{X}^\top\)</span> is a generalization of the inverse of a matrix for non-square matrices, called the <strong><a class="reference external" href="http://mathworld.wolfram.com/Moore-PenroseMatrixInverse.html">Moore-Penrose pseudoinverse</a></strong>:</p>
+<div class="math notranslate nohighlight">
+\[\bigg[\big( \mathbf{X}^\top\mathbf{X}\big)^{-1}\mathbf{X}^\top\bigg] \mathbf{X} = \big( \mathbf{X}^\top\mathbf{X}\big)^{-1}\mathbf{X}^\top\mathbf{X} = \mathbf{I}\]</div>
+<p>Implementing this solution is straightforward because of the closed-form solution we have:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ones</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x_lin</span><span class="p">)</span> <span class="c1"># create a vector of 1&#39;s with the same length as x</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">ones</span><span class="p">,</span> <span class="n">x_lin</span><span class="p">],</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="c1"># stack 1&#39;s and x&#39;s to get the X matrix having the 1&#39;s and x&#39;s as columns</span>
+
+<span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">((</span><span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="p">))</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">y_lin</span><span class="p">)</span> <span class="c1"># compute the optimal w using the Moore-Penrose pseudoinverse</span>
+
+<span class="n">x_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="c1"># 100 points equispaced between 0 and 1</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="n">w</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">x_pred</span> <span class="o">+</span> <span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># evaluate the linear trendline at the values of x above</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_pred</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">)</span> <span class="c1"># plot the trendline</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_lin</span><span class="p">,</span> <span class="n">y_lin</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">)</span> <span class="c1"># plot the datapoints</span>
+<span class="n">beautify_plot</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span><span class="s2">&quot;Least squares regression&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span><span class="s2">&quot;$x$&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span><span class="s2">&quot;$y$&quot;</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now that we’ve demonstrated the least-squares solution has a tractable closed form, we turn our attention to the interesting equivalence advertised previously: that minimizing \(E_2\) is equivalent to determining the most likely w’s under the assumption the \(y\)’s contain gaussian noise. Suppose the \(y\)’s have been generated through</p>
+<p>\[y_n = w_0 + w_1 x_n + \epsilon_n,~\text{where}~ \epsilon_n \sim \mathcal{N}(0, \sigma^2)\]</p>
+<p>where we have added <em>independent</em> gaussian noise \(\epsilon_n\) to each true value of \(w_0 + w_1 x_n\). By independent we mean that for each data point we have drawn a different noise value \(\epsilon_n\). For given \(\sigma^2,\) \(\mathbf{X}\) and \(\mathbf{w}\), we can write down the probability density of \(\mathbf{y}\) or likelihood as</p>
+<p>\[p(\mathbf{y}\mid\mathbf{X}, \mathbf{w}, \sigma^2) = \frac{1}{(2\pi \sigma^2)^{N/2}}\text{exp}\big(-\frac{1}{2\sigma^2}(\mathbf{y} - \mathbf{X}\mathbf{w})^\top (\mathbf{y} - \mathbf{X}\mathbf{w})\big)\]</p>
+<p>Now we aim to find the \(\mathbf{w}\) which maximizes the likelihood. Instead of directly taking derivatives of the exponential, we can use the simplifying facts: (i) the maxima/minima of a quantity are also maxima/minima of a monotonic increasing function \(f\) (monotonic increasing means \(f\) decreases with \(x\)) of that quantity and that (ii) the logarithm is a monotonic increasing function. Then maximixing \(p(\mathbf{y}\mid\mathbf{X}, \mathbf{w}, \sigma^2)\) is equivalent to maximizing the <strong>log-likelihood</strong></p>
+<p>\[\mathcal{L} = \text{log}~ p(\mathbf{y}\mid\mathbf{X}, \mathbf{w}, \sigma^2) = -\frac{N}{2}log(2\pi \sigma^2) -\frac{1}{2\sigma^2}(\mathbf{y} - \mathbf{X}\mathbf{w})^\top (\mathbf{y} - \mathbf{X}\mathbf{w})\]</p>
+<p>or equivalently <strong>minimizing</strong> the negative log-likelihood</p>
+<p>\[-\mathcal{L} = \frac{N}{2}log(2\pi \sigma^2) +\frac{1}{2\sigma^2}(\mathbf{y} - \mathbf{X}\mathbf{w})^\top (\mathbf{y} - \mathbf{X}\mathbf{w})\]</p>
+<details>
+<summary>Extra proof on extrema of monotonic functions</summary>
+<div>
+Consider a quantity \\(\mathcal{Q}(x)\\) with an extremum at \\(x^*\\), and a monotonic function \\(f\\). The derivative of \\(f(\mathcal{Q}(x))\\) with respect to \\(x\\) is
+<p>\begin{align}
+\frac{\partial~ f\big(\mathcal{Q}\big)}{\partial x} = \frac{\partial~ f}{\partial \mathcal{Q}} \frac{\partial~ \mathcal{Q}}{\partial x}.
+\end{align}</p>
+<p>So at \(x = x^*\), \(\partial~ f\left(\mathcal{Q}\right)/\partial x = 0\) and also the signs of \(\partial^2~ f\big(\mathcal{Q}\big)/\partial x^2\) and \(\partial^2~ \mathcal{Q}/\partial x^2\) are the same, which means that the type of extremum is the same for \(\mathcal{Q}\) and \(f\big(\mathcal{Q}\big)\): the maxima of \(\mathcal{Q}\) are maxima of \(f(\mathcal{Q})\) and similarly for the minima.</p>
+</div>
+</details>
+<p>Because the term \(\frac{N}{2}log(2\pi \sigma^2)\) is independent of \(\mathbf{w}\), minimizing the negative log-likelihood is equivalent to minimizing the least-squares error \(-\) exactly the same criterion we had before:</p>
+<p>\[\boxed{\text{Least squares} \equiv \text{minimize}~ (\mathbf{y} - \mathbf{X}\mathbf{w})^\top (\mathbf{y} - \mathbf{X}\mathbf{w}) \Leftrightarrow \text{Maximum-likelihood}}\]</p>
+<p>As promised, we have shown the advertised equivalence. Aside from providing an interpretation for least squares, our probabilistic approach has several additional benefits which we will exploit later. Our probabilistic treatment will allow us to infer the noise level, \(\sigma\), as well as quantitatively criticise our model. More importantly however, this probabilistic approach paves the way to Bayesian modelling where the task of selecting model weights is dealt with in a principled manner.</p>
+</div>
+<div class="section" id="non-linear-basis-regression">
+<h2>2.2 Non-linear basis regression<a class="headerlink" href="#non-linear-basis-regression" title="Permalink to this headline">¶</a></h2>
+<p>In the previous section we showed how linear regression can be used to deal with datasets where the input-output relation is linear. We can extend our method to deal with non-linear datasets with minimal effort, by modelling the dataset as a linear combination of basis functions \(\phi_d, d = 0, 1, …, D\). For example we may choose a set of polynomials or sinusoids</p>
+<p>\[\phi_{d} = x^d, ~\text{or}~
+\phi_{d} = e^{i\pi d},\]</p>
+<p>or any other set of functions \(\phi_{d}\). Then the assumed model responsible for generating the data, called the <strong>generative</strong> model is:</p>
+<p>\[y_n = w_0 + w_1 \phi_{1}(x_n) + w_2 \phi_{2}(x_n) + … w_D \phi_{D}(x_n) + \epsilon_n = \boldsymbol{\phi}(x_n)^\top \mathbf{w} + \epsilon_n\]</p>
+<p>Note that the set of functions \(\phi_{d}\) does not need to be a complete basis \(-\) a set of functions is complete if every function can be expressed as a linear combination of functions from the set. In fact we cannot possibly use a complete set in practice because we have to cut off the sum at some point, or else we would need infinite computation time! Using the same approach as before, we write</p>
+<p>\[\mathbf{y} = \boldsymbol{\Phi}\mathbf{w} + \boldsymbol{\epsilon}\]</p>
+<p>where \(\mathbf{y}\) is the vector of outputs, \(\boldsymbol{\epsilon}\) is a vector of independent gaussian noise draws from \(\mathcal{N}(0, \sigma^2)\) and \(\boldsymbol{\Phi}\) is the matrix whose entry at the \(i^{th}\) row and \(j^{th}\) column is \(\phi_j(x_i)\). The matrix \(\boldsymbol{\Phi}\) is called the <strong>design matrix</strong> and when written out, it looks like:</p>
+<p>\begin{equation}
+\boldsymbol{\Phi} =  \begin{pmatrix}
+1 &amp; \phi_1(x_1) &amp; \cdots &amp; \phi_D(x_1)\<br />
+1 &amp; \phi_1(x_2) &amp; \cdots &amp; \phi_D(x_2)\<br />
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots \<br />
+1 &amp; \phi_1(x_N) &amp; \cdots &amp; \phi_D(x_N)\<br />
+\end{pmatrix}
+\end{equation}</p>
+<p>Where we have explicitly assumed the \(0^{th}\) basis function is 1 to give the constant \(w_0\) term when multiplied by \(\mathbf{w}\). You should convinve yourself that this matrix gives the correct linear combination when acting on \(\mathbf{w}\). We can now proceed either by doing least squares with error</p>
+<p>\[E_2 = \big|\mathbf{y} - \boldsymbol{\Phi}\mathbf{w}\big|^2 = \big(\mathbf{y} - \boldsymbol{\Phi}\mathbf{w}\big)^\top \big(\mathbf{y} - \boldsymbol{\Phi}\mathbf{w}\big),\]</p>
+<p>or by minimizing the negative log-likelihood</p>
+<p>\[- \mathcal{L} = - \text{log}~ p(\mathbf{y}|\boldsymbol{\Phi}, \mathbf{w}, \sigma^2) = \frac{N}{2}log(2\pi \sigma^2) + \frac{1}{2\sigma^2}(\mathbf{y} - \boldsymbol{\Phi}\mathbf{w})^\top (\mathbf{y} - \boldsymbol{\Phi}\mathbf{w})\]</p>
+<p>with respect to <span class="math notranslate nohighlight">\(\mathbf{w}\)</span>. Again it is easy to convince yourself that the two approaches are equivalent, and that the maximum-likelihood weights are</p>
+<p>\begin{align}
+\boxed{\mathbf{w} = \big( \boldsymbol{\Phi}^\top\boldsymbol{\Phi}\big)^{-1}\boldsymbol{\Phi}^\top \mathbf{y}}
+\end{align}</p>
+<p>Implementing the solution is once again straightforward:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_nonlin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;reg_nonlin_x.npy&#39;</span><span class="p">)</span> <span class="c1"># load inputs from a prepared non-linear dataset</span>
+<span class="n">y_nonlin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;reg_nonlin_y.npy&#39;</span><span class="p">)</span> <span class="c1"># load corresponding outputs</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_nonlin</span><span class="p">,</span> <span class="n">y_nonlin</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">)</span>
+<span class="n">beautify_plot</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span><span class="s2">&quot;Non-linear dataset&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span><span class="s2">&quot;$x$&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span><span class="s2">&quot;$y$&quot;</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>For this example we will use polynomial basis functions \(\phi_d(x) = x^d\). The next question is where to cut off the linear combination. Intuitively, we expect a higher order polynomial to be more flexible and able to model more complex input-output relations. For the momement, let’s arbitrarily pick \(D = 3\).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">D</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x_</span><span class="o">**</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="k">for</span> <span class="n">x_</span> <span class="ow">in</span> <span class="n">x_nonlin</span><span class="p">])</span> 
+<span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">((</span><span class="n">phi</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">phi</span><span class="p">))</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">phi</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">y_nonlin</span><span class="p">)</span> <span class="c1"># apply the Moore-Penrose pseudoinverse using Phi</span>
+
+<span class="n">xs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="c1"># 100 points equispaced between 0 and 1</span>
+<span class="n">phi_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x_</span><span class="o">**</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="k">for</span> <span class="n">x_</span> <span class="ow">in</span> <span class="n">xs</span><span class="p">])</span> <span class="c1"># design matrix for points at which to plot</span>
+<span class="n">ys</span> <span class="o">=</span> <span class="n">phi_pred</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="c1"># output of the model at the points above</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Sum squared errors for polynomial of order </span><span class="si">{}</span><span class="s1">:&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">D</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">phi</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">)</span><span class="o">-</span><span class="n">y_nonlin</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_nonlin</span><span class="p">,</span> <span class="n">y_nonlin</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">)</span> <span class="c1"># plot model predictions</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">)</span> <span class="c1"># plot dataset</span>
+<span class="n">beautify_plot</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span><span class="s2">&quot;Non-linear regression (D = </span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">D</span><span class="p">),</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span><span class="s2">&quot;y&quot;</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>How does then the wellness of fit depend on the order of the polynomial? In the code above, <strong>experiment with <span class="math notranslate nohighlight">\(D\)</span></strong> and see how the sum of squares of error changes. Let’s repeat the process for <span class="math notranslate nohighlight">\(D = 1, 2, ... 9\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span> <span class="c1"># figure on which to plot the subfigures - you don&#39;t have to worry about this</span>
+<span class="k">for</span> <span class="n">D</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">):</span>
+    <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x_</span><span class="o">**</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="k">for</span> <span class="n">x_</span> <span class="ow">in</span> <span class="n">x_nonlin</span><span class="p">])</span> <span class="c1"># training design matrix, as before</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">((</span><span class="n">phi</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">phi</span><span class="p">))</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">phi</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">y_nonlin</span><span class="p">)</span> <span class="c1"># Moore-Penrose pseudoinverse</span>
+    
+    <span class="n">phi_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x_</span><span class="o">**</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="k">for</span> <span class="n">x_</span> <span class="ow">in</span> <span class="n">xs</span><span class="p">])</span> <span class="c1"># design matrix of evaluation points as before</span>
+    <span class="n">ys</span> <span class="o">=</span> <span class="n">phi_pred</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="c1"># model predictions as before</span>
+    
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">D</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_nonlin</span><span class="p">,</span> <span class="n">y_nonlin</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">)</span> <span class="c1"># plot </span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="o">-</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">D</span> <span class="o">%</span> <span class="mi">3</span> <span class="ow">is</span> <span class="ow">not</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">remove_axes</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">D</span> <span class="o">&lt;</span> <span class="mi">7</span><span class="p">:</span>
+        <span class="n">remove_axes</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>In the plots above something interesting is happening as \(D\) changes. As the order of the polynomial increases, it becomes more flexible and it can pass closer to each datapoint. At \(D = 9\), the polynomial has \(10\) degrees of freedom (including the constant \(w_0\)), which is equal to the number of datapoints and is just enough for the curve to pass exactly through every point achieving an error of 0. In effect, the polynomial is using up its degrees of freedom to fit the training datapoints exessively well, whilst forming an odd shape which we do not expect to represent unseen data very well \(-\) notice how the curve becomes excessively wiggly as \(D\) increases. This phenomenon is called <strong>overfitting</strong> and is a serious problem which occurs when the model complexity becomes large compared to the amount of training data. Overfitted models exhibit very small training errors but are too well adapted for the training data and <em>learn the noise</em> of that data too. Consequently, they make poor predictions about unseen datapoints \(-\) they fail to generalise. Returning to our polynomial example, let’s have a look at the values of the weights for each \(D\).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">weights</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">D</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">):</span>
+    <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x_</span><span class="o">**</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="k">for</span> <span class="n">x_</span> <span class="ow">in</span> <span class="n">x_nonlin</span><span class="p">])</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">((</span><span class="n">phi</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">phi</span><span class="p">))</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">phi</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">y_nonlin</span><span class="p">)</span>
+    
+    <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span> <span class="o">-</span> <span class="n">w</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="s1">&#39;constant&#39;</span><span class="p">,</span> <span class="n">constant_values</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="c1"># pad with 0&#39;s for unused weights</span>
+    <span class="n">weights</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> 
+
+<span class="kn">import</span> <span class="nn">pandas</span>
+<span class="n">row_names</span><span class="p">,</span> <span class="n">column_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)],</span> <span class="p">[</span><span class="s1">&#39;$w_</span><span class="si">{}</span><span class="s1">$&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)]</span>
+<span class="n">table</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">row_names</span><span class="p">,</span> <span class="n">column_names</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">table</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;D&quot;</span>
+<span class="n">table</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The weights also show something interesting: as \(D\) increases the values of the high-order weights increase dramatically and also their sign oscillates with \(d\), i.e. \(w_d\) and \(w_{d+1}\) have opposite signs for a given large \(D\). The sign oscillation is because each (extremely large) term must be counteracted by some other term, so the weights come in pairs of opposite signs. Prior to fitting the model, we would hardly expect such a behaviour of the \(w\)’s and something must be done to fix this overfitting problem. But before we look for a solution, let’s quantify the impact of overfitting on our model’s performance.</p>
+<p>How can we evaluate model performance and diagnose overfitting? One way to do this is to use a fraction of the data to train the model (train set), whilst leaving the rest of the data (test set) unseen. We can evaluate the model’s performance on the train and test sets. If training performance is good while test performance is poor, it is likely that there is overfitting, whereas if training performance is poor to start with, it is likely that the model is exeedingly simple to capture the complexity of the dataset.</p>
+<p>Let’s apply this method to our polynomial model, using an extended version of the previous dataset. This contains the 10 points of the previous dataset plus another 40 points which we’ll use for testing.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_ext</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;reg_nonlin_x_extended.npy&#39;</span><span class="p">)</span>
+<span class="n">y_ext</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;reg_nonlin_y_extended.npy&#39;</span><span class="p">)</span>
+<span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">x_ext</span><span class="p">[:</span><span class="mi">10</span><span class="p">],</span> <span class="n">x_ext</span><span class="p">[</span><span class="mi">10</span><span class="p">:],</span> <span class="n">y_ext</span><span class="p">[:</span><span class="mi">10</span><span class="p">],</span> <span class="n">y_ext</span><span class="p">[</span><span class="mi">10</span><span class="p">:]</span>
+
+<span class="n">train_err</span><span class="p">,</span> <span class="n">test_err</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span> <span class="c1"># lists to store training and test error as D varies</span>
+<span class="k">for</span> <span class="n">D</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">):</span>
+    
+    <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x_</span><span class="o">**</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="k">for</span> <span class="n">x_</span> <span class="ow">in</span> <span class="n">x_train</span><span class="p">])</span> <span class="c1"># design matrix for training points</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">((</span><span class="n">phi</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">phi</span><span class="p">))</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">phi</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">y_train</span><span class="p">)</span> <span class="c1"># max-lik w</span>
+    <span class="n">y_trained</span> <span class="o">=</span> <span class="n">phi</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="c1"># evaluate polynomial at training points</span>
+    <span class="n">train_err</span><span class="o">.</span><span class="n">append</span><span class="p">(((</span><span class="n">y_trained</span> <span class="o">-</span> <span class="n">y_train</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">**</span><span class="mf">0.5</span><span class="p">)</span> <span class="c1"># store train errors</span>
+    
+    <span class="n">phi_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x_</span><span class="o">**</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="k">for</span> <span class="n">x_</span> <span class="ow">in</span> <span class="n">x_test</span><span class="p">])</span> <span class="c1"># design matrix for test points</span>
+    <span class="n">y_pred</span> <span class="o">=</span> <span class="n">phi_pred</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="c1"># evaluate polynomial at test data points</span>
+    <span class="n">test_err</span><span class="o">.</span><span class="n">append</span><span class="p">(((</span><span class="n">y_pred</span> <span class="o">-</span> <span class="n">y_test</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">**</span><span class="mf">0.5</span><span class="p">)</span> <span class="c1"># store test errors</span>
+    
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">train_err</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;Train&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">test_err</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;Test&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">beautify_plot</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span><span class="s2">&quot;Training and test errors&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span><span class="s2">&quot;$D$&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="s1">&#39;$E_</span><span class="si">{rms}</span><span class="s1">$&#39;</span><span class="p">})</span> <span class="c1"># add a legend for maximum style</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>As the order of the polynomial increases, the training error steadily decreases due to the model’s increased flexibility, whereas the test error initially decreases and then increases again, because the model starts overfitting the training data and no longer fits the test data well. Notably, the error shoots up at <span class="math notranslate nohighlight">\(D = 9\)</span> when the oscillation of the polynomial is most acute.</p>
+<p>A remedy for overfitting would be to somehow force the weight coefficients to be small, for example by adding a term to the log-likelihood expression which penalizes large weights:</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}\mathcal{L} \to \mathcal{L} - \frac{\alpha}{2}\mathbf{w}^\top\mathbf{w}= -\frac{N}{2}log(2\pi \sigma^2) -\frac{1}{2\sigma^2}(\mathbf{y} - \boldsymbol{\Phi}\mathbf{w})^\top (\mathbf{y} - \boldsymbol{\Phi}\mathbf{w})\end{align} - \frac{\alpha}{2}\mathbf{w}^\top\mathbf{w}\]</div>
+<p>The log-likelihood <span class="math notranslate nohighlight">\(\mathcal{L}\)</span> is the same as before, except for the quadratic term <span class="math notranslate nohighlight">\(\frac{\alpha}{2}\mathbf{w}^\top\mathbf{w}\)</span> where <span class="math notranslate nohighlight">\(\alpha &gt; 0\)</span> is a constant. If a weight term becomes large, this quadratic term penalizes the log-likelihood, and <span class="math notranslate nohighlight">\(\alpha\)</span> controls the size of the penalty. This method discourages the weights from becoming large and is known as <strong>regularization</strong>. Again, there is some arbitrariness here, in our choice of regularization term <span class="math notranslate nohighlight">\(-\)</span> why use <span class="math notranslate nohighlight">\(\mathbf{w}^\top\mathbf{w} = ||\mathbf{w}||^2\)</span> and not <span class="math notranslate nohighlight">\(||\mathbf{w}||\)</span> or in fact <span class="math notranslate nohighlight">\(||\mathbf{w}||^p\)</span> for arbitrary <span class="math notranslate nohighlight">\(p\)</span>? We could use a regularization term with different <span class="math notranslate nohighlight">\(p\)</span>, however the <span class="math notranslate nohighlight">\(p = 2\)</span> case has two particularly nice features (which happen to be the same reasons we used least squares <span class="math notranslate nohighlight">\(E_2\)</span> instad of <span class="math notranslate nohighlight">\(E_p\)</span> earlier!):</p>
+<ul class="simple">
+<li><p>It makes the mathematics tractable</p></li>
+<li><p>It is equivalent to performing Bayesian linear regression with a gaussian prior (will be explained later) <strong>fix this</strong></p></li>
+</ul>
+<p>Note that the literature refers to regularization using different <span class="math notranslate nohighlight">\(p\)</span>’s as <span class="math notranslate nohighlight">\(Lp\)</span>, so that <span class="math notranslate nohighlight">\(L1 \implies ||\mathbf{w}||\)</span>, <span class="math notranslate nohighlight">\(~L2 \implies ||\mathbf{w}||^2\)</span> and so on. Sticking with the <span class="math notranslate nohighlight">\(p = 2\)</span> case we differentiate <span class="math notranslate nohighlight">\(\mathcal{L}\)</span></p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}\frac{\partial\mathcal{L}}{\partial \mathbf{w}} = -\frac{1}{\sigma^2}\boldsymbol{\Phi}^\top(\mathbf{y} - \boldsymbol{\Phi}\mathbf{w}) - \alpha\mathbf{w} = 0\\
+~\\
+\boldsymbol{\Phi}^\top\mathbf{y} - \boldsymbol{\Phi}^\top\boldsymbol{\Phi}\mathbf{w} + \lambda\mathbf{I}\mathbf{w} = 0\\
+~\\
+\implies \boxed{\mathbf{w} = (\boldsymbol{\Phi}^\top\boldsymbol{\Phi} + \lambda\mathbf{I})^{-1}\boldsymbol{\Phi}^\top\mathbf{y}}\\
+\end{align}\end{split}\]</div>
+<p>where we have introduced the term <span class="math notranslate nohighlight">\(\lambda = \alpha \sigma^2\)</span>, which controls the regularization magnitude relative to the noise magnitude. Comparing this with the unregularized expression for <span class="math notranslate nohighlight">\(\mathbf{w}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+\mathbf{w} &amp;= (\boldsymbol{\Phi}^\top\boldsymbol{\Phi})^{-1}\boldsymbol{\Phi}^\top\mathbf{y},~\text{unregularized},\\
+~\\
+\mathbf{w} &amp;= (\boldsymbol{\Phi}^\top\boldsymbol{\Phi} + \lambda\mathbf{I})^{-1}\boldsymbol{\Phi}^\top\mathbf{y},~\text{regularized},\\
+\end{align}\end{split}\]</div>
+<p>we see that the only difference is the added <span class="math notranslate nohighlight">\(\lambda\mathbf{I}\)</span> term. Since this is inside the <span class="math notranslate nohighlight">\((\cdot)^{-1}\)</span> matrix inverse we can intuitively see that its effect is to reduce the magnitude of the matrix elements of <span class="math notranslate nohighlight">\((\boldsymbol{\Phi}^\top\boldsymbol{\Phi} + \lambda\mathbf{I})^{-1}\)</span> and hence those of <span class="math notranslate nohighlight">\(\mathbf{w}\)</span>. Consider for example the limiting case <span class="math notranslate nohighlight">\(\boldsymbol{\Phi}^\top\boldsymbol{\Phi} &lt;&lt; \lambda\mathbf{I}\)</span>. Then <span class="math notranslate nohighlight">\((\boldsymbol{\Phi}^\top\boldsymbol{\Phi} + \lambda\mathbf{I})^{-1} \approx \lambda^{-1}\mathbf{I}\)</span> and increasing <span class="math notranslate nohighlight">\(\lambda\)</span> results in smaller <span class="math notranslate nohighlight">\(\mathbf{w}\)</span>. Note that the value of <span class="math notranslate nohighlight">\(\lambda\)</span> is arbitrarily chosen (we will later address this point). Let’s have a look on how regularization affects the model:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span>
+<span class="n">lamda</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**-</span><span class="mi">5</span> <span class="c1"># arbitrarily chosen lamda</span>
+
+<span class="k">for</span> <span class="n">D</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">):</span>
+    <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x_</span><span class="o">**</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="k">for</span> <span class="n">x_</span> <span class="ow">in</span> <span class="n">x_nonlin</span><span class="p">])</span>
+    
+    <span class="n">reg_term</span> <span class="o">=</span> <span class="n">lamda</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="c1"># regularization term = lamda*(indentity matrix)</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">((</span><span class="n">phi</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span> <span class="o">+</span> <span class="n">reg_term</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">phi</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">y_nonlin</span><span class="p">)</span> <span class="c1"># apply regularized pseudoinverse</span>
+    
+    <span class="n">phi_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x_</span><span class="o">**</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="k">for</span> <span class="n">x_</span> <span class="ow">in</span> <span class="n">xs</span><span class="p">])</span> <span class="c1"># design matrix for predictions</span>
+    <span class="n">ys</span> <span class="o">=</span> <span class="n">phi_pred</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="c1"># model predictions as before</span>
+    
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">D</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_nonlin</span><span class="p">,</span> <span class="n">y_nonlin</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="o">-</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">D</span> <span class="o">%</span> <span class="mi">3</span> <span class="ow">is</span> <span class="ow">not</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">remove_axes</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">D</span> <span class="o">&lt;</span> <span class="mi">7</span><span class="p">:</span>
+        <span class="n">remove_axes</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>In the plots above, the effect of overfitting is greatly diminished. Now, although regularization appears to deal with overfitting, one could object that we have merely shifted the problem from the choice of model complexity (e.g. where to cut off the polynomial) to the choice of regularization constant \(\lambda\). We arbitrarily chose \(\lambda = 10^{-5}\) \(-\) <strong>try tweaking the value of \(\boldsymbol{\lambda}\) to see how the curves change</strong>. One principled way to choose \(\lambda\) would be to try different values for it using training/test datasets, and pick the \(\lambda\) which results in the best test performance. Let’s also have a look on how regularization affects the train/test errors.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">x_ext</span><span class="p">[:</span><span class="mi">10</span><span class="p">],</span> <span class="n">x_ext</span><span class="p">[</span><span class="mi">10</span><span class="p">:],</span> <span class="n">y_ext</span><span class="p">[:</span><span class="mi">10</span><span class="p">],</span> <span class="n">y_ext</span><span class="p">[</span><span class="mi">10</span><span class="p">:]</span>
+<span class="n">lamda</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**-</span><span class="mi">5</span>
+
+<span class="n">train_errors</span><span class="p">,</span> <span class="n">test_errors</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">D</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">):</span>
+    
+    <span class="n">reg_term</span> <span class="o">=</span> <span class="n">lamda</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x_</span><span class="o">**</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="k">for</span> <span class="n">x_</span> <span class="ow">in</span> <span class="n">x_train</span><span class="p">])</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">((</span><span class="n">phi</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span> <span class="o">+</span> <span class="n">reg_term</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">phi</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">y_train</span><span class="p">)</span>
+    <span class="n">y_trained</span> <span class="o">=</span> <span class="n">phi</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+    <span class="n">train_rms_error</span> <span class="o">=</span> <span class="p">((</span><span class="n">y_trained</span> <span class="o">-</span> <span class="n">y_train</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">**</span><span class="mf">0.5</span>
+    
+    <span class="n">phi_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x_</span><span class="o">**</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="k">for</span> <span class="n">x_</span> <span class="ow">in</span> <span class="n">x_test</span><span class="p">])</span>
+    <span class="n">y_pred</span> <span class="o">=</span> <span class="n">phi_pred</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+    <span class="n">test_rms_error</span> <span class="o">=</span> <span class="p">((</span><span class="n">y_pred</span> <span class="o">-</span> <span class="n">y_test</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">**</span><span class="mf">0.5</span>
+    
+    <span class="n">train_errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">train_rms_error</span><span class="p">)</span>
+    <span class="n">test_errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">test_rms_error</span><span class="p">)</span>
+    
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">train_errors</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;Train&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">test_errors</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;Test&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">beautify_plot</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span><span class="s2">&quot;Training and test errors (regularised)&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span><span class="s2">&quot;$D$&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="s1">&#39;$E_</span><span class="si">{rms}</span><span class="s1">$&#39;</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>As expected, the training error steadily decreases with <span class="math notranslate nohighlight">\(D\)</span>. The test error again reaches a minimum for <span class="math notranslate nohighlight">\(D = 3\)</span>, but unlike in the unregularized case, it doesn’t explode for large <span class="math notranslate nohighlight">\(D\)</span>, because the regularization term prevents the weights from becoming large. To prove this point, let’s check the values of the weights:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">weights</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">lamda</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**-</span><span class="mi">6</span>
+
+<span class="k">for</span> <span class="n">D</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span><span class="p">):</span>
+    <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x_</span><span class="o">**</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="k">for</span> <span class="n">x_</span> <span class="ow">in</span> <span class="n">x_nonlin</span><span class="p">])</span>
+    <span class="n">reg_term</span> <span class="o">=</span> <span class="n">lamda</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">((</span><span class="n">phi</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span> <span class="o">+</span> <span class="n">reg_term</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">phi</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">y_nonlin</span><span class="p">)</span>
+    
+    <span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pad</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10</span> <span class="o">-</span> <span class="n">w</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="s1">&#39;constant&#39;</span><span class="p">,</span> <span class="n">constant_values</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="c1"># pad with 0&#39;s for unused weights</span>
+    <span class="n">weights</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> 
+
+<span class="kn">import</span> <span class="nn">pandas</span>
+<span class="n">row_names</span><span class="p">,</span> <span class="n">column_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)],</span> <span class="p">[</span><span class="s1">&#39;$w_</span><span class="si">{}</span><span class="s1">$&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)]</span>
+<span class="n">table</span> <span class="o">=</span> <span class="n">pandas</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">row_names</span><span class="p">,</span> <span class="n">column_names</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">table</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;D&quot;</span>
+<span class="n">table</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The weights are significantly decreased by regularization. <strong>You can change <span class="math notranslate nohighlight">\(\boldsymbol{\lambda}\)</span> to see how the weights are affected by the size of the regularization term</strong>.</p>
+</div>
+<div class="section" id="bayesian-linear-regression">
+<h2>2.3 Bayesian linear regression<a class="headerlink" href="#bayesian-linear-regression" title="Permalink to this headline">¶</a></h2>
+<p>In the previous section we saw that using a maximum likelihood approach to modelling data can result in overfitting, impairing the model’s ability to generalize to unseen data. This occured because the model uses its exessive flexibility to fit the noisy training data exactly. The weights <span class="math notranslate nohighlight">\(\mathbf{w}\)</span> attained extremely large values with of alternating signs, which perhaps one would not initially expect. This idea of <em>expectation</em> about the weights’ values points us towards a Bayesian treatment of linear regression: we will use a distribution to encode our expectations about the values of the weights before observing the data, called the <em>prior</em>.</p>
+<p>Suppose we introduce a prior over the weights, which we arbitrarily choose to be a gaussian <span class="math notranslate nohighlight">\(p(\mathbf{w}) \sim \mathcal{N}(\mathbf{m}_0, \mathbf{S}_0)\)</span>, where <span class="math notranslate nohighlight">\(\mathbf{m}_0\)</span> is the mean (vector) and <span class="math notranslate nohighlight">\(\mathbf{S}_N\)</span> is the covariance (matrix). In full detail, <span class="math notranslate nohighlight">\(p(\mathbf{w})\)</span> is</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+p(\mathbf{w}) = \frac{1}{(2\pi |\mathbf{S}_0|)^{D/2}}\text{exp}\big(-\frac{1}{2\sigma^2}(\mathbf{w} - \mathbf{m}_0)^\top \mathbf{S}_0^{-1} (\mathbf{w} - \mathbf{m}_0)\big),
+\end{align}\]</div>
+<p>where <span class="math notranslate nohighlight">\(D\)</span> is the size of <span class="math notranslate nohighlight">\(\mathbf{w}\)</span>. Introducing a gaussian prior may appear quite arbitrary <span class="math notranslate nohighlight">\(-\)</span> why not use a uniform distribution or any other distribution for that matter? There are two reasons for this</p>
+<ul class="simple">
+<li><p>A gaussian prior makes the mathematics tractable <span class="math notranslate nohighlight">\(-\)</span> we’ll be able to write down various closed form expressions</p></li>
+<li><p>As previously claimed, using a gaussian prior is strongly related to using a quadratic regularization term</p></li>
+</ul>
+<p>Using Bayes’ rule, we can relate the prior and likelihood to the posterior:</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+p(\mathbf{w}|\mathbf{y}, \mathbf{X}, \sigma^2) \propto p(\mathbf{y}|\mathbf{X}, \mathbf{w}, \sigma^2)p(\mathbf{w})
+\end{align}\]</div>
+<p>up to a normalization constant which we ignore for the moment. Substituting our expressions for the prior and likelihood</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+p(\mathbf{y}|\mathbf{X}, \mathbf{w}, \sigma^2) &amp;= \frac{1}{(2\pi \sigma^2)^{N/2}}\text{exp}\big(-\frac{1}{2\sigma^2}(\mathbf{y} - \boldsymbol{\Phi}\mathbf{w})^\top (\mathbf{y} - \boldsymbol{\Phi}\mathbf{w})\big)\\
+~\\
+\implies p(\mathbf{w}|\mathbf{y}, \mathbf{X}, \sigma^2) &amp;\propto \text{exp}\big(-\frac{1}{2\sigma^2}(\mathbf{y} - \boldsymbol{\Phi}\mathbf{w})^\top (\mathbf{y} - \boldsymbol{\Phi}\mathbf{w}) -\frac{1}{2}(\mathbf{w} - \mathbf{m}_0)^\top \mathbf{S}_0^{-1} (\mathbf{w} - \mathbf{m}_0) \big)
+\end{align}\end{split}\]</div>
+<p>Next we look to simplify this expression, and we can save ourselves a lot of effort by noting that the exponent is overall quadratic in <span class="math notranslate nohighlight">\(\mathbf{w}\)</span>, so the expression is a gaussian in <span class="math notranslate nohighlight">\(\mathbf{w}\)</span>, which is fully determined by its mean and covariance. The exponent of a general multivariate gaussian is a quadratic form</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+Q = -\frac{1}{2}(\mathbf{w} - \boldsymbol{\mu})^\top \mathbf{S}^{-1} (\mathbf{w} - \boldsymbol{\mu})
+\end{align}\]</div>
+<p>and the task is to find (<span class="math notranslate nohighlight">\(\boldsymbol{\mu}\)</span>, <span class="math notranslate nohighlight">\(\mathbf{S}^{-1}\)</span>) such that</p>
+<div class="math notranslate nohighlight">
+\[
+Q = -\frac{1}{2}(\mathbf{w} - \boldsymbol{\mu})^\top \mathbf{S}^{-1} (\mathbf{w} - \boldsymbol{\mu}) =
+-\frac{1}{2\sigma^2}(\mathbf{y} - \boldsymbol{\Phi}\mathbf{w})^\top (\mathbf{y} - \boldsymbol{\Phi}\mathbf{w}) -\frac{1}{2}(\mathbf{w} - \mathbf{m}_0)^\top \mathbf{S}_0^{-1} (\mathbf{w} - \mathbf{m}_0).
+\]</div>
+<p>The covariance of the posterior, <span class="math notranslate nohighlight">\(\mathbf{S}^{-1}\)</span>, is straightforward to obtain once we notice that it can be read off the term which is quadratic in <span class="math notranslate nohighlight">\(\mathbf{w}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\mathbf{w}^\top \mathbf{S}^{-1} \mathbf{w} =
+\mathbf{w}^\top (\sigma^{-2}\boldsymbol{\Phi}^\top \boldsymbol{\Phi} + \mathbf{S}_0^{-1})\mathbf{w}\\
+~\\
+\implies \mathbf{S}^{-1} = \sigma^{-2}\boldsymbol{\Phi}^\top \boldsymbol{\Phi} + \mathbf{S}_0^{-1}
+\end{split}\]</div>
+<p>Similarly, the mean <span class="math notranslate nohighlight">\(\boldsymbol{\mu}\)</span> is straightforward to obtain by noting that it corresponds to the terms linear in <span class="math notranslate nohighlight">\(\mathbf{w}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+\mathbf{w}^\top \mathbf{S}^{-1} \boldsymbol{\mu} &amp;= \mathbf{w}^\top \boldsymbol{\Phi}^\top \mathbf{y} + \mathbf{w}^\top (\mathbf{S}_0^{-1})\mathbf{m}_0\\
+~\\
+\implies \boldsymbol{\mu} &amp;= \mathbf{S}(\mathbf{y} - \boldsymbol{\Phi}\mathbf{w})^\top (\mathbf{y} - \boldsymbol{\Phi}\mathbf{w})\\
+\end{align}\end{split}\]</div>
+<p>There is still one missing piece, namely the value of <span class="math notranslate nohighlight">\(\sigma^{-2}\)</span>. We can estimate this by calculating the value of <span class="math notranslate nohighlight">\(\sigma^{2}\)</span> which maximizes the log-likelihood <span class="math notranslate nohighlight">\(\mathcal{L}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+\frac{\partial\mathcal{L}}{\partial \sigma^{-2}} = -\frac{N}{2\sigma^2} -\frac{1}{2}(\mathbf{y} - \boldsymbol{\Phi}\mathbf{w})^\top (\mathbf{y} - \boldsymbol{\Phi}\mathbf{w}) = 0\\
+~\\
+\implies \sigma^{2} = \frac{1}{N}(\mathbf{y} - \boldsymbol{\Phi}\mathbf{w})^\top (\mathbf{y} - \boldsymbol{\Phi}\mathbf{w})
+\end{align}\end{split}\]</div>
+<p>If we use a zero mean (<span class="math notranslate nohighlight">\(\mathbf{m}_0 = 0\)</span>) isotropic (<span class="math notranslate nohighlight">\(\mathbf{S}_0^{-1} = \lambda \mathbf{I}\)</span>) gaussian prior, the posterior mean and covariance become:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+\sigma^{2} &amp;= \frac{1}{N}(\mathbf{y} - \boldsymbol{\Phi}\mathbf{w})^\top (\mathbf{y} - \boldsymbol{\Phi}\mathbf{w})\\
+~\\
+\mathbf{S} &amp;= (\sigma^{-2}\boldsymbol{\Phi}^\top \boldsymbol{\Phi} + \lambda \mathbf{I})^{-1}\\
+~\\
+\boldsymbol{\mu} &amp;= \mathbf{S}\boldsymbol{\Phi}^\top \mathbf{y}\\
+\end{align}\end{split}\]</div>
+<p>This may look familiar:</p>
+<div class="math notranslate nohighlight">
+\[
+\boldsymbol{\mu} = (\sigma^{-2}\boldsymbol{\Phi}^\top \boldsymbol{\Phi} + \lambda \mathbf{I})\boldsymbol{\Phi}^\top \mathbf{y} = \text{expression for}~\mathbf{w}~\text{using least-squares with regularization}
+\]</div>
+<p>Noting that the posterior is maximum when <span class="math notranslate nohighlight">\(\mathbf{w} = \boldsymbol{\mu}\)</span> (since a multivariate gaussian attains its maximum at its mean), we conclude that for regression with a gaussian likelihood <strong>finding the <span class="math notranslate nohighlight">\(\mathbf{w}\)</span> which maximizes the posterior using a gaussian prior is equivalent to doing least-squares with <span class="math notranslate nohighlight">\(\mathbf{L2}\)</span> regularization</strong>. The method whereby we estimate <span class="math notranslate nohighlight">\(\mathbf{w}\)</span> as the weight vector which maximizes the posterior is called <em>maximum a posteriori</em> or MAP for short.</p>
+<div class="math notranslate nohighlight">
+\[
+\boxed{\text{Least squares with } L2 \text{ regularzation } \equiv \text{ MAP with gaussian likelihood and prior}}
+\]</div>
+<p>Note also that for a different problem the likelihood may not be gaussian but have some other form, and in such cases we may choose another prior to match that likelihood, aiming to make the mathematics tractable. Priors selected to match the form of the likelihood are known as <strong>conjugate priors</strong>.</p>
+<p>At this point it is worth reflecting over the Bayesian approach we have employed thus far. Making an assumption about the generative model has allowed us to write down the likelihood <span class="math notranslate nohighlight">\(p(\mathbf{y}|\mathbf{X}, \mathbf{w}, \sigma^2)\)</span>. Then, assuming the a gaussian prior <span class="math notranslate nohighlight">\(p(\mathbf{w})\)</span> over the weights and using Bayes’ rule we have determined the (gaussian) posterior distribution <span class="math notranslate nohighlight">\(p(\mathbf{w}|\mathbf{y}, \mathbf{X}, \sigma^2)\)</span>, and showed that MAP is equivalent to maximum likelihood with <span class="math notranslate nohighlight">\(L2\)</span> regularization. Our approach to treating <span class="math notranslate nohighlight">\(\mathbf{w}\)</span> however is still one of working out a point estimate and we have so far neglected the overall posterior distribution <span class="math notranslate nohighlight">\(p(\mathbf{w}|\mathbf{y}, \mathbf{X}, \sigma^2)\)</span>. In fact, we can exploit the posterior further to find the probability distribution of the output <span class="math notranslate nohighlight">\(y^*\)</span>, given its input <span class="math notranslate nohighlight">\(x^*\)</span> and the training data <span class="math notranslate nohighlight">\(\mathcal{D}\)</span> through:</p>
+<div class="math notranslate nohighlight">
+\[
+p(y^* | x^*, \mathcal{D}) = \int p(y^* | x^*, \mathbf{w}) p(\mathbf{w}|\mathbf{y}, \mathcal{D}) d\mathbf{w} 
+\]</div>
+<p>where the integral is a multidimensional integral over each weight in <span class="math notranslate nohighlight">\(\mathbf{w}\)</span>. Evaluating this integral directly can be tedious, but fortunately the calculation can be greatly simplified by noting that since <span class="math notranslate nohighlight">\(p(y^* | x^*, \mathbf{w})\)</span> and <span class="math notranslate nohighlight">\(p(\mathbf{w}|\mathbf{y}, \mathcal{D})\)</span> are both gaussian, their product is also gaussian and after integrating over <span class="math notranslate nohighlight">\(\mathbf{w}\)</span> the result will be a gaussian as well <span class="math notranslate nohighlight">\(-\)</span> <strong>take some time to convince yourself that the above is true</strong>. As explained when we calculated the posterior, a multivariate gaussian is fully characterized by its mean and covariance matrix, which we are now after. <strong>You should also convince yourslef</strong> that drawing sample <span class="math notranslate nohighlight">\(y^*\)</span>’s from <span class="math notranslate nohighlight">\(p(y^* | x^*, \mathcal{D})\)</span> is equivalent to drawing samples from <span class="math notranslate nohighlight">\(y^* = \boldsymbol{\phi}^\top \mathbf{w} + \epsilon\)</span>, where <span class="math notranslate nohighlight">\(\mathbf{w} \sim \mathcal{N}(\boldsymbol{\mu}, \mathbf{S})\)</span> and <span class="math notranslate nohighlight">\(\epsilon \sim \mathcal{N}(0, \sigma^2)\)</span>. The expectation and variance of <span class="math notranslate nohighlight">\(y^*\)</span> are then:</p>
+<p>\begin{align}
+\mathbb{E}[y^<em>] &amp;= \mathbb{E}[\boldsymbol{\phi}^\top \mathbf{w} + \epsilon] = \boldsymbol{\phi}^\top\mathbb{E}[\mathbf{w}] = \boldsymbol{\phi}^\top \mu\
+~\
+\text{Var}(y^</em>) = \mathbb{E}[(y^* - \mathbb{E}[y^*])^2] &amp;= \mathbb{E}[(\boldsymbol{\phi}^\top \mathbf{w} - \boldsymbol{\phi}^\top \mu + \epsilon)^2] = \mathbb{E}[(\boldsymbol{\phi}^\top (\mathbf{w} - \boldsymbol{\mu}) + \epsilon)^2] \
+~\
+&amp;= \boldsymbol{\phi}^\top \mathbb{E}[(\mathbf{w} - \boldsymbol{\mu})(\mathbf{w} - \boldsymbol{\mu})^\top] \boldsymbol{\phi}  + \sigma^2\
+~\
+&amp;= \boldsymbol{\phi}^\top \mathbf{S} \boldsymbol{\phi}  + \sigma^2
+\end{align}</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\boxed{\mathbb{E}[y^*] = \boldsymbol{\phi}^\top \mu}\\
+\boxed{\text{Var}(y^*) = \boldsymbol{\phi}^\top \mathbf{S} \boldsymbol{\phi}  + \sigma^2}
+\end{split}\]</div>
+<p>Note that <span class="math notranslate nohighlight">\(\mathbb{E}[y^*]\)</span> and <span class="math notranslate nohighlight">\(\text{Var}(y^*)\)</span> are functions of <span class="math notranslate nohighlight">\(x^*\)</span> through <span class="math notranslate nohighlight">\(\boldsymbol{\phi}\)</span>, meaning that our prediction of <span class="math notranslate nohighlight">\(y^*\)</span> after training is a gaussian with mean and variance which depend on <span class="math notranslate nohighlight">\(x^*\)</span>. Let’s implement these results on the linear and non-linear datasets.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lamda</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x_</span><span class="o">**</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)]</span> <span class="k">for</span> <span class="n">x_</span> <span class="ow">in</span> <span class="n">x_lin</span><span class="p">])</span> <span class="c1"># X instantiated more elegantly here</span>
+
+<span class="n">prior_term</span> <span class="o">=</span> <span class="n">lamda</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="c1"># prior covariance matrix to include in MAP solution</span>
+<span class="n">w_maxlik</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">((</span><span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="o">+</span> <span class="n">prior_term</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">y_lin</span><span class="p">)</span> <span class="c1"># MAP weights to use in mean(y*)</span>
+<span class="n">var</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">y_lin</span> <span class="o">-</span> <span class="n">X</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w_maxlik</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="n">x_lin</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># maximum-likelihood variance to use in var(y*)</span>
+
+<span class="n">S</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">((</span><span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="o">/</span><span class="n">var</span> <span class="o">+</span> <span class="n">lamda</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> <span class="c1"># posterior distribution covariance matrix</span>
+<span class="n">mu</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">y_lin</span><span class="p">)</span><span class="o">/</span><span class="n">var</span> <span class="c1"># posterior distribution mean vector</span>
+
+<span class="n">x_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">X_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x_</span><span class="o">**</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)]</span> <span class="k">for</span> <span class="n">x_</span> <span class="ow">in</span> <span class="n">x_pred</span><span class="p">])</span>
+
+<span class="n">mu_pred</span> <span class="o">=</span> <span class="n">X_pred</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">mu</span><span class="p">)</span> <span class="c1"># calculate mean(y*)</span>
+<span class="n">stdev_pred</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">X_pred</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">S</span><span class="p">)</span><span class="o">*</span><span class="n">X_pred</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">var</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span> <span class="c1"># calculate Var(y*)^0.5</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">x_pred</span><span class="p">,</span> <span class="n">mu_pred</span> <span class="o">+</span> <span class="n">stdev_pred</span><span class="p">,</span> <span class="n">mu_pred</span> <span class="o">-</span> <span class="n">stdev_pred</span><span class="p">,</span> <span class="n">facecolor</span> <span class="o">=</span> <span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">)</span> <span class="c1"># plot confidence intervals = +/- Var(y*)^0.5</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_lin</span><span class="p">,</span> <span class="n">y_lin</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">)</span> <span class="c1"># plot data</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_pred</span><span class="p">,</span> <span class="n">mu_pred</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">)</span> <span class="c1"># plot mean(y*)</span>
+<span class="n">beautify_plot</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span><span class="s2">&quot;Bayesian regression predictive&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span><span class="s2">&quot;$x$&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="s1">&#39;$y$&#39;</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The black line shows <span class="math notranslate nohighlight">\(\mathbb{E}[y^*]\)</span>, and the gray area shows <span class="math notranslate nohighlight">\(\pm \sqrt{\text{Var}(y^*)}\)</span>, i.e. plus/minus one standard deviation of the predictive distribution. The predictive uncertainty is a direct consequence in the uncertainty of <span class="math notranslate nohighlight">\(\mathbf{w}\)</span> captured by the Bayesian approach. Uncertainty quantification is a great benefit of the bayesian approach because we can now justify our conclusions about the data in a principled way, unlike in the maximum-likelihood case where we only get an estimate for <span class="math notranslate nohighlight">\(y^*\)</span> without a measure of how off this <span class="math notranslate nohighlight">\(y^*\)</span> may be from the right answer. Let’s apply this method to the non-linear dataset.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># exactly the same process with the linear case, except phi is different</span>
+<span class="n">lamda</span> <span class="o">=</span> <span class="mi">10</span><span class="o">**-</span><span class="mi">5</span>
+<span class="n">D</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x_</span><span class="o">**</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="k">for</span> <span class="n">x_</span> <span class="ow">in</span> <span class="n">x_nonlin</span><span class="p">])</span>
+
+<span class="n">prior_term</span> <span class="o">=</span> <span class="n">lamda</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">w_maxlik</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">((</span><span class="n">phi</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span> <span class="o">+</span> <span class="n">prior_term</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">phi</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">y_nonlin</span><span class="p">)</span>
+<span class="n">var</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">y_nonlin</span> <span class="o">-</span> <span class="n">phi</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w_maxlik</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="n">x_nonlin</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="n">S</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">((</span><span class="n">phi</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">phi</span><span class="p">)</span><span class="o">/</span><span class="n">var</span> <span class="o">+</span> <span class="n">lamda</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">mu</span> <span class="o">=</span> <span class="n">S</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">phi</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">y_nonlin</span><span class="p">)</span><span class="o">/</span><span class="n">var</span>
+
+<span class="n">x_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">phi_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x_</span><span class="o">**</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">D</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span> <span class="k">for</span> <span class="n">x_</span> <span class="ow">in</span> <span class="n">x_pred</span><span class="p">])</span>
+
+<span class="n">mu_pred</span> <span class="o">=</span> <span class="n">phi_pred</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">mu</span><span class="p">)</span>
+<span class="n">stdev_pred</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">phi_pred</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">S</span><span class="p">)</span><span class="o">*</span><span class="n">phi_pred</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">var</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">x_pred</span><span class="p">,</span> <span class="n">mu_pred</span> <span class="o">+</span> <span class="n">stdev_pred</span><span class="p">,</span> <span class="n">mu_pred</span> <span class="o">-</span> <span class="n">stdev_pred</span><span class="p">,</span>
+                 <span class="n">facecolor</span> <span class="o">=</span> <span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_nonlin</span><span class="p">,</span> <span class="n">y_nonlin</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_pred</span><span class="p">,</span> <span class="n">mu_pred</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">)</span>
+<span class="n">beautify_plot</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span><span class="s2">&quot;Bayesian regression predictive&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span><span class="s2">&quot;$x$&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="s1">&#39;$y$&#39;</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">1.1</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="update-learning-and-visualizations">
+<h2>Update learning and visualizations<a class="headerlink" href="#update-learning-and-visualizations" title="Permalink to this headline">¶</a></h2>
+<p>Until now we have been considering the whole dataset in one go. In this section we will be exploring how each point of in the dataset affects our knowledge about the model. This will expand our intuition about the bayesian approach and also show how we may go about <em>online learning</em> <span class="math notranslate nohighlight">\(-\)</span> that is learning where the datapoints are gradually made available in a sequence. Online learning would for example be useful for scenarios such as weather prediction, where one can use each day’s new data to improve the weather model.</p>
+<p>Consider this scenario: we start off with a prior <span class="math notranslate nohighlight">\(p(\mathbf{w})\)</span> and the data is made available on a point-by-point basis, in <span class="math notranslate nohighlight">\((x_n, y_n)\)</span> pairs. After observing one point, we can use Bayes’ rule to evaluate the posterior, and use this to calculate the predictive:</p>
+<div class="math notranslate nohighlight">
+\[
+p(\mathbf{w}| y_1, x_1) \propto p(y_1| x_1, \mathbf{w}, \sigma^2)p(\mathbf{w})
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+p(y^* | x^*, y_1, x_1) = \int p(y^* | x^*, \mathbf{w}) p(\mathbf{w}|y_1, x_1) d\mathbf{w}
+\]</div>
+<p>When <span class="math notranslate nohighlight">\((x_2, y_2)\)</span> becomes available, we can use it to update our model. The weight distribution prior to seeing <span class="math notranslate nohighlight">\((x_2, y_2)\)</span> is <span class="math notranslate nohighlight">\(p(\mathbf{w}|y_1, x_1)\)</span>, reflecting the knowledge gained from <span class="math notranslate nohighlight">\((x_1, y_1)\)</span>. Applying Bayes’ rule again:</p>
+<div class="math notranslate nohighlight">
+\[
+p(\mathbf{w}| \{y_{n}, x_{n}\}^2_{n = 1}) \propto p(y_2| x_2, \mathbf{w}, \sigma^2)p(\mathbf{w}|y_1, x_1)
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+p(y^* | x^*, \{y_{n}, x_{n}\}^2_{n = 1}) = \int p(y^* | x^*, \mathbf{w}) p(\mathbf{w}|\{y_{n}, x_{n}\}^2_{n = 1}) d\mathbf{w}
+\]</div>
+<p>And in general after observing <span class="math notranslate nohighlight">\(N\)</span> datapoints:</p>
+<div class="math notranslate nohighlight">
+\[
+p(\mathbf{w}| \{y_{n}, x_{n}\}^{N}_{n = 1}) \propto p(y_{N}| x_{N}, \mathbf{w}, \sigma^2)p(\mathbf{w}|y_{N-1}, x_{N-1})
+\]</div>
+<div class="math notranslate nohighlight">
+\[
+p(y^* | x^*, \{y_{n}, x_{n}\}^{N}_{n = 1}) = \int p(y^* | x^*, \mathbf{w}) p(\mathbf{w}|\{y_{n}, x_{n}\}^N_{n = 1}) d\mathbf{w}
+\]</div>
+<p><strong>Note how the posterior of the <span class="math notranslate nohighlight">\(\mathbf{(N-1)^{th}}\)</span> step becomes the prior for the <span class="math notranslate nohighlight">\(\mathbf{N^{th}}\)</span> step.</strong> This reflects the gradual increase in our knowledge about <span class="math notranslate nohighlight">\(\mathbf{w}\)</span>. It should be pointed out that for arbitrary distributions we must calculate the constant of proportionality for the posterior, or equivalently normalize <span class="math notranslate nohighlight">\(p(y^* | x^*, \{y_{n}, x_{n}\}^{N}_{n = 1})\)</span> at the end to get a valid probability distribution <span class="math notranslate nohighlight">\(-\)</span> this integral may be challenging and will often need to be approximated. Fortunately, in the special case of gaussian likelihoods with a conjugate prior we don’t need to bother with this since the normalization constant is determined by the covariance matrix which we already know how to find.</p>
+<p>The last outstanding point regarding this process is the noise level \(\sigma\). When learning the whole dataset at once, we used the \(\sigma_{ML}\) which maximised the likelihood as an estimate for the noise magnitude. It is possible to follow a fully Bayesian approach including a prior over \(\sigma\), but this is too involved for our purposes, so we will stick with the estimate \(\sigma_{ML}\) which maximises the likelihood of the observed points. For the first step where no points have yet been observed \(\sigma_{ML}\) would be \(0\) giving an infinitely sharp gaussian. To prevent this problem, which would otherwise constrain subsequent posteriors to be infinitely sharp as well, we will use an arbitrary noise level of \(1\).</p>
+<p>Let’s implement this method for the linear dataset since this has <span class="math notranslate nohighlight">\(2\)</span> weights which we can easily visualise with a contour plot <span class="math notranslate nohighlight">\(-\)</span> unlike the non-linear example which has several weights which we can’t easily visualise in one go. At each step, will also draw <span class="math notranslate nohighlight">\(3\)</span> weight samples from the posterior and plot the corresponding lines in data-space.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">w1_range</span><span class="p">,</span> <span class="n">w2_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">100</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="c1"># specify the range of weights to be visualised</span>
+<span class="n">w1</span><span class="p">,</span> <span class="n">w2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">w1_range</span><span class="p">,</span> <span class="n">w2_range</span><span class="p">)</span> <span class="c1"># returns two 2d arrays with the values of w1_range and w2_range (see docs!)</span>
+<span class="n">grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">w1</span><span class="p">,</span> <span class="n">w2</span><span class="p">],</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span> <span class="c1"># stack the two grids together to do aritmetic elegantly later</span>
+
+<span class="n">lamda</span> <span class="o">=</span> <span class="mi">4</span>
+<span class="n">no_points</span> <span class="o">=</span> <span class="mi">5</span> <span class="c1"># do the algorithm for 3 sequential observations</span>
+<span class="n">prior</span> <span class="o">=</span> <span class="kc">None</span> <span class="c1"># start with a null prior</span>
+<span class="n">noise</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="n">colours</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">]</span>
+<span class="n">x_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">no_points</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+
+    <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x_lin</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">**</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)]])</span> <span class="c1"># X contains a single point (x[n]) for online learning</span>
+    
+    <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">prior_Q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">/</span><span class="n">lamda</span><span class="p">)</span><span class="o">*</span><span class="n">grid</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span> <span class="c1"># quadratic form of prior (goes in the exponent)</span>
+        <span class="n">prior</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="o">*</span><span class="n">prior_Q</span><span class="p">)</span> <span class="c1"># exponentiate quadratic form to get the prior</span>
+        
+    <span class="n">lik_Q</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">y_lin</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">-</span> <span class="n">grid</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">))</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span> <span class="c1"># quadratic form of likelihood of (x[n], y[n]) point</span>
+    <span class="n">lik</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">2</span><span class="o">*</span><span class="n">lik_Q</span><span class="p">)</span> <span class="c1"># exponentiate quadratic form to get the likelihood of the new point</span>
+    
+    <span class="n">post</span> <span class="o">=</span> <span class="n">prior</span><span class="o">*</span><span class="n">lik</span> <span class="c1"># posterior is prior*lik by Bayes&#39; rule</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span> <span class="c1"># add new figure to plot this step</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="n">prior</span><span class="p">,</span> <span class="n">lik</span><span class="p">,</span> <span class="n">post</span><span class="p">]):</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">w1_range</span><span class="p">,</span> <span class="n">w2_range</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">cmap</span> <span class="o">=</span> <span class="s1">&#39;coolwarm&#39;</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">)</span> <span class="c1"># plot prior after n points</span>
+        <span class="n">remove_axes</span><span class="p">()</span>
+    
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">143</span><span class="p">)</span>
+        <span class="n">w1</span><span class="p">,</span> <span class="n">w2</span> <span class="o">=</span> <span class="n">sample_weights_from</span><span class="p">(</span><span class="n">w2_range</span><span class="p">,</span> <span class="n">w1_range</span><span class="p">,</span> <span class="n">post</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">w1</span><span class="p">,</span> <span class="n">w2</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="n">colours</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        
+        <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">144</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_</span><span class="p">,</span> <span class="n">w1</span> <span class="o">+</span> <span class="n">w2</span><span class="o">*</span><span class="n">x_</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="n">colours</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">remove_axes</span><span class="p">()</span>
+    
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">144</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_lin</span><span class="p">[:</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">y_lin</span><span class="p">[:</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">facecolor</span> <span class="o">=</span> <span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">edgecolor</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+    
+    <span class="n">prior</span> <span class="o">=</span> <span class="n">post</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="c1"># set prior of the next step to be the posterior of the current step</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The first plot in the first row we see the prior before any data has been observed. After one datapoint is observed, our certainty about the values of the weights is improved: the likelihood (second plot, first row) multiplied by the prior gives a narrowed posterior (third plot, first row). Three independent weight samples are drawn (red, green and blue crosses) from the posterior giving the corresponding linear trendlines in data space (data as black crosses). In the next step <strong>the prior is the posterior of the previous step</strong>, i.e. <span class="math notranslate nohighlight">\(3^{rd}\)</span> plot of <span class="math notranslate nohighlight">\(n^{th}\)</span> row is the same as the <span class="math notranslate nohighlight">\(1^{st}\)</span> plot of the <span class="math notranslate nohighlight">\((n+1)^{th}\)</span> row. Note that as more datapoints are added the posterior narrows down, and the weights are constrained to a progressively narrower area. This is reflected in the data space where the red/green/blue lines are also progressively constrained.</p>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./content/regression"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Stratis Markou, Rich Turner<br/>
+        
+            &copy; Copyright 2021.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../../_static/js/index.3da636dd464baa7582d2.js"></script>
+
+
+    
+    <!-- Google Analytics -->
+    <script>
+      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+      ga('create', 'UA-168728006-1', 'auto');
+      ga('set', 'anonymizeIp', true);
+      ga('send', 'pageview');
+    </script>
+    <script async src='https://www.google-analytics.com/analytics.js'></script>
+    <!-- End Google Analytics -->
+    
+  </body>
+</html>
