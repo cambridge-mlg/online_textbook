@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Linear regression &#8212; OMLT</title>
+    <title>Linear regression &#8212; Probabilistic Modelling and Inference</title>
     
   <link rel="stylesheet" href="../../_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
 
@@ -80,7 +80,7 @@
   <img src="../../_static/logo.png" class="logo" alt="logo">
   
   
-  <h1 class="site-logo" id="site-title">OMLT</h1>
+  <h1 class="site-logo" id="site-title">Probabilistic Modelling and Inference</h1>
   
 </a>
 </div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
@@ -91,7 +91,7 @@
     <ul class="nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="../home.html">
-   Online Machine Learning Textbook
+   Online Inference Textbook
   </a>
  </li>
 </ul>
@@ -175,7 +175,7 @@
         aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
     <div class="dropdown-buttons">
         
-        <a class="binder-button" href="https://mybinder.org/v2/gh/stratisMarkou/random-walks/master?urlpath=tree/./content/regression/regression-linear.ipynb"><button type="button"
+        <a class="binder-button" href="https://mybinder.org/v2/gh/cambridge-mlg/online_textbook/master?urlpath=tree/./content/regression/regression-linear.ipynb"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
                 data-placement="left"><img class="binder-button-logo"
                     src="../../_static/images/logo_binder.svg"
@@ -201,11 +201,23 @@
   <a class="reference internal nav-link" href="#least-squares-fitting">
    Least Squares Fitting
   </a>
- </li>
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#maximum-likelihood-fitting">
-   Maximum likelihood fitting
-  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#analytic-solution">
+     Analytic solution
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#implementation">
+     Implementation
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#maximum-likelihood-fitting">
+     Maximum likelihood fitting
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#summary">
@@ -230,13 +242,10 @@
                 
   <div class="section" id="linear-regression">
 <h1>Linear regression<a class="headerlink" href="#linear-regression" title="Permalink to this headline">¶</a></h1>
-<p>This section will introduce <strong>linear regression</strong>, <strong>least squares fitting</strong>, and the relationship to <strong>probabilistic modelling</strong> and <strong>maximum likelihood estimation</strong>.</p>
-<p>Let’s start by considering a toy dataset (shown below) consisting of <span class="math notranslate nohighlight">\(N=10\)</span> scalar input and output pairs <span class="math notranslate nohighlight">\(\{ x_{n}, y_{n} \}_{n=1}^N\)</span>. Our goal will be to make predictions at new input locations <span class="math notranslate nohighlight">\(x^\star\)</span>.</p>
+<p>This section will introduce <strong>linear regression</strong>, <strong>least squares fitting</strong>, and the relationship to <strong>probabilistic modelling</strong> and <strong>maximum likelihood estimation</strong>. Let’s start by considering a toy dataset (shown below) consisting of <span class="math notranslate nohighlight">\(N=10\)</span> scalar input and output pairs <span class="math notranslate nohighlight">\(\{ x_{n}, y_{n} \}_{n=1}^N\)</span>. Our goal will be to make predictions at new input locations <span class="math notranslate nohighlight">\(x^\star\)</span>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-
-<span class="c1"># Load some prepared data</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load some prepared data</span>
 <span class="n">x_lin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;reg_lin_x.npy&#39;</span><span class="p">)</span>
 <span class="n">y_lin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;reg_lin_y.npy&#39;</span><span class="p">)</span>
 </pre></div>
@@ -245,9 +254,7 @@
 </div>
 <div class="cell tag_hide-input tag_center-output docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-
-<span class="c1"># Plot data</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot data</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_lin</span><span class="p">,</span> <span class="n">y_lin</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">)</span>
 
@@ -264,275 +271,330 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/regression-linear_2_0.png" src="../../_images/regression-linear_2_0.png" />
-</div>
+<img alt="../../_images/regression-linear_3_0.svg" src="../../_images/regression-linear_3_0.svg" /></div>
 </div>
 <p>A simple and popular approach to regression is fit a linear function to the data and use this to make predictions at new input locations. Denoting the slope of the linear function <span class="math notranslate nohighlight">\(w_1\)</span> and intercept <span class="math notranslate nohighlight">\(w_0\)</span>, we have</p>
-<p>\begin{align}
+<div class="math notranslate nohighlight">
+\[\begin{align}
 f(x) = w_1 x + w_0.
-\end{align}</p>
+\end{align}\]</div>
 <div class="section" id="least-squares-fitting">
 <h2>Least Squares Fitting<a class="headerlink" href="#least-squares-fitting" title="Permalink to this headline">¶</a></h2>
 <p>The task is now to estimate the parameters <span class="math notranslate nohighlight">\(w_0\)</span> and <span class="math notranslate nohighlight">\(w_1\)</span> from the data. A straight line clearly can’t pass precisely through all of the datapoints because they aren’t collinear, but it is clear that some parameter choices will result in straight lines that go closer to data than others. A popular measure for the goodness of fit is the sum of square distances between each data point and <span class="math notranslate nohighlight">\(f(x_n)\)</span>,</p>
-<p>\begin{align}
-C_2 = \sum^N_{n = 1} \big[y_n - f(x_n) \big]^2  = \sum^N_{n = 1} \big[y_n - (w_1x_n + w_0)\big]^2 \geq 0
-\end{align}</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+C_2 = \sum^N_{n = 1} \big[y_n - f(x_n) \big]^2  = \sum^N_{n = 1} \big[y_n - (w_1x_n + w_0)\big]^2 \geq 0,
+\end{align}\]</div>
 <p>where equality with 0 holds only if \(~y_n = w_1x_n + w_0\) for every \(n\). By this measure, the optimal fit is the fit which minimises <span class="math notranslate nohighlight">\(C_2\)</span>. This cost function, although intuitive, lacks justification. We will return to this issue at the end of this section.</p>
 <p>The following animation encapsulates the proposed approach problem. In the left plot, we visualise lines corresponding to different settings of the parameters <span class="math notranslate nohighlight">\((w_0, w_1)\)</span> in data space <span class="math notranslate nohighlight">\((x,y)\)</span>. The distances between the observed data and the fit are shown by grey dashes. The sum of the squares of these distances is <span class="math notranslate nohighlight">\(C_2\)</span>. The right plot shows contours of the cost <span class="math notranslate nohighlight">\(C_2\)</span> in parameter space with blue indicating the cost is low and red high. The black cross shows the parameters of the line displayed on the left. When the cross moves horizontally in parameter space the intercept of the line changes and when the cross moves vertically the slope changes.</p>
-<!-- <div class="row">
-  <div class="column">
-    <img src="reg_lin_weight_excursion.gif" style="width:80%; float: center; padding: 0px">
-  </div>
-</div> -->
-<p>Our goal is to find the parameters \((w_0, w_1)\) which minimise the cost. Since the cost has a simple form (it is a quadratic function of the parameters), this minimisation has an analytic solution. In order to derive that solution, we will first write the cost in a more compact and general form and second use differentiation to solve for the minimum.</p>
+<p><img alt="" src="../../_images/reg_lin_weight_excursion.gif" /></p>
+<div class="section" id="analytic-solution">
+<h3>Analytic solution<a class="headerlink" href="#analytic-solution" title="Permalink to this headline">¶</a></h3>
+<p>Our goal is to find the parameters \((w_0, w_1)\) which minimise <span class="math notranslate nohighlight">\(C_2\)</span>. Because the cost is a quadratic function of the parameters, this minimisation has an analytic solution. In order to derive that solution, we will first write the cost in a more compact and general form and second use differentiation to solve for the minimum.</p>
 <p><strong>Step 1</strong>: writing \(C_2\) in a more convenient form</p>
 <p>The cost can be written in terms of a  vector <span class="math notranslate nohighlight">\(\mathbf{w}\)</span> containing the model parameters, a vector <span class="math notranslate nohighlight">\(\mathbf{y}\)</span> that contains the training outputs, and a matrix <span class="math notranslate nohighlight">\(X\)</span> which contains the inputs augmented with a column of ones.</p>
-<p>\[
-C_2 = \big|\big|\mathbf{y} - \mathbf{X}\mathbf{w}\big|\big|^2 = \big(\mathbf{y} - \mathbf{X}\mathbf{w}\big)^\top \big(\mathbf{y} - \mathbf{X}\mathbf{w}\big)
-\]</p>
-<p>\begin{equation}
+<div class="math notranslate nohighlight">
+\[C_2 = \big|\big|\mathbf{y} - \mathbf{X}\mathbf{w}\big|\big|^2 = \big(\mathbf{y} - \mathbf{X}\mathbf{w}\big)^\top \big(\mathbf{y} - \mathbf{X}\mathbf{w}\big)\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
 \text{where}~~~
 \mathbf{y} = \begin{pmatrix}
-y_1\<br />
-y_2\<br />
-\vdots \<br />
+y_1\\\
+y_2\\\
+\vdots \\\
 y_N
 \end{pmatrix}, ~~~
 \mathbf{X} =  \begin{pmatrix}
-1 &amp; x_1\<br />
-1 &amp; x_2\
-\vdots &amp; \vdots \<br />
+1 &amp; x_1\\\
+1 &amp; x_2\\
+\vdots &amp; \vdots \\\
 1 &amp; x_N
 \end{pmatrix}, ~~~
 \mathbf{w} =  \begin{pmatrix}
-w_0\<br />
+w_0\\\
 w_1
 \end{pmatrix}
-\end{equation}</p>
-<details>
-<summary>Simplification of the cost in more detail</summary>
+\end{align}\end{split}\]</div>
+<details class="graydrop">
+<summary>Details: Rewriting the cost more conveniently</summary>
 <div>
-\begin{align}
-    C_2 &= \sum^N_{n = 1} \big[y_n - (w_1x_n + w_0)\big]^2\\
-    ~\\
-    &= \sum^N_{n = 1} \big[\mathbf{y}_n - \sum^2_{j = 1}\mathbf{X}_{nj}\mathbf{w}_j\big]^2\\
-    ~\\
-    &= \sum^N_{n = 1} \big[\mathbf{y}_n - \left(\mathbf{X}\mathbf{w}\right)_n\big]^2\\
-    ~\\
-    &= \big(\mathbf{y} - \mathbf{X}\mathbf{w}\big)^\top \big(\mathbf{y} - \mathbf{X}\mathbf{w}\big)\\
-\end{align}
+We can rewrite the cost more tersly and conveniently as
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+    C_2 &amp;= \sum^N_{n = 1} \big[y_n - (w_1x_n + w_0)\big]^2\\
+    &amp;= \sum^N_{n = 1} \big[\mathbf{y}_n - \sum^2_{j = 1}\mathbf{X}_{nj}\mathbf{w}_j\big]^2\\
+    &amp;= \sum^N_{n = 1} \big[\mathbf{y}_n - \left(\mathbf{X}\mathbf{w}\right)_n\big]^2\\
+    &amp;= \big(\mathbf{y} - \mathbf{X}\mathbf{w}\big)^\top \big(\mathbf{y} - \mathbf{X}\mathbf{w}\big)
+\end{align}\end{split}\]</div>
 </div>
 </details>
+<br>
 <p><strong>Step 2</strong>: using differentiation to solve for the minimum.</p>
 <p>Letting the derivative of a quantity \(f\) with respect to a vector \(\mathbf{v}\) to have have elements</p>
-<p>\[
-\bigg(\frac{\partial f}{\partial \mathbf{v}}\bigg)_i = \frac{\partial f}{\partial \mathbf{v}_i}
-\]</p>
+<div class="math notranslate nohighlight">
+\[\bigg(\frac{\partial f}{\partial \mathbf{v}}\bigg)_i = \frac{\partial f}{\partial \mathbf{v}_i}\]</div>
 <p>we differentiate \(C_2\), set to zero, and obtain the closed form solution:</p>
-<p>\begin{align}\frac{\partial C_2}{\partial \mathbf{w}} &amp;= -2\mathbf{X}^\top\big(\mathbf{y} - \mathbf{X}\mathbf{w}\big)=0\
-~\<br />
-\implies &amp; \mathbf{X}^\top\mathbf{X}\mathbf{w} - \mathbf{X}^\top\mathbf{y} = 0\
-~\<br />
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}\frac{\partial C_2}{\partial \mathbf{w}} &amp;= -2\mathbf{X}^\top\big(\mathbf{y} - \mathbf{X}\mathbf{w}\big)=0\\
+\implies &amp; \mathbf{X}^\top\mathbf{X}\mathbf{w} - \mathbf{X}^\top\mathbf{y} = 0\\
 \implies &amp;\boxed{\mathbf{w} = \big( \mathbf{X}^\top\mathbf{X}\big)^{-1}\mathbf{X}^\top \mathbf{y}}
-\end{align}</p>
-<details>
-<summary>Derivatives in detail</summary>
+\end{align}\end{split}\]</div>
+<details class="graydrop">
+<summary>Details: Vector derivatives</summary>
 <div>
-Here we show a more detailed derivation of the equality $\frac{\partial C_2}{\partial \mathbf{w}} = -2\mathbf{X}^\top\big(\mathbf{y} - \mathbf{X}\mathbf{w}\big)$.
-<p>\begin{align}
-\bigg(\frac{\partial C_2}{\partial \mathbf{w}}\bigg)_i &amp;= \frac{\partial C_2}{\partial \mathbf{w}_i} = \frac{\partial}{\partial \mathbf{w}_i} \bigg[\big(\mathbf{y} - \mathbf{X}\mathbf{w}\big)^\top \big(\mathbf{y} - \mathbf{X}\mathbf{w}\big)\bigg] = \frac{\partial}{\partial \mathbf{w}_i} \sum_n \bigg[\big(\mathbf{y}<em>n - \sum_j\mathbf{X}</em>{nj}\mathbf{w}_j\big) \big(\mathbf{y}<em>n - \sum_j\mathbf{X}</em>{nj}\mathbf{w}_j\big)\bigg]\
-~\
-&amp;= 2\sum_n \bigg[\big(\mathbf{y}<em>n - \sum_j\mathbf{X}</em>{nj}\mathbf{w}_j\big) \frac{\partial}{\partial \mathbf{w}_i} \big(\mathbf{y}<em>n - \sum_j\mathbf{X}</em>{nj}\mathbf{w}_j\big)\bigg]\
-~\
-&amp;= -2\sum_n \bigg[\big(\mathbf{y}<em>n - \sum_j\mathbf{X}</em>{nj}\mathbf{w}<em>j\big) \big(\sum_j\mathbf{X}</em>{nj} \frac{\partial \mathbf{w}<em>j}{\partial \mathbf{w}<em>i}\big)\bigg]\
-~\
-&amp;= -2\sum_n \bigg[\big(\mathbf{y}<em>n - \sum_j\mathbf{X}</em>{nj}\mathbf{w}<em>j\big) \big(\sum_j\mathbf{X}</em>{nj} \delta</em>{ij}\big)\bigg]\
-~\
-&amp;= -2\sum_n \bigg[\big(\mathbf{y}<em>n - \sum_j\mathbf{X}</em>{nj}\mathbf{w}<em>j\big)\mathbf{X}</em>{ni}\bigg]\
-~\
-&amp;= -2\sum_n \bigg[\mathbf{X}^\top</em>{in}\big(\mathbf{y}<em>n - \sum_j\mathbf{X}</em>{nj}\mathbf{w}_j\big)\bigg]\
-~\
-&amp;= -2 \left[\mathbf{X}^\top \big(\mathbf{y} - \mathbf{X}\mathbf{w}\big)\right]_i\
-\end{align}</p>
+Here we show a more detailed derivation of the equality
+<div class="math notranslate nohighlight">
+\[\begin{align}\frac{\partial C_2}{\partial \mathbf{w}} = -2\mathbf{X}^\top\big(\mathbf{y} - \mathbf{X}\mathbf{w}\big).\end{align}\]</div>
+<p>We can write</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+\bigg(\frac{\partial C_2}{\partial \mathbf{w}}\bigg)_i &amp;= \frac{\partial C_2}{\partial \mathbf{w}_i} = \frac{\partial}{\partial \mathbf{w}_i} \bigg[\big(\mathbf{y} - \mathbf{X}\mathbf{w}\big)^\top \big(\mathbf{y} - \mathbf{X}\mathbf{w}\big)\bigg] \\
+&amp;= \frac{\partial}{\partial \mathbf{w}_i} \sum_n \bigg[\big(\mathbf{y}_n - \sum_j\mathbf{X}_{nj}\mathbf{w}_j\big) \big(\mathbf{y}_n - \sum_j\mathbf{X}_{nj}\mathbf{w}_j\big)\bigg]\\
+&amp;= 2\sum_n \bigg[\big(\mathbf{y}_n - \sum_j\mathbf{X}_{nj}\mathbf{w}_j\big) \frac{\partial}{\partial \mathbf{w}_i} \big(\mathbf{y}_n - \sum_j\mathbf{X}_{nj}\mathbf{w}_j\big)\bigg]\\
+&amp;= -2\sum_n \bigg[\big(\mathbf{y}_n - \sum_j\mathbf{X}_{nj}\mathbf{w}_j\big) \big(\sum_j\mathbf{X}_{nj} \frac{\partial \mathbf{w}_j}{\partial \mathbf{w}_i}\big)\bigg]\\
+&amp;= -2\sum_n \bigg[\big(\mathbf{y}_n - \sum_j\mathbf{X}_{nj}\mathbf{w}_j\big) \big(\sum_j\mathbf{X}_{nj} \delta_{ij}\big)\bigg]\\
+&amp;= -2\sum_n \bigg[\big(\mathbf{y}_n - \sum_j\mathbf{X}_{nj}\mathbf{w}_j\big)\mathbf{X}_{ni}\bigg]\\
+&amp;= -2\sum_n \bigg[\mathbf{X}^\top_{in}\big(\mathbf{y}_n - \sum_j\mathbf{X}_{nj}\mathbf{w}_j\big)\bigg]\\
+&amp;= -2 \left[\mathbf{X}^\top \big(\mathbf{y} - \mathbf{X}\mathbf{w}\big)\right]_i\\
+\end{align}\end{split}\]</div>
 </div>
 </details>
-<p>As promised, when the matrix <span class="math notranslate nohighlight">\(\mathbf{X}^\top\mathbf{X}\)</span> is invertable, we have a closed form solution for \(\mathbf{w}\) which extremizes \(C_2\). You can convince yourself this is a minimum either by taking a second derivative or by considering the quadratic form of \(C_2\) and what happens in the limit of large \(\mathbf{w}\).</p>
-<div class="further_box">
-** Further reading and information **<br><br>
+<br>
+<p>As promised, when the matrix <span class="math notranslate nohighlight">\(\mathbf{X}^\top\mathbf{X}\)</span> is invertible, we have a closed form solution for \(\mathbf{w}\) which extremizes \(C_2\). You can convince yourself this is a minimum either by taking a second derivative or by considering the quadratic form of \(C_2\) and what happens in the limit of large \(\mathbf{w}\).</p>
+<details class="graydrop">
+<summary>Further details and reading</summary>
 <p>In the expression for the least squares solution for the weights</p>
 <div class="math notranslate nohighlight">
 \[\mathbf{w} = \big( \mathbf{X}^\top\mathbf{X}\big)^{-1}\mathbf{X}^\top \mathbf{y}\]</div>
 <p>the matrix <span class="math notranslate nohighlight">\(\big( \mathbf{X}^\top\mathbf{X}\big)^{-1}\mathbf{X}^\top\)</span> is a generalization of the inverse of a matrix for non-square matrices, called the <strong><a class="reference external" href="http://mathworld.wolfram.com/Moore-PenroseMatrixInverse.html">Moore-Penrose pseudoinverse</a></strong> having the property</p>
 <div class="math notranslate nohighlight">
 \[\bigg[\big( \mathbf{X}^\top\mathbf{X}\big)^{-1}\mathbf{X}^\top\bigg] \mathbf{X} = \big( \mathbf{X}^\top\mathbf{X}\big)^{-1}\mathbf{X}^\top\mathbf{X} = \mathbf{I}\]</div>
-<p>Note that when <span class="math notranslate nohighlight">\(\mathbf{X}^\top\mathbf{X}\)</span> is not invertable there is an infinity of solutions to the least squares problem. This occurs when the number of unique datapoints <span class="math notranslate nohighlight">\(N'\)</span> is smaller than the number of parameters we are fitting. For example, if we have a single datapoint, there are many ways of constructing a straight line that passes through the point. <br><br></p>
+<p>Note that when <span class="math notranslate nohighlight">\(\mathbf{X}^\top\mathbf{X}\)</span> is not invertible there is an infinity of solutions to the least squares problem. This occurs when the number of unique datapoints <span class="math notranslate nohighlight">\(N'\)</span> is smaller than the number of parameters we are fitting. For example, if we have a single datapoint, there are many ways of constructing a straight line that passes through the point. <br><br></p>
 <p>More generally, when the inputs are <span class="math notranslate nohighlight">\(D\)</span> dimensional or when we’re fitting non-linear models with <span class="math notranslate nohighlight">\(D\)</span> basis functions the least squares solution is not unique when <span class="math notranslate nohighlight">\(N'&lt;D\)</span>. This is one of the motivations for approaches considered later that <a class="reference internal" href="regression_regularisation.html"><span class="doc std std-doc">regularise the least squares solution</span></a> and return unique solutions even when <span class="math notranslate nohighlight">\(N'&lt;D\)</span>.</p>
+</details>
+<br>
 </div>
-<p>Implementing this solution is straightforward because of the closed-form solution:</p>
+<div class="section" id="implementation">
+<h3>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">¶</a></h3>
+<p>Below is an implementation of the least squares solution for finding the coefficients which minimise <span class="math notranslate nohighlight">\(C_2\)</span>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ones</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x_lin</span><span class="p">)</span> <span class="c1"># create a vector of 1&#39;s with the same length as x</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a vector of ones with the same shape as x</span>
+<span class="n">ones</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">x_lin</span><span class="p">)</span>
 
-<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">ones</span><span class="p">,</span> <span class="n">x_lin</span><span class="p">],</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="c1"># stack 1&#39;s and x&#39;s to get the X matrix having the 1&#39;s and x&#39;s as columns</span>
+<span class="c1"># Stack ones and x&#39;s to get the X matrix</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">ones</span><span class="p">,</span> <span class="n">x_lin</span><span class="p">],</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
 
-
-<span class="c1"># compute the optimal w using the Moore-Penrose pseudoinverse</span>
-<span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span> <span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="p">,</span> <span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">y_lin</span><span class="p">)</span> <span class="p">)</span>
+<span class="c1"># Compute the optimal w using the Moore-Penrose pseudoinverse</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">((</span><span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="p">),</span> <span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">y_lin</span><span class="p">))</span>
 
 <span class="c1"># The above line is equivalent to the following: </span>
+<span class="c1">#</span>
 <span class="c1"># w = np.linalg.inv((X.T).dot(X)).dot(X.T).dot(y_lin) </span>
-<span class="c1"># but unlike this approach it avoids explicitly computing the matrix inverse, which can be numerically unstable, </span>
-<span class="c1"># instead it uses a linear solver, which is more stable. In general, if you don&#39;t explicitly need a matrix inverse, </span>
-<span class="c1"># you should avoid computing it.</span>
+<span class="c1">#</span>
+<span class="c1"># Unlike np.linalg.inv, the method np.linalg.solve avoids explicitly computing</span>
+<span class="c1"># the matrix inverse, which can be numerically unstable. Instead it uses a linear</span>
+<span class="c1"># solver, which is more stable. In general, if you don&#39;t explicitly need</span>
+<span class="c1"># a matrix inverse, you should avoid computing it.</span>
 
-<span class="n">x_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span> <span class="c1"># 100 points equispaced between 0 and 1</span>
+<span class="c1"># 100 points equispaced between 0 and 1</span>
+<span class="n">x_pred</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
 
-<span class="n">y_pred</span> <span class="o">=</span> <span class="p">(</span><span class="n">w</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">x_pred</span><span class="p">)</span> <span class="o">+</span> <span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="c1"># evaluate the linear trendline at the values of x above</span>
+<span class="c1"># Evaluate the linear trendline at the points above</span>
+<span class="n">y_pred</span> <span class="o">=</span> <span class="p">(</span><span class="n">w</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">x_pred</span><span class="p">)</span> <span class="o">+</span> <span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_center-output tag_hide-input docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot data</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_lin</span><span class="p">,</span> <span class="n">y_lin</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_pred</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">)</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_pred</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">)</span> <span class="c1"># plot the trendline</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_lin</span><span class="p">,</span> <span class="n">y_lin</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">)</span> <span class="c1"># plot the datapoints</span>
-<span class="n">beautify_plot</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span><span class="s2">&quot;Least squares regression&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span><span class="s2">&quot;$x$&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span><span class="s2">&quot;$y$&quot;</span><span class="p">})</span>
+<span class="c1"># Format plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;Linear fit (minimising $C_2$)&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">24</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;$x$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;$y$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">((</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">))</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-
-<span class="n">toggle_code</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">17</span><span class="o">-</span><span class="n">eb8fbec44e06</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="g g-Whitespace">     </span><span class="mi">19</span> <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_pred</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">)</span> <span class="c1"># plot the trendline</span>
-<span class="g g-Whitespace">     </span><span class="mi">20</span> <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_lin</span><span class="p">,</span> <span class="n">y_lin</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">)</span> <span class="c1"># plot the datapoints</span>
-<span class="ne">---&gt; </span><span class="mi">21</span> <span class="n">beautify_plot</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span><span class="s2">&quot;Least squares regression&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span><span class="s2">&quot;$x$&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span><span class="s2">&quot;$y$&quot;</span><span class="p">})</span>
-<span class="g g-Whitespace">     </span><span class="mi">22</span> <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-<span class="g g-Whitespace">     </span><span class="mi">23</span> 
-
-<span class="ne">NameError</span>: name &#39;beautify_plot&#39; is not defined
-</pre></div>
-</div>
-<img alt="../../_images/regression-linear_4_1.png" src="../../_images/regression-linear_4_1.png" />
-</div>
+<img alt="../../_images/regression-linear_6_0.svg" src="../../_images/regression-linear_6_0.svg" /></div>
 </div>
 <p><strong>Critique of the Least Squares fitting approach</strong></p>
 <p>Is the least squares procedure a sensible way to fit a linear model and return predictions?</p>
 <p>One weakness in the rationale for the approach outlined above is that the cost function was drawn out of a hat. For example, instead of minimising the squared error, why not use an alternative cost in the family</p>
-<p>\begin{align}
-C_{p} = \sum^N_{n = 1} \big|y_n - (w_1x_n + w_0)\big|^p,~\text{for some <span class="math notranslate nohighlight">\(p &gt; 0\)</span>}.
-\end{align}</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+C_{p} = \sum^N_{n = 1} \big|y_n - (w_1x_n + w_0)\big|^p,~\text{for some $p &gt; 0$}.
+\end{align}\]</div>
 <p>From a <em>computational</em> perspective, minimising \(C_2\) is arguably a sensible choice as it yields a closed-form solution for the parameters (other choices do not), but it is not immediately clear if it is a <em>statistically</em> superior approach. However, in the next section we will show that minimising \(C_2\) is equivalent to a probabilistic approach that finds the parameters that are most likely, given the data, under the assumption of Gaussian observation noise.</p>
 <p>Another weakness in the least squares approach is that it does not return uncertainty estimates in either the parameter estimates or the predictions. Framing the estimation as a probabilistic inference problem will later enable us to apply full blown probabilistic inference which does return uncertainties.</p>
 </div>
 <div class="section" id="maximum-likelihood-fitting">
-<h2>Maximum likelihood fitting<a class="headerlink" href="#maximum-likelihood-fitting" title="Permalink to this headline">¶</a></h2>
+<h3>Maximum likelihood fitting<a class="headerlink" href="#maximum-likelihood-fitting" title="Permalink to this headline">¶</a></h3>
 <p>The least squares approach assumed that the function underlying the data was a straight line, but it did not explicitly specify how the observed data relates to this line. One simple assumption is that they are produced by adding independent and identically distributed Gaussian noise with zero mean and variance <span class="math notranslate nohighlight">\(\sigma_{y}^2\)</span>,</p>
 <p>\[y_n = w_0 + w_1 x_n + \epsilon_n,~\text{where}~ \epsilon_n \sim \mathcal{N}(0, \sigma_{y}^2).\]</p>
 <p>This expression describes how to sample the outputs given the inputs and the model parameters, by computing the value the linear function takes at <span class="math notranslate nohighlight">\(x_n\)</span> and adding Gaussian noise. We can write down an equivalent expression for the probability density of the outputs <span class="math notranslate nohighlight">\(\mathbf{y}\)</span> given the inputs and model parameters (<span class="math notranslate nohighlight">\(\mathbf{X}, \mathbf{w}, \sigma_y^2\)</span>),</p>
 <p>\[p(\mathbf{y}\mid\mathbf{X}, \mathbf{w}, \sigma_y^2) = \frac{1}{(2\pi \sigma_y^2)^{N/2}}\text{exp}\big(-\frac{1}{2\sigma_y^2}(\mathbf{y} - \mathbf{X}\mathbf{w})^\top (\mathbf{y} - \mathbf{X}\mathbf{w})\big)\]</p>
 <p>This function is also known as the <strong>likelihood of the parameters</strong> and it can be used for fitting. The <strong>setting of the parameters that makes the observed data most probable is called the  maximum likelihood estimate</strong>.</p>
-<p>One way to find the parameters \(\mathbf{w}\) that maximise the likelihood is by directly taking derivatives of <span class="math notranslate nohighlight">\(p(\mathbf{y}\mid\mathbf{X}, \mathbf{w}, \sigma_y^2)\)</span>. However, we can make our lives easier by maximising the log of the likelihood. This is equivalent since the logarithm is a monotonically increasing function (that is <span class="math notranslate nohighlight">\(\log(x_1) &gt; \log(x_2)\)</span> if <span class="math notranslate nohighlight">\(x_1 &gt; x_2\)</span> ), and the location of maxima and minima are unchanged by applying a monotonically increasing function. <strong>It is often simpler to handle logarithms of probabilistic quantities</strong> since:</p>
+<p>One way to find the parameters \(\mathbf{w}\) that maximise the likelihood is by directly taking derivatives of <span class="math notranslate nohighlight">\(p(\mathbf{y}\mid\mathbf{X}, \mathbf{w}, \sigma_y^2)\)</span>. However, we can make our lives easier by maximising the log of the likelihood. This is equivalent since the logarithm is a monotonically increasing function (that is <span class="math notranslate nohighlight">\(\log(x_1) &gt; \log(x_2)\)</span> if and only if <span class="math notranslate nohighlight">\(x_1 &gt; x_2\)</span>), and the location of maxima and minima are unchanged by applying a monotonically increasing function. <strong>It is often simpler to handle logarithms of probabilistic quantities</strong> since:</p>
 <ol class="simple">
-<li><p>probabilities often decompose into products which become sums once the logarithm is taken, and</p></li>
+<li><p>probabilities often decompose into products which become sums once the logarithm is taken; and</p></li>
 <li><p>many widely used probability distributions often involve the exponential function which simplifies after taking the log (the Gaussian being such a case).</p></li>
 </ol>
-<details>
-<summary>More details on the extrema of monotonically transformed functions</summary>
+<details class="graydrop">
+<summary>Details: Monotonic transformations of functions</summary>
 <div>
-Consider a quantity \\(\mathcal{Q}(x)\\) with a (local or global) maximum at \\(x^*\\), and a  monotonic function \\(f\\).<br><br> 
-<p>Now consider <span class="math notranslate nohighlight">\(Q\)</span> in a neighbourhood around <span class="math notranslate nohighlight">\(x^*\)</span>.  Denoting a point in this neighbourhood as <span class="math notranslate nohighlight">\(x^*+\delta\)</span> we can restrict the size of neighbourhood by limiting the magnitude of the perturbation <span class="math notranslate nohighlight">\(|\delta| &lt; \epsilon\)</span>.  For sufficiently small <span class="math notranslate nohighlight">\(\epsilon\)</span> due to  <span class="math notranslate nohighlight">\(x^*\)</span> being a maximum, <span class="math notranslate nohighlight">\(Q(x^*)&gt;Q(x^*+\delta)\)</span>. <br><br></p>
+<p>Consider a quantity <span class="math notranslate nohighlight">\(\mathcal{Q}(x)\)</span> with a (local or global) maximum at <span class="math notranslate nohighlight">\(x^*\)</span>, and a  monotonic function <span class="math notranslate nohighlight">\(f\)</span>. Now consider <span class="math notranslate nohighlight">\(Q\)</span> in a neighbourhood around <span class="math notranslate nohighlight">\(x^*\)</span>.  Denoting a point in this neighbourhood as <span class="math notranslate nohighlight">\(x^*+\delta\)</span> we can restrict the size of neighbourhood by limiting the magnitude of the perturbation <span class="math notranslate nohighlight">\(|\delta| &lt; \epsilon\)</span>.  For sufficiently small <span class="math notranslate nohighlight">\(\epsilon\)</span> due to  <span class="math notranslate nohighlight">\(x^*\)</span> being a maximum, <span class="math notranslate nohighlight">\(Q(x^*)&gt;Q(x^*+\delta)\)</span>.</p>
 <p>Now, we can apply the function <span class="math notranslate nohighlight">\(f\)</span> to both sides of this inequality and use the fact that it is monotonic to give</p>
-<p>\begin{align}
-f(Q(x^<em>))&gt;f(Q(x^</em>+\delta)) ;; \forall ;; |\delta| &lt; \epsilon
-\end{align}</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+f(Q(x^*))&gt;f(Q(x^*+\delta)) \;\; \forall \;\; |\delta| &lt; \epsilon
+\end{align}\]</div>
 <p>This demonstrates that <span class="math notranslate nohighlight">\(x^*\)</span> is also a (local/global) maximum of <span class="math notranslate nohighlight">\(f(Q(x))\)</span>.</p>
 </div>
 </details>
-<p>The <strong>log-likelihood</strong> is</p>
+<br>
+<p>In this model the <strong>log-likelihood</strong> is</p>
 <p>\[\mathcal{L}(\mathbf{w}) = \text{log}~ p(\mathbf{y}\mid\mathbf{X}, \mathbf{w}, \sigma_y^2) = -\frac{N}{2}\log(2\pi \sigma_y^2) -\frac{1}{2\sigma_y^2}(\mathbf{y} - \mathbf{X}\mathbf{w})^\top (\mathbf{y} - \mathbf{X}\mathbf{w})\]</p>
 <p>maximising this quantity is equivalent to <strong>minimising</strong> the negative log-likelihood</p>
 <p>\[-\mathcal{L}(\mathbf{w}) = \frac{N}{2}\log(2\pi \sigma_y^2) +\frac{1}{2\sigma_y^2}(\mathbf{y} - \mathbf{X}\mathbf{w})^\top (\mathbf{y} - \mathbf{X}\mathbf{w})\]</p>
 <p>Notice that the term \(\frac{N}{2}\log(2\pi \sigma_y^2)\) is independent of \(\mathbf{w}\), so minimising the negative log-likelihood is equivalent to minimizing the least-squares error \(-\) exactly the same criterion we had before:</p>
 <p>\[\boxed{\text{Least squares} \equiv \text{minimize}~ (\mathbf{y} - \mathbf{X}\mathbf{w})^\top (\mathbf{y} - \mathbf{X}\mathbf{w}) \Leftrightarrow \text{Maximum-likelihood}}\]</p>
-<p>So the squared error assumption is equivalent to assuming that the observed data have been corrupted by Gaussian noise whose variance is fixed across the input space. One of the benefits of this new perpective (i.e. in terms of a probabilistic model and a specific inference scheme) is that the implicit assumptions are revealed, their suitability assessed, and  modifications can be made. For example, the model could be generalised to include noise whose variance depends on the input location. Moreover, it might be important to infer the noise level \(\sigma_y\). The maximum likelihood approach paves the way to the Bayesian modelling approach where the task of infering the model weights retains uncertainty and incorporates prior knowledge.</p>
-<p>In the next <a class="reference internal" href="regression_non_linear.html"><span class="doc std std-doc">notebook</span></a>, we look at how to adapt our linear regression model to better deal with non-linear datasets that cannot be so accurately fit by a straight line.</p>
+<p>So the squared error assumption is equivalent to assuming that the observed data have been corrupted by Gaussian noise whose variance is fixed across the input space. One of the benefits of this new perpective (i.e. in terms of a probabilistic model and a specific inference scheme) is that the implicit assumptions are revealed, their suitability assessed, and  modifications can be made. For example, the model could be generalised to include noise whose variance depends on the input location. Moreover, it might be important to infer the noise level \(\sigma_y\). The maximum likelihood approach paves the way to the Bayesian modelling approach where the task of infering the model weights retains uncertainty and incorporates prior knowledge. In subsequent chapters, we look at how to adapt our linear regression model to better deal with non-linear datasets that cannot be so accurately fit by a straight line.</p>
+</div>
 </div>
 <div class="section" id="summary">
 <h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
 <p>Having covered linear regression, you should now understand:</p>
 <ol class="simple">
-<li><p>Why the sum-of-squared-errors is used as a measure of fit</p></li>
-<li><p>How to manipulate the sum-of-square-errors cost into different forms</p></li>
-<li><p>How to derive the least squares estimate for the parameters of a linear model</p></li>
-<li><p>Why the least squares estimate is equivalent to the maximum likelihood estimate (under an i.i.d. Gaussian noise assumption)</p></li>
+<li><p>Why the sum-of-squared-errors is used as a measure of fit.</p></li>
+<li><p>How to manipulate the sum-of-square-errors cost into different forms.</p></li>
+<li><p>How to derive the least squares estimate for the parameters of a linear model.</p></li>
+<li><p>Why the least squares estimate is equivalent to the maximum likelihood estimate (under an i.i.d. Gaussian noise assumption).</p></li>
 </ol>
 </div>
 <div class="section" id="questions">
 <h2>Questions<a class="headerlink" href="#questions" title="Permalink to this headline">¶</a></h2>
-<ol class="simple">
-<li><p><strong>Probabilistic models for regression</strong></p></li>
-</ol>
+<ol>
+<li> <b>Probabilistic models for regression</b>
 <p>A machine learner observes two separate regression datasets comprising scalar inputs and outputs <span class="math notranslate nohighlight">\(\{ x_n, y_n \}_{n=1}^N\)</span> shown below.</p>
-  <div class="row">
-  <div class="column">
-    <img src="dataset_regression.svg" alt="Snow" style="width:90%; float: center; padding: 0px; padding : 20px">
-  </div>
-</div>
+<p><img alt="" src="../../_images/dataset_regression.svg" /></p>
 <ul class="simple">
 <li><p>Suggest a suitable regression model, <span class="math notranslate nohighlight">\(p(y_n|x_n)\)</span> for the dataset A. Indicate sensible settings for the parameters in your proposed model where possible. Explain your modelling choices.</p></li>
 <li><p>Suggest a suitable regression model, <span class="math notranslate nohighlight">\(p(y_n|x_n)\)</span> for the dataset B. Indicate sensible settings for the parameters in your proposed model where possible. Explain your modelling choices.</p></li>
 </ul>
-<!-- <details>
+<br>
+<details class="graydrop">
 <summary>Answer</summary>
-<div class="row">
-  <div class="column">
-    <img src="solution-prob_mod.png" alt="Snow" style="width:95%; float: center; padding: 0px; padding : 20px">
-  </div>
+<p><strong>Part (a)</strong> A suitable regression model is a linear mode, with gradient <span class="math notranslate nohighlight">\(\approx 5\)</span> and an intercept at <span class="math notranslate nohighlight">\((0, 0)\)</span>. The noise appears to be Gaussian but its standard deviation appears to grow with <span class="math notranslate nohighlight">\(x\)</span>. Therefore an appropriate model including the noise would be</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+y_n(x) = 5x + \sigma(x) + \epsilon_n, \epsilon_n \sim \mathcal{N}(0, 1),
+\end{align}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\sigma(x) = |x|\)</span>. Note that there are several reasonable choices that could be made to model this data here.</p>
+<p><strong>Part (b)</strong> A suitable model here would be a sinusoidal trend, with period of aobut <span class="math notranslate nohighlight">\(25\)</span> time steps. Since there are outliers present, an appropriate noise model would be some heavy tailed model, such as a Student-t distribution:</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+y_n(x) = 2 + \sin \left(\frac{2\pi}{25}x\right) + \epsilon_n, \epsilon_n \sim \text{Student-t}.
+\end{align}\]</div>
+<p>Note that the choice of using a Student-t distribution here is perhaps hard to guess, but you should be able to identify that outliers are present and that a Gaussian noise model may not be the most appropriate choice here.</p>
 </div>
-</details> -->
-<ol class="simple">
-<li><p><strong>Maximum-likelihood learning for a simple regression model</strong></p></li>
+</details>
+<br> </li>
 </ol>
+<ol start="2">
+<li> <b>Maximum-likelihood learning for a simple regression model</b>
 <p>Consider a regression problem where the data comprise <span class="math notranslate nohighlight">\(N\)</span> scalar inputs and outputs, <span class="math notranslate nohighlight">\(\mathcal{D} = \{ (x_1, y_1), ..., (x_N,y_N)\}\)</span>, and the goal is to predict <span class="math notranslate nohighlight">\(y\)</span> from <span class="math notranslate nohighlight">\(x\)</span>.</p>
 <p>Assume a very simple linear model, <span class="math notranslate nohighlight">\(y_n = a x_n + \epsilon_n\)</span>, where the noise <span class="math notranslate nohighlight">\(\epsilon_n\)</span> is iid Gaussian with zero mean and variance 1.</p>
 <ul class="simple">
 <li><p>Provide an expression for the log-likelihood of the parameter <span class="math notranslate nohighlight">\(a\)</span>.</p></li>
 <li><p>Compute the maximum likelihood estimate for <span class="math notranslate nohighlight">\(a\)</span>.</p></li>
 </ul>
-<details>
+<br>
+<details class="graydrop">
 <summary>Answer</summary>
-<div class="row">
-  <div class="column">
-    <img src="solution-ml.png" alt="Snow" style="width:95%; float: center; padding: 0px; padding : 20px">
-  </div>
+<p><strong>Part (a)</strong> The likelihood for this model is</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+p(\{y_n\}_{n=1}^N | \{x_n\}_{n=1}^N, a) = \prod_{n=1}^N p(y_n, z_n | x_n, a).
+\end{align}\]</div>
+<p>Therefore the log-likelihood is</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+\log p(\{y_n\}_{n=1}^N | \{x_n\}_{n=1}^N, a) &amp;= \sum_{n=1}^N \log p(y_n, z_n | x_n, a) \\
+&amp;= \sum_{n=1}^N \left[ -\frac{1}{2}\log 2\pi - \frac{1}{2} (y_n - ax_n)^2 \right] \\
+&amp;= -\frac{N}{2} \log 2\pi -\frac{1}{2} \sum_{n=1}^N \left[ (y_n - ax_n)^2 \right] = \mathcal{L}(a).
+\end{align}\end{split}\]</div>
+<p><strong>Part (b)</strong> To find the maximum-likelihood estimate, we take a derivative of the log-likelihood with respect to <span class="math notranslate nohighlight">\(a\)</span> and equate this to <span class="math notranslate nohighlight">\(0\)</span>, to obtain</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+\frac{d \mathcal{L}(a)}{da} &amp;= - \sum_{n=1}^N \left[ x_n (y_n - ax_n) \right] = 0 \implies a = \frac{\sum_{n=1}^N  x_n y_n}{\sum_{n=1}^N  x_n^2}
+\end{align}\]</div>
 </div>
 </details>
-<ol class="simple">
-<li><p><strong>Maximum-likelihood learning for multi-output regression</strong></p></li>
+<br> </li>
 </ol>
+<ol start="3">
+<li> <b>Maximum-likelihood learning for multi-output regression</b>
 <p>A data-scientist has collected a regression dataset comprising <span class="math notranslate nohighlight">\(N\)</span> scalar inputs (<span class="math notranslate nohighlight">\(\{x_n\}_{n=1}^N\)</span>) and <span class="math notranslate nohighlight">\(N\)</span> scalar outputs (<span class="math notranslate nohighlight">\(\{y_n\}_{n=1}^N\)</span>). Their goal is to predict <span class="math notranslate nohighlight">\(y\)</span> from <span class="math notranslate nohighlight">\(x\)</span> and they have assumed a very simple linear model, <span class="math notranslate nohighlight">\(y_n = a x_n + \epsilon_n\)</span>.</p>
 <p>The data-scientist also has access to a second set of outputs (<span class="math notranslate nohighlight">\(\{z_n\}_{n=1}^N\)</span>) that are well described by the model <span class="math notranslate nohighlight">\(z_n = x_n + \epsilon'_n\)</span>.</p>
 <p>The noise variables <span class="math notranslate nohighlight">\(\epsilon_n\)</span> and <span class="math notranslate nohighlight">\(\epsilon'_n\)</span>  are known to be iid zero mean correlated Gaussian variables</p>
-<p>\begin{align}
-p\left( \left[ \begin{array}{c} \epsilon_n\ \epsilon’_n \end{array} \right ] \right) = \mathcal{N}\left( \left[ \begin{array}{c} \epsilon_n\ \epsilon’_n \end{array} \right ]; \mathbf{0}, \Sigma \right)  ;; \text{where} ;; ; \Sigma^{-1} = \left[ \begin{array}{cc} 1 &amp; 0.5 \ 0.5 &amp; 1 \end{array} \right ].  \nonumber
-\end{align}</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+p\left( \left[ \begin{array}{c} \epsilon_n\\ \epsilon'_n \end{array} \right ] \right) = \mathcal{N}\left( \left[ \begin{array}{c} \epsilon_n\\ \epsilon'_n \end{array} \right ]; \mathbf{0}, \Sigma \right)  \;\; \text{where} \;\; \; \Sigma^{-1} = \left[ \begin{array}{cc} 1 &amp; 0.5 \\ 0.5 &amp; 1 \end{array} \right ].  \nonumber
+\end{align}\end{split}\]</div>
 <ul class="simple">
 <li><p>Provide an expression for the log-likelihood of the parameter <span class="math notranslate nohighlight">\(a\)</span>.</p></li>
 <li><p>Compute the maximum likelihood estimate for <span class="math notranslate nohighlight">\(a\)</span>.</p></li>
 <li><p>Do the additional outputs <span class="math notranslate nohighlight">\(\{z_n\}_{n=1}^N\)</span> provide useful additional information for estimating <span class="math notranslate nohighlight">\(a\)</span>? Explain your reasoning.</p></li>
 </ul>
-<p>The formula for the probability density of a multivariate Gaussian distribution of mean <span class="math notranslate nohighlight">\(\mu\)</span> and covariance <span class="math notranslate nohighlight">\(\Sigma\)</span> is given by
-\begin{align}
+<p>The formula for the probability density of a multivariate Gaussian distribution of mean <span class="math notranslate nohighlight">\(\mu\)</span> and covariance <span class="math notranslate nohighlight">\(\Sigma\)</span> is given by</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
 \mathcal{N}(\mathbf{x};\mu,\Sigma) = \frac{1}{\sqrt{\text{det}(2 \pi \Sigma)}} \exp\left(-\frac{1}{2} (\mathbf{x} - \mathbf{\mu})^{\top} \Sigma^{-1}  (\mathbf{x} - \mathbf{\mu})\right). \nonumber
-\end{align}</p>
- <details>
+\end{align}\]</div>
+ <details class="graydrop">
 <summary>Answer</summary>
-<div class="row">
-  <div class="column">
-    <img src="solution-multi-output-1.png" alt="Snow" style="width:95%; float: center; padding: 0px; padding : 20px">
-          <img src="solution-multi-output-2.png" alt="Snow" style="width:95%; float: center; padding: 0px; padding : 20px">
-  </div>
-</div>
-</details></div>
+<p><strong>Part (a)</strong> We can write the likelihood as</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+\mathcal{L}(a) = \log p(\{y_n\}_{n=1}^N, \{z_n\}_{n=1}^N | \{x_n\}_{n=1}^N, a) = \sum_{n=1}^N \log p(y_n, z_n | x_n, a)
+\end{align}\]</div>
+<p>where the terms <span class="math notranslate nohighlight">\(p(y_n, z_n | x_n, a)\)</span> are given by</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+p(y_n, z_n | x_n, a) = \mathcal{N}\left( \begin{bmatrix} y_n \\ z_n \end{bmatrix}; \begin{bmatrix} a x_n \\ x_n \end{bmatrix}, \begin{bmatrix} 1 &amp; \frac{1}{2} \\ \frac{1}{2} &amp; 1 \end{bmatrix}^{-1} \right).
+\end{align}\end{split}\]</div>
+<p>Substituting one expression into the other, we obtain</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+\mathcal{L}(a) &amp;= -\frac{N}{2} \log \text{ det} (2\pi \Sigma) - \frac{1}{2} \sum_{n = 1}^N  \left(\begin{bmatrix} y_n \\ z_n \end{bmatrix} - \begin{bmatrix} a x_n \\ x_n \end{bmatrix} \right)^\top \begin{bmatrix} 1 &amp; \frac{1}{2} \\ \frac{1}{2} &amp; 1 \end{bmatrix} \left(\begin{bmatrix} y_n \\ z_n \end{bmatrix} - \begin{bmatrix} a x_n \\ x_n \end{bmatrix}\right) \\
+&amp;= -\frac{N}{2} \log \text{ det} (2\pi \Sigma) - \frac{1}{2} \sum_{n = 1}^N \left[ (y_n - a x_n)^2 + (y_n - a x_n)(z_n - x_n) + (z_n - x_n)^2 \right]
+\end{align}\end{split}\]</div>
+<p><strong>Part (b)</strong> Taking the derivative of the likelihood with respect to the parameter <span class="math notranslate nohighlight">\(a\)</span> and equating it to <span class="math notranslate nohighlight">\(0\)</span></p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+\frac{d\mathcal{L}(a)}{da} &amp;= \frac{1}{2} \sum_{n = 1}^N \underbrace{2x_n(y_n - a x_n)}_{\text{Contribution from observing } y_n} + \underbrace{x_n (z_n - x_n)}_{\text{Contribution from observing } z_n} \\
+&amp;= \sum_{n = 1}^N \left[ x_n y_n - a x_n^2 + x_n (z_n - x_n) \right] = 0
+\end{align}\end{split}\]</div>
+<p>followed by rearranging, we obtain the maximum-likelihood estimate of <span class="math notranslate nohighlight">\(a\)</span></p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+a = \frac{\sum_{n = 1}^N \left[ x_n y_n + x_n (z_n - x_n) \right]}{\sum_{n = 1}^N x_n^2}.
+\end{align}\]</div>
+<p><strong>Part (c)</strong> The additionnal outputs change the ML estimate of <span class="math notranslate nohighlight">\(a\)</span>. This means that they must provide useful information about <span class="math notranslate nohighlight">\(a\)</span>. They do this because the noise in <span class="math notranslate nohighlight">\(z_n\)</span> is correlated with the noise in <span class="math notranslate nohighlight">\(y_n\)</span> and so observing <span class="math notranslate nohighlight">\(z_n\)</span> reveals information about the noise <span class="math notranslate nohighlight">\(\epsilon_n\)</span> and allows more accureate identification of <span class="math notranslate nohighlight">\(a\)</span>.</p>
+</details> </li>
+</ol>
+<br></div>
 </div>
 
     <script type="text/x-thebe-config">
@@ -586,16 +648,6 @@ p\left( \left[ \begin{array}{c} \epsilon_n\ \epsilon’_n \end{array} \right ] \
   <script src="../../_static/js/index.3da636dd464baa7582d2.js"></script>
 
 
-    
-    <!-- Google Analytics -->
-    <script>
-      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-      ga('create', 'UA-168728006-1', 'auto');
-      ga('set', 'anonymizeIp', true);
-      ga('send', 'pageview');
-    </script>
-    <script async src='https://www.google-analytics.com/analytics.js'></script>
-    <!-- End Google Analytics -->
     
   </body>
 </html>
