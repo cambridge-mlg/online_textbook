@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Regression &#8212; OMLT</title>
+    <title>Regression &#8212; Probabilistic Modelling and Inference</title>
     
   <link rel="stylesheet" href="../../_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
 
@@ -59,7 +59,7 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Linear regression" href="regression-linear.html" />
-    <link rel="prev" title="Online Machine Learning Textbook" href="../home.html" />
+    <link rel="prev" title="Online Inference Textbook" href="../home.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
@@ -81,7 +81,7 @@
   <img src="../../_static/logo.png" class="logo" alt="logo">
   
   
-  <h1 class="site-logo" id="site-title">OMLT</h1>
+  <h1 class="site-logo" id="site-title">Probabilistic Modelling and Inference</h1>
   
 </a>
 </div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
@@ -92,7 +92,7 @@
     <ul class="nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="../home.html">
-   Online Machine Learning Textbook
+   Online Inference Textbook
   </a>
  </li>
 </ul>
@@ -105,6 +105,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="regression-linear.html">
      Linear regression
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="regression-nonlinear.html">
+     Non-linear basis regression
     </a>
    </li>
   </ul>
@@ -176,7 +181,7 @@
         aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
     <div class="dropdown-buttons">
         
-        <a class="binder-button" href="https://mybinder.org/v2/gh/stratisMarkou/random-walks/master?urlpath=tree/./content/regression/regression-intro.ipynb"><button type="button"
+        <a class="binder-button" href="https://mybinder.org/v2/gh/cambridge-mlg/online_textbook/master?urlpath=tree/./content/regression/regression-intro.ipynb"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
                 data-placement="left"><img class="binder-button-logo"
                     src="../../_static/images/logo_binder.svg"
@@ -262,7 +267,7 @@ The outputs <span class="math notranslate nohighlight">\(y_n\)</span> are also k
 <h2>Outline of subsequent sections<a class="headerlink" href="#outline-of-subsequent-sections" title="Permalink to this headline">¶</a></h2>
 <ol class="simple">
 <li><p><a class="reference internal" href="regression-linear.html"><span class="doc std std-doc">Linear regression</span></a>: Linear regression, least squares and maximum likelihood fitting</p></li>
-<li><p><a class="reference internal" href="regression_non_linear.html"><span class="doc std std-doc">Non-linear regression</span></a>: Non-linear regression using basis functions</p></li>
+<li><p><span class="xref myst">Non-linear regression</span>: Non-linear regression using basis functions</p></li>
 <li><p><a class="reference internal" href="regression_overfitting.html"><span class="doc std std-doc">Overfitting in non-linear regression</span></a>: What is overfitting, diagnosis using validation sets</p></li>
 <li><p><a class="reference internal" href="regression_regularisation.html"><span class="doc std std-doc">Regularised non-linear regression</span></a>: Using regularisation to mitigate overfitting, interpretations of regularisation as MAP inference</p></li>
 <li><p><a class="reference internal" href="regression_bayesian.html"><span class="doc std std-doc">Bayesian non-linear regression</span></a>: Bayesian approaches to regression that return uncertainty in the parameter estimates</p></li>
@@ -301,7 +306,7 @@ The outputs <span class="math notranslate nohighlight">\(y_n\)</span> are also k
     
     <div class='prev-next-bottom'>
         
-    <a class='left-prev' id="prev-link" href="../home.html" title="previous page">Online Machine Learning Textbook</a>
+    <a class='left-prev' id="prev-link" href="../home.html" title="previous page">Online Inference Textbook</a>
     <a class='right-next' id="next-link" href="regression-linear.html" title="next page">Linear regression</a>
 
     </div>
@@ -325,16 +330,6 @@ The outputs <span class="math notranslate nohighlight">\(y_n\)</span> are also k
   <script src="../../_static/js/index.3da636dd464baa7582d2.js"></script>
 
 
-    
-    <!-- Google Analytics -->
-    <script>
-      window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-      ga('create', 'UA-168728006-1', 'auto');
-      ga('set', 'anonymizeIp', true);
-      ga('send', 'pageview');
-    </script>
-    <script async src='https://www.google-analytics.com/analytics.js'></script>
-    <!-- End Google Analytics -->
     
   </body>
 </html>

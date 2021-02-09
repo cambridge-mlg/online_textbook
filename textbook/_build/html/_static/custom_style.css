@@ -55,7 +55,7 @@
 	border-color: rgba(178, 234, 188, 0.5);
 }
 
-details.proof {
+details.graydrop {
     border-width: 2px;
 	border-radius: 20px;
 	border-style: solid;
@@ -64,11 +64,11 @@ details.proof {
 }
 
 
-details.proof div{
+details.graydrop div{
 	padding: 20px 20px 10px 20px;
 }
 
-details.proof {
+details.graydrop {
 	padding: 0px 30px 0px 30px;
 }
 

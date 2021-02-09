@@ -5,7 +5,7 @@
 
 #######################################################################################
 # Book settings
-title                       : OMLT
+title                       : "Probabilistic Modelling and Inference"
 author                      : Stratis Markou, Rich Turner
 copyright                   : "2021"
 logo                        : "assets/logo.png"
@@ -23,7 +23,7 @@ html:
   favicon                   : "assets/favicon.ico"
   navbar_number_sections    : False
   navbar_footer_text        : ''
-  google_analytics_id       : "UA-168728006-1"
+  google_analytics_id       : ""
   home_page_in_navbar       : true
   use_edit_page_button      : false
   baseurl                   : ""
@@ -37,9 +37,9 @@ launch_buttons:
   thebelab                  : false
 
 repository:
-  url                       : https://github.com/stratisMarkou/random-walks
+  url                       : "https://github.com/cambridge-mlg/online_textbook"
   path_to_book              : "./"
-  branch                    : master
+  branch                    : "master"
 
 #######################################################################################
 # Advanced and power-user settings
