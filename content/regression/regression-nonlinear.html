@@ -397,7 +397,12 @@ C_2 = \big|\big| \mathbf{y} - \boldsymbol{\Phi}\mathbf{w}\big|\big|^2 = \big(\ma
 <div class="cell_output docutils container">
 <img alt="../../_images/regression-nonlinear_7_0.svg" src="../../_images/regression-nonlinear_7_0.svg" /></div>
 </div>
-<p>Next we use <span class="math notranslate nohighlight">\(D=5\)</span> Gaussian basis functions, \(\phi_d(x) = \exp(-(x - \mu_d)^2/(2 \sigma^2_{\phi}))\), with centres <span class="math notranslate nohighlight">\(\mu_d\)</span> uniformly spaced between 0 and 1, and with widths <span class="math notranslate nohighlight">\(\sigma^2_{\phi} = 0.05\)</span>.</p>
+<p>Next we use <span class="math notranslate nohighlight">\(D=5\)</span> Gaussian basis functions,</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}
+\phi_d(x) = \exp \left[-\frac{1}{2\sigma_\phi^2} (x - \mu_d)^2 \right],
+\end{align}\]</div>
+<p>with centres <span class="math notranslate nohighlight">\(\mu_d\)</span> uniformly spaced between 0 and 1, and with widths <span class="math notranslate nohighlight">\(\sigma^2_{\phi} = 0.05\)</span>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use five Gaussian basis functions</span>
