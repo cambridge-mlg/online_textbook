@@ -110,6 +110,11 @@
      Non-linear basis regression
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="regression-overfitting.html">
+     Overfitting
+    </a>
+   </li>
   </ul>
   <i class="fas fa-chevron-down">
   </i>
@@ -356,7 +361,7 @@ $(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($
 </div>
 <div class="section" id="avoiding-overfitting-using-regularisation">
 <h1>Avoiding overfitting using regularisation<a class="headerlink" href="#avoiding-overfitting-using-regularisation" title="Permalink to this headline">¶</a></h1>
-<p><a class="reference internal" href="regression_overfitting.html"><span class="doc std std-doc">Overfitting</span></a> can plague the maximum likelihood approach to model fitting. For example, polynomial fits to the simple 1D regression dataset showed pathalogical behaviour for <span class="math notranslate nohighlight">\(D&gt;7\)</span> (see plots below). In this section we will discuss how to mitigate overfitting using regularisation.</p>
+<p><span class="xref myst">Overfitting</span> can plague the maximum likelihood approach to model fitting. For example, polynomial fits to the simple 1D regression dataset showed pathalogical behaviour for <span class="math notranslate nohighlight">\(D&gt;7\)</span> (see plots below). In this section we will discuss how to mitigate overfitting using regularisation.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_nonlin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;reg_nonlin_x.npy&#39;</span><span class="p">)</span> <span class="c1"># load inputs from a prepared non-linear dataset</span>
