@@ -4,3 +4,5 @@
   sections:
       - file: content/regression/regression-linear
       - file: content/regression/regression-nonlinear
+      - file: content/regression/regression-overfitting
+        title: Overfitting
