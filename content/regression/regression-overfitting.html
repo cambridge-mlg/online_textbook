@@ -58,6 +58,7 @@
     <script async="async" src="../../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Avoiding overfitting using regularisation" href="regression-regularisation.html" />
     <link rel="prev" title="Non-linear basis regression" href="regression-nonlinear.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -114,6 +115,11 @@
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
      Overfitting
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="regression-regularisation.html">
+     Regularisation
     </a>
    </li>
   </ul>
@@ -406,7 +412,7 @@ y_n = f_{\mathbf{w}}(x_n) + \sigma_y \epsilon_n = \sum_{d=0}^D w_d x^d_n + \sigm
 <h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
 <p><strong>Overfitting</strong> occurs when a training procedure causes a model to capture aspects of the training data that are irrelevant or deleterious for predicting unseen test data.</p>
 <p>Overfitting can be monitored by comparing the quality of predictions on the <strong>training set</strong> and a held-out <strong>validation set</strong>. A validation error that is much larger than the test error reveals overfitting.</p>
-<p>Having learned how to diagnose and quantify overfitting, in the next section we investigate how to use <a class="reference internal" href="regression_regularisation.html"><span class="doc std std-doc">regularisation</span></a> to mitigate its effects.</p>
+<p>Having learned how to diagnose and quantify overfitting, in the next section we investigate how to use <span class="xref myst">regularisation</span> to mitigate its effects.</p>
 </div>
 <div class="section" id="questions">
 <h2>Questions<a class="headerlink" href="#questions" title="Permalink to this headline">¶</a></h2>
@@ -462,6 +468,7 @@ y_n = f_{\mathbf{w}}(x_n) + \sigma_y \epsilon_n = \sum_{d=0}^D w_d x^d_n + \sigm
     <div class='prev-next-bottom'>
         
     <a class='left-prev' id="prev-link" href="regression-nonlinear.html" title="previous page">Non-linear basis regression</a>
+    <a class='right-next' id="next-link" href="regression-regularisation.html" title="next page">Avoiding overfitting using regularisation</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">
