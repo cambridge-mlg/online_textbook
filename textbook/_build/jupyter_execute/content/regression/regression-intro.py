@@ -50,4 +50,5 @@ Regression also serves as a good introduction to several cross-cutting concepts 
 regression-linear
 regression-nonlinear
 Overfitting <regression-overfitting>
+Regularisation <regression-regularisation>
 ```

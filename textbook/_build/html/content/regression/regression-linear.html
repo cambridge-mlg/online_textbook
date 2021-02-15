@@ -117,6 +117,11 @@
      Overfitting
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="regression-regularisation.html">
+     Regularisation
+    </a>
+   </li>
   </ul>
   <i class="fas fa-chevron-down">
   </i>
@@ -381,7 +386,7 @@ Here we show a more detailed derivation of the equality
 <div class="math notranslate nohighlight">
 \[\bigg[\big( \mathbf{X}^\top\mathbf{X}\big)^{-1}\mathbf{X}^\top\bigg] \mathbf{X} = \big( \mathbf{X}^\top\mathbf{X}\big)^{-1}\mathbf{X}^\top\mathbf{X} = \mathbf{I}\]</div>
 <p>Note that when <span class="math notranslate nohighlight">\(\mathbf{X}^\top\mathbf{X}\)</span> is not invertible there is an infinity of solutions to the least squares problem. This occurs when the number of unique datapoints <span class="math notranslate nohighlight">\(N'\)</span> is smaller than the number of parameters we are fitting. For example, if we have a single datapoint, there are many ways of constructing a straight line that passes through the point. <br><br></p>
-<p>More generally, when the inputs are <span class="math notranslate nohighlight">\(D\)</span> dimensional or when we’re fitting non-linear models with <span class="math notranslate nohighlight">\(D\)</span> basis functions the least squares solution is not unique when <span class="math notranslate nohighlight">\(N'&lt;D\)</span>. This is one of the motivations for approaches considered later that <a class="reference internal" href="regression_regularisation.html"><span class="doc std std-doc">regularise the least squares solution</span></a> and return unique solutions even when <span class="math notranslate nohighlight">\(N'&lt;D\)</span>.</p>
+<p>More generally, when the inputs are <span class="math notranslate nohighlight">\(D\)</span> dimensional or when we’re fitting non-linear models with <span class="math notranslate nohighlight">\(D\)</span> basis functions the least squares solution is not unique when <span class="math notranslate nohighlight">\(N'&lt;D\)</span>. This is one of the motivations for approaches considered later that <span class="xref myst">regularise the least squares solution</span> and return unique solutions even when <span class="math notranslate nohighlight">\(N'&lt;D\)</span>.</p>
 </details>
 <br>
 </div>

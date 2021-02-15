@@ -115,6 +115,11 @@
      Overfitting
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="regression-regularisation.html">
+     Regularisation
+    </a>
+   </li>
   </ul>
   <i class="fas fa-chevron-down">
   </i>
@@ -380,7 +385,7 @@ $(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($
 </div>
 <div class="section" id="bayesian-linear-regression">
 <h1>Bayesian linear regression<a class="headerlink" href="#bayesian-linear-regression" title="Permalink to this headline">¶</a></h1>
-<p>We have seen <a class="reference internal" href="regression_regularisation.html"><span class="doc std std-doc">previously</span></a> how i) regularisation can be intrepreted in terms of a probabilistic prior over the regression weights, and ii) how MAP estimation of the weights mitigates some of the effects of overfitting. However, the approaches we have considered so far have not returned uncertainty estimates in the weights. Uncertainty estimates are key when, for example, making decisions and performing online incremental updates to the model.</p>
+<p>We have seen <span class="xref myst">previously</span> how i) regularisation can be intrepreted in terms of a probabilistic prior over the regression weights, and ii) how MAP estimation of the weights mitigates some of the effects of overfitting. However, the approaches we have considered so far have not returned uncertainty estimates in the weights. Uncertainty estimates are key when, for example, making decisions and performing online incremental updates to the model.</p>
 <p>In this section we will consider Bayesian approaches to regression that return uncertainty in parameter estimates. The probabilisitc approach involves two phases. First we explicitly define our assumptions about how the data and parameters are generated. This is called the probabilistic model. Second, we use the rules of probability to manipulate the probabilistic model to perform the inferences we wish to make. Let’s walk through these two steps in detail.</p>
 <div class="section" id="probabilistic-model">
 <h2>1. Probabilistic model<a class="headerlink" href="#probabilistic-model" title="Permalink to this headline">¶</a></h2>
@@ -482,9 +487,9 @@ p(\mathbf{w},\mathbf{y},\mathbf{X} | \sigma_{\mathbf{w}}^2,\sigma_{y}^2) &amp; =
 &amp; = \mathcal{N}(\mathbf{w} ; \mathbf{0},\sigma_{\mathbf{w}}^2 \mathrm{I}) \prod_{n=1}^N p(\mathbf{x}<em>n) \mathcal{N}(y_n; f^{(m)}</em>{\mathbf{w}}(\mathbf{x}),\sigma_{y}^2)
 \end{align}</p>
 <p>All aspects of this model can be critiqued:</p>
-<p>The assumption of <strong>independent Gaussian observation noise</strong> can be appropriate, e.g. if there are many independent noise sources and the central limit theorem has kicked in, and it leads to analytic inference. However, it may be inappropriate if the output noise is correlated or if there are outliers in the data (e.g. see <span class="xref myst">question 1B</span> and <a class="reference internal" href="regression_regularisation.html"><span class="doc std std-doc">question 2</span></a>).</p>
+<p>The assumption of <strong>independent Gaussian observation noise</strong> can be appropriate, e.g. if there are many independent noise sources and the central limit theorem has kicked in, and it leads to analytic inference. However, it may be inappropriate if the output noise is correlated or if there are outliers in the data (e.g. see <span class="xref myst">question 1B</span> and <span class="xref myst">question 2</span>).</p>
 <p>The <strong>zero mean Gaussian prior over the weights</strong> encodes the fact that <em>a priori</em> we expect the weight values to take values within a few standard deviations <span class="math notranslate nohighlight">\(\sigma_{\mathbf{w}}\)</span> of zero. We will see in a moment that the use of a Gaussian distribution leads to tractable inference schemes. However, other distributions might be appropriate depending on the circumstances. For example, you might have reason to suspect that only a small number of the features <span class="math notranslate nohighlight">\(\phi_d(\mathbf{x})\)</span> affect the output, in which case distributions that put more probability mass at zero and in the tails than a Gaussian might be more appropriate. Such distributions are called sparse distribtions and examples include the <a class="reference external" href="https://en.wikipedia.org/wiki/Laplace_distribution">Laplace</a> and <a class="reference external" href="https://en.wikipedia.org/wiki/Student%27s_t-distribution">Student’s t-distribution</a>.</p>
-<p>Notice here that our probabilistic model includes a <strong>distribution over the input locations</strong> are sampled. This is required to sample datasets, but it is not something that we encountered when we <a class="reference internal" href="regression_regularisation.html"><span class="doc std std-doc">interpreted regularisation in terms of MAP inference in a probabilistic model</span></a>. We will see that the distribution over the inputs does not affect the inference for the weights. This is why we have not specified a distributional family for <span class="math notranslate nohighlight">\(p(x)\)</span>.</p>
+<p>Notice here that our probabilistic model includes a <strong>distribution over the input locations</strong> are sampled. This is required to sample datasets, but it is not something that we encountered when we <span class="xref myst">interpreted regularisation in terms of MAP inference in a probabilistic model</span>. We will see that the distribution over the inputs does not affect the inference for the weights. This is why we have not specified a distributional family for <span class="math notranslate nohighlight">\(p(x)\)</span>.</p>
 </div>
 <div class="section" id="probabilistic-inference-for-the-weights">
 <h2>2.1 Probabilistic inference for the weights<a class="headerlink" href="#probabilistic-inference-for-the-weights" title="Permalink to this headline">¶</a></h2>
