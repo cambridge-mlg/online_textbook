@@ -923,16 +923,31 @@ p(\mathbf{w} | \{x_n,y_n\}_{n=1}^N,\sigma_y^2,\sigma_{\mathbf{w}}^2) &amp; = \fr
 <details class='graydrop'>
 <summary>Answer</summary>
 <div>
-The mean of the distribution over functions is defined as:
-<p><span class="math notranslate nohighlight">\(\mathbb{E}_{\mathbf{w}}(f_{\mathbf{w}}(x)) = \int f_{\mathbf{w}}(x) p(\mathbf{w}) \mathrm{d} \mathbf{w}\)</span>.</p>
+<p>The mean of the distribution over functions is defined as:</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+\mathbb{E}_{\mathbf{w}}(f_{\mathbf{w}}(x)) = \int f_{\mathbf{w}}(x) p(\mathbf{w}) \mathrm{d} \mathbf{w}.
+\end{align}\]</div>
 <p>Substituting in the definition of the function <span class="math notranslate nohighlight">\(f_{\mathbf{w}}(x) = \sum_{d=0}^D w_d \phi_d(x)\)</span>:</p>
-<p><span class="math notranslate nohighlight">\(\mathbb{E}_{\mathbf{w}}(f_{\mathbf{w}}(x)) = \int \sum_{d=0}^D w_d \phi_d(x) p(\mathbf{w}) \mathrm{d} \mathbf{w} =  \sum_{d=0}^D  \mathbb{E}_{\mathbf{w}} (w_d) \phi_d(x)  = 0\)</span></p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+\mathbb{E}_{\mathbf{w}}(f_{\mathbf{w}}(x)) = \int \sum_{d=0}^D w_d \phi_d(x) p(\mathbf{w}) \mathrm{d} \mathbf{w} =  \sum_{d=0}^D  \mathbb{E}_{\mathbf{w}} (w_d) \phi_d(x) = 0
+\end{align}\]</div>
 <p>So the average function is one which takes the value <span class="math notranslate nohighlight">\(0\)</span> everywhere. The variance is defined as</p>
-<p><span class="math notranslate nohighlight">\(\mathbb{E}_{\mathbf{w}}(f^2_{\mathbf{w}}(x)) = \int f^2_{\mathbf{w}}(x) p(\mathbf{w}) \mathrm{d} \mathbf{w}\)</span></p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+\mathbb{E}_{\mathbf{w}}(f^2_{\mathbf{w}}(x)) = \int f^2_{\mathbf{w}}(x) p(\mathbf{w}) \mathrm{d} \mathbf{w}
+\end{align}\]</div>
 <p>where we have used the fact that the mean is zero. Substituting in the definition of the function again yields</p>
-<p><span class="math notranslate nohighlight">\(\mathbb{E}_{\mathbf{w}}(f^2_{\mathbf{w}}(x)) = \int \sum_{d=0}^D \sum_{d'=0}^D w_d \phi_d(x) w_{d'} \phi_{d'}(x) p(\mathbf{w}) \mathrm{d} \mathbf{w} =  \sum_{d=0}^D \mathbb{E}_{\mathbf{w}}(w^2_d) \phi^2_d(x)\)</span></p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+\mathbb{E}_{\mathbf{w}}(f^2_{\mathbf{w}}(x)) = \int \sum_{d=0}^D \sum_{d'=0}^D w_d \phi_d(x) w_{d'} \phi_{d'}(x) p(\mathbf{w}) \mathrm{d} \mathbf{w} =  \sum_{d=0}^D \mathbb{E}_{\mathbf{w}}(w^2_d) \phi^2_d(x)
+\end{align}\]</div>
 <p>where we used the fact that the weights are independent in the prior. Therefore</p>
-<p><span class="math notranslate nohighlight">\(\mathbb{E}_{\mathbf{w}}(f^2_{\mathbf{w}}(x)) =  \sigma_{\mathbf{w}}^2 \sum_{d=0}^D \phi^2_d(x)\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+\mathbb{E}_{\mathbf{w}}(f^2_{\mathbf{w}}(x)) =  \sigma_{\mathbf{w}}^2 \sum_{d=0}^D \phi^2_d(x).
+\end{align}\]</div>
 <p>Notice that  in the case of polynomial regression the variance grows with the magnitude of the inputs <span class="math notranslate nohighlight">\(|x|\)</span>. That is, the functions will typically blow up once the magnitude of <span class="math notranslate nohighlight">\(x\)</span> is large enough. For Gaussian basis functions the variance shrinks to zero away from the basis functions. Both behaviours can be problematic for extrapolation.</p>
 </div>
 </details></li>
