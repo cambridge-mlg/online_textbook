@@ -8,3 +8,5 @@
         title: Overfitting
       - file: content/regression/regression-regularisation
         title: Regularisation
+      - file: content/regression/regression-bayesian
+        title: Bayesian Regression

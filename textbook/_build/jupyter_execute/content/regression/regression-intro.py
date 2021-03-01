@@ -51,4 +51,5 @@ regression-linear
 regression-nonlinear
 Overfitting <regression-overfitting>
 Regularisation <regression-regularisation>
+Bayesian Regression <regression-bayesian>
 ```
