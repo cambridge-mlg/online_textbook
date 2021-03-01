@@ -58,6 +58,7 @@
     <script async="async" src="../../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Bayesian linear regression" href="regression-bayesian.html" />
     <link rel="prev" title="The effects of model complexity: overfitting and generalisation" href="regression-overfitting.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -119,6 +120,11 @@
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
      Regularisation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="regression-bayesian.html">
+     Bayesian Regression
     </a>
    </li>
   </ul>
@@ -914,7 +920,7 @@ p(\mathbf{w} | \{x_n,y_n\}_{n=1}^N,\sigma_y^2,\sigma_{\mathbf{w}}^2) &amp; = \fr
 </div>
 <div class="section" id="summary">
 <h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
-<p>Overfitting causes the weight estimates in a linear-in-the-parameters regression model to become extreme. Extreme settings of the weights can be discouraged by penalising their magnitude. This can be interpreted as placing a prior distribution that encodes knowledge before observing the data that the weights are likely to be small in magnitude. In the next section we will look at <a class="reference internal" href="regression_bayesian.html"><span class="doc std std-doc">bayesian</span></a> approach to regression.</p>
+<p>Overfitting causes the weight estimates in a linear-in-the-parameters regression model to become extreme. Extreme settings of the weights can be discouraged by penalising their magnitude. This can be interpreted as placing a prior distribution that encodes knowledge before observing the data that the weights are likely to be small in magnitude. In the next section we will look at <span class="xref myst">bayesian</span> approach to regression.</p>
 </div>
 <div class="section" id="questions">
 <h2>Questions<a class="headerlink" href="#questions" title="Permalink to this headline">¶</a></h2>
@@ -1008,6 +1014,7 @@ p(w_d | \sigma_{w}) \propto (1 + \frac{v}{v-2} |w_d|^2/\sigma^2_{w})^{- (v+1)/2}
     <div class='prev-next-bottom'>
         
     <a class='left-prev' id="prev-link" href="regression-overfitting.html" title="previous page">The effects of model complexity: overfitting and generalisation</a>
+    <a class='right-next' id="next-link" href="regression-bayesian.html" title="next page">Bayesian linear regression</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">

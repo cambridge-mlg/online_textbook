@@ -120,6 +120,11 @@
      Regularisation
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="regression-bayesian.html">
+     Bayesian Regression
+    </a>
+   </li>
   </ul>
   <i class="fas fa-chevron-down">
   </i>
@@ -281,7 +286,7 @@
 </div>
 <div class="section" id="visualising-bayesian-linear-regression-online-learning">
 <h1>Visualising Bayesian linear regression: Online learning<a class="headerlink" href="#visualising-bayesian-linear-regression-online-learning" title="Permalink to this headline">¶</a></h1>
-<p>Previously we have introduced the <a class="reference internal" href="regression_bayesian.html"><span class="doc std std-doc">Bayesian approach to regression</span></a> and visualised the resulting <em>predictive distribution</em>. In this section we visualise the <em>posterior distribution</em> over the weights. By considering how the posterior evolves as data arrive one by one, we will develop an intuitive understanding of several important properties of Bayesian inference.</p>
+<p>Previously we have introduced the <span class="xref myst">Bayesian approach to regression</span> and visualised the resulting <em>predictive distribution</em>. In this section we visualise the <em>posterior distribution</em> over the weights. By considering how the posterior evolves as data arrive one by one, we will develop an intuitive understanding of several important properties of Bayesian inference.</p>
 <p>The presentation also shows that probabilistic inference naturally provides so-called <strong>online</strong> or <strong>incremental</strong> updates. That is to say, an inference can be updated using the previous posterior distribution and the current data: it does not require the old data. Such updates are often faster and more memory efficient than <strong>batch</strong> updates which have to retain the whole dataset so that it can be accessed as new data arrive. They are particularly appealing when speed is important e.g. in high-frequency trading or in an autonomous robot that is continuously localising itself in an environment.</p>
 <div class="section" id="recapitulating-the-model">
 <h2>Recapitulating the model<a class="headerlink" href="#recapitulating-the-model" title="Permalink to this headline">¶</a></h2>
