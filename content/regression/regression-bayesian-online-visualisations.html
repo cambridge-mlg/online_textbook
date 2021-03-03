@@ -1,0 +1,533 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Visualising Bayesian linear regression: Online learning &#8212; Probabilistic Modelling and Inference</title>
+    
+  <link rel="stylesheet" href="../../_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom_style.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/.ipynb_checkpoints/custom_style-checkpoint.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../../_static/js/index.3da636dd464baa7582d2.js">
+
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="prev" title="Bayesian linear regression" href="regression-bayesian.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../../index.html">
+  
+  <img src="../../_static/logo.png" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">Probabilistic Modelling and Inference</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../home.html">
+   Online Inference Textbook
+  </a>
+ </li>
+</ul>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1 current active collapsible-parent">
+  <a class="reference internal" href="regression-intro.html">
+   Regression
+  </a>
+  <ul class="current collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="regression-linear.html">
+     Linear regression
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="regression-nonlinear.html">
+     Non-linear basis regression
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="regression-overfitting.html">
+     Overfitting
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="regression-regularisation.html">
+     Regularisation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="regression-bayesian.html">
+     Bayesian Regression
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Bayesian Online Learning
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../../_sources/content/regression/regression-bayesian-online-visualisations.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+        <!-- Source interaction buttons -->
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/cambridge-mlg/online_textbook/master?urlpath=tree/./content/regression/regression-bayesian-online-visualisations.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#recapitulating-the-model">
+   Recapitulating the model
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#inference-through-incremental-updates">
+   Inference through incremental updates
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#visualisation">
+   Visualisation
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#summary">
+     Summary
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+        </nav>
+        
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="visualising-bayesian-linear-regression-online-learning">
+<h1>Visualising Bayesian linear regression: Online learning<a class="headerlink" href="#visualising-bayesian-linear-regression-online-learning" title="Permalink to this headline">¶</a></h1>
+<p>Previously we have introduced the <a class="reference internal" href="regression-bayesian.html"><span class="doc std std-doc">Bayesian approach to regression</span></a> and visualised the resulting <em>predictive distribution</em>. In this section we visualise the <em>posterior distribution</em> over the weights. By considering how the posterior evolves as data arrive one by one, we will develop an intuitive understanding of several important properties of Bayesian inference.</p>
+<p>The presentation also shows that probabilistic inference naturally provides so-called <strong>online</strong> or <strong>incremental</strong> updates. That is to say, an inference can be updated using the previous posterior distribution and the current data: it does not require the old data. Such updates are often faster and more memory efficient than <strong>batch</strong> updates which have to retain the whole dataset so that it can be accessed as new data arrive. They are particularly appealing when speed is important e.g. in high-frequency trading or in an autonomous robot that is continuously localising itself in an environment.</p>
+<div class="section" id="recapitulating-the-model">
+<h2>Recapitulating the model<a class="headerlink" href="#recapitulating-the-model" title="Permalink to this headline">¶</a></h2>
+<p>Consider a scenario where we are fitting a regression model</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+p(\mathbf{w},\mathbf{y},\mathbf{X} | \sigma_{\mathbf{w}}^2,\sigma_{y}^2) &amp; = p(\mathbf{w}| \sigma_{\mathbf{w}}^2)  p(\mathbf{X}) p(\mathbf{y}|\mathbf{X},\sigma_{y}^2) = p(\mathbf{w} | \sigma_{\mathbf{w}}^2) \prod_{n=1}^N p(x_n) p(y_n |\mathbf{w},\mathbf{x}_n,\sigma_{y}^2)\\
+&amp; = \mathcal{N}(\mathbf{w} ; \mathbf{0},\sigma_{\mathbf{w}}^2 \mathrm{I}) \prod_{n=1}^N p(\mathbf{x}_n) \mathcal{N}(y_n; f^{(m)}_{\mathbf{w}}(\mathbf{x}),\sigma_{y}^2) \;\; \text{where} \;\; f_{\mathbf{w}}.(\mathbf{x})=\boldsymbol{\phi}(\mathbf{x})^\top \mathbf{w}.
+\end{align}\end{split}\]</div>
+<p>We will suppress the parameters <span class="math notranslate nohighlight">\(\sigma_{\mathbf{w}}^2\)</span> and <span class="math notranslate nohighlight">\(\sigma_y^2\)</span> to lighten the notation.</p>
+</div>
+<div class="section" id="inference-through-incremental-updates">
+<h2>Inference through incremental updates<a class="headerlink" href="#inference-through-incremental-updates" title="Permalink to this headline">¶</a></h2>
+<p>The data  <span class="math notranslate nohighlight">\(\{ \mathbf{x}_{n}, y_n \}\)</span> arrive one after another and predictions are required after each datapoint is seen.</p>
+<p>Initially, before any data are seen, the prior <span class="math notranslate nohighlight">\(p(\mathbf{w})\)</span> captures our knowledge about the weights <span class="math notranslate nohighlight">\(\mathbf{w}\)</span>. After one datapoint is observed Bayes’ rule tells us that the posterior distribution over the weights is proportional to the prior times the likelihood from the datapoint:</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+p(\mathbf{w}| y_1, \mathbf{x}_1) \propto p(\mathbf{w}) p(y_1| \mathbf{x}_1, \mathbf{w})
+\end{align}\]</div>
+<p>After two datapoints are seen the posterior is equal to the prior times the likelihood from the two datapoints</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+p(\mathbf{w}| y_1, \mathbf{x}_1,y_2, \mathbf{x}_2) \propto p(\mathbf{w}) p(y_1| \mathbf{x}_1, \mathbf{w}) p(y_2| \mathbf{x}_2, \mathbf{w}, \sigma_y^2)
+\end{align}\]</div>
+<p>This can be rewritten in terms of the product of the posterior after seeing one datapoint and the likelihood from the second datapoint</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+p(\mathbf{w}| y_1, \mathbf{x}_1,y_2, \mathbf{x}_2) \propto p(\mathbf{w}| y_1, \mathbf{x}_1) p(y_2| \mathbf{x}_2, \mathbf{w}).
+\end{align}\]</div>
+<p>Here <strong>the previous posterior <span class="math notranslate nohighlight">\(p(\mathbf{w}| y_1, \mathbf{x}_1)\)</span> plays the role of the new prior</strong>. In retrospect this seems obvious as it follows directly from Bayes’ rule: combine what you know about the parameters before seeing a new data point (the previous posterior) with the information coming from the datapoint (the new likelihood).</p>
+<p>The extension to <span class="math notranslate nohighlight">\(N\)</span> datapoints is straightforward,</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+p(\mathbf{w}| \{y_{n}, \mathbf{x}_{n}\}^N_{n = 1}) \propto p(\mathbf{w}| \{y_{n}, \mathbf{x}_{n}\}^{N-1}_{n = 1}) p(y_N| \mathbf{x}_N, \mathbf{w}).
+\end{align}\]</div>
+<p>At any point during the process the updated posterior can be used to make predictions in the usual way</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+p(y^* | \mathbf{x}^*,  \{y_{n}, \mathbf{x}_{n}\}^N_{n = 1} ) = \int p(y^* | \mathbf{x}^*, \mathbf{w}) p(\mathbf{w}| \{y_{n}, \mathbf{x}_{n}\}^N_{n = 1}) d\mathbf{w}.
+\end{align}\]</div>
+<p>The updating scheme above is called  <em>online</em> or <em>incremental</em> because it only requires the old posterior to be stored, and not the old data  <span class="math notranslate nohighlight">\(\{y_{n}, \mathbf{x}_{n}\}^{N-1}_{n = 1}\)</span>. Although the expressions were computed with regression in mind, they are very general.</p>
+<p>We will work with the same dataset which we used for <a class="reference internal" href="regression-linear.html"><span class="doc std std-doc">linear regression</span></a>. However this time the data will be presented point by point to the model, which will adjust its posterior over weights accordingly.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load the data used for linear regression</span>
+<span class="n">x_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;reg_lin_x.npy&#39;</span><span class="p">)</span>  
+<span class="n">y_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;reg_lin_y.npy&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_center-output tag_hide-input docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot data</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_data</span><span class="p">,</span> <span class="n">y_data</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">)</span>
+
+<span class="c1"># Plot formatting</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;A simple dataset&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">24</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;$x$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;$y$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">((</span><span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span> 
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">))</span> 
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/regression-bayesian-online-visualisations_5_0.svg" src="../../_images/regression-bayesian-online-visualisations_5_0.svg" /></div>
+</div>
+</div>
+<div class="section" id="visualisation">
+<h2>Visualisation<a class="headerlink" href="#visualisation" title="Permalink to this headline">¶</a></h2>
+<p>Let’s implement the method we described earlier, for Bayesian straight line fitting. We will use a model of the form</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+y=w_0 + w_1 x_1 + \epsilon,
+\end{align}\]</div>
+<p>since this has <span class="math notranslate nohighlight">\(2\)</span> weights (the gradient and intercept) which we can easily visualise with a contour plot. At each update step, will also draw three <span class="math notranslate nohighlight">\((w_1, w_2)\)</span> samples from the posterior and plot the corresponding lines in data-space.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set the range of weights which </span>
+<span class="n">w1_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+<span class="n">w2_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
+<span class="n">w_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">w1_range</span><span class="p">,</span> <span class="n">w2_range</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># w_grid is a (100, 100, 2) array. Each of the (100, 100) entries</span>
+<span class="c1"># is a 2D vector (w1, w2) containing pairs of weights</span>
+
+<span class="c1"># Variance of prior over weights and of observation noise</span>
+<span class="n">var_w</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">var_y</span> <span class="o">=</span> <span class="mf">0.01</span>
+<span class="n">num_points</span> <span class="o">=</span> <span class="mi">5</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_hide-input docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Input locations at which to plot sampled lines</span>
+<span class="n">x_plot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+
+<span class="c1"># Colors used for plotting the sampled lines</span>
+<span class="n">colours</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">]</span>
+
+<span class="c1"># Initilialise grid</span>
+<span class="n">log_prior</span> <span class="o">=</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">w_grid</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span> <span class="o">*</span> <span class="n">w_grid</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">var_w</span>
+
+<span class="c1"># Run online learning for a certain number of points</span>
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_points</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+
+    <span class="c1"># Design matrix -- in online learning it contains a single datum</span>
+    <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">x_data</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">**</span> <span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)]])</span>
+        
+    <span class="c1"># Grid of the log-likelihood of the current datapoint -- shape (50, 50)</span>
+    <span class="n">log_lik</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">y_data</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">-</span> <span class="n">w_grid</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">var_y</span>
+    
+    <span class="c1"># Grid of the updated (unnormalised) log-posterior -- shape (50, 50)</span>
+    <span class="n">log_post</span> <span class="o">=</span> <span class="n">log_prior</span> <span class="o">+</span> <span class="n">log_lik</span>
+
+    <span class="c1"># Add new figure to plot</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+    
+    <span class="c1"># Plot the log-prior, log-likelihood and log-posterior</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">([</span><span class="n">log_prior</span><span class="p">,</span> <span class="n">log_lik</span><span class="p">,</span> <span class="n">log_post</span><span class="p">]):</span>
+        
+        <span class="c1"># Plot in the appropriate subplot</span>
+        <span class="n">subplot</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">values</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">values</span><span class="p">))</span>
+        
+        <span class="c1"># Plot the grid</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">w1_range</span><span class="p">,</span> <span class="n">w2_range</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">cmap</span> <span class="o">=</span> <span class="s1">&#39;coolwarm&#39;</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">)</span>
+        <span class="n">subplot</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">,</span> <span class="s1">&#39;box&#39;</span><span class="p">)</span>
+        
+        <span class="n">title</span> <span class="o">=</span> <span class="n">get_plot_title_bayesian_online_learning</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+
+        <span class="c1"># Format ticks of posterior plots</span>
+        <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="n">num_points</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">([])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">([</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;$w_0$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+            
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;$w_1$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+
+         
+    <span class="c1"># Lists to store sampled weights</span>
+    <span class="n">w1_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">w2_list</span> <span class="o">=</span> <span class="p">[]</span>
+    
+    <span class="c1"># Discretised posterior distribution on grid</span>
+    <span class="n">post</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">log_post</span><span class="p">)</span>
+    <span class="n">post</span> <span class="o">=</span> <span class="n">post</span> <span class="o">/</span> <span class="n">post</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    
+    <span class="c1"># Loop to plot sampled models, each time sampling (w1, w2) from the grid</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+        
+        <span class="c1"># Reshape posterior probabilities to a (100*100) vector</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">post</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+        
+        <span class="c1"># Sample the index of the point to be sampled</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">)</span>
+        <span class="n">w1</span><span class="p">,</span> <span class="n">w2</span> <span class="o">=</span> <span class="n">w_grid</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))[</span><span class="n">idx</span><span class="p">]</span>
+        
+        <span class="c1"># Plot sampled weights</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">w1</span><span class="p">,</span> <span class="n">w2</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="n">colours</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        
+        <span class="n">w1_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">w1</span><span class="p">)</span>
+        <span class="n">w2_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">w2</span><span class="p">)</span>
+        
+    <span class="c1"># Plot linear models corresponding to sampled weights</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">144</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_plot</span><span class="p">,</span> <span class="n">w1_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">w2_list</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">x_plot</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colours</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    
+    <span class="c1"># Plot observed data</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_data</span><span class="p">[:</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">y_data</span><span class="p">[:</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">facecolor</span> <span class="o">=</span> <span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">edgecolor</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">)</span>
+    
+    <span class="c1"># Format plot</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+        
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;$x$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;$y$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+    
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Sampled models&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+    
+    <span class="n">log_prior</span> <span class="o">=</span> <span class="n">log_post</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/regression-bayesian-online-visualisations_8_0.svg" src="../../_images/regression-bayesian-online-visualisations_8_0.svg" /><img alt="../../_images/regression-bayesian-online-visualisations_8_1.svg" src="../../_images/regression-bayesian-online-visualisations_8_1.svg" /><img alt="../../_images/regression-bayesian-online-visualisations_8_2.svg" src="../../_images/regression-bayesian-online-visualisations_8_2.svg" /><img alt="../../_images/regression-bayesian-online-visualisations_8_3.svg" src="../../_images/regression-bayesian-online-visualisations_8_3.svg" /><img alt="../../_images/regression-bayesian-online-visualisations_8_4.svg" src="../../_images/regression-bayesian-online-visualisations_8_4.svg" /><img alt="../../_images/regression-bayesian-online-visualisations_8_5.svg" src="../../_images/regression-bayesian-online-visualisations_8_5.svg" /></div>
+</div>
+<p>The first row of figures above shows contour plots of the prior (<span class="math notranslate nohighlight">\(p(w_0, w_1)\)</span>, first plot, leftmost), the likelihood for the first datapoint (<span class="math notranslate nohighlight">\(p(y_1|x_1,w_0,w_1)\)</span>, second), and the posterior after seeing the first datapoint (<span class="math notranslate nohighlight">\(p(w_0,w_1|x_1,y_1)\)</span>, third) plotted as a function of the intercept (<span class="math notranslate nohighlight">\(w_0\)</span>) and gradient (<span class="math notranslate nohighlight">\(w_1\)</span>). The fourth plot (rightmost) shows the datapoint <span class="math notranslate nohighlight">\(\{x_1,y_1\}\)</span>. Samples from the posterior distribution are shown by coloured crosses (third plot) and the corresponding straight lines are shown on the right. When one datapoint is seen, the settings of the weight corresponding to straight lines that pass close to the datapoint will have high mass under the posterior. In this instance, that is lines with positive gradient that have an intercept with a low value or lines with a negative gradient and a high valued intercept. This is the reason why the posterior is fairly diffuse - a single datapoint cannot pin down the parameters by itself - and correlated.</p>
+<p>The second row of figures shows the same quantities once the second datapoint is observed. On the left is the ‘prior’ (the previous posterior), next is the likelihood for the new data point, then the posterior with three samples, and finally the data with the sampled straight lines. The new datapoint in this case has a similar input location to the old one, so it does not provide much additional information about the parameters. Notice though that the posterior has narrowed slightly as we become more confident.</p>
+<p>The third datapoint (third row) does have a different input location from the other two. It consequently suggests that the line has positive graident and a relatively low value for the intercept. The posterior collapses, not largely confined to the postive quadrant. The posterior samples all have postive gradient.</p>
+<p>As more data arrive (lower rows) the posterior narrows down, and the weights are constrained to a progressively smaller area. This is caused by the likelihoods that act as soft constraints ruling out more and more of parameter space. This collapse is reflected in the data space where the lines corresponding to posterior samples show less variability.</p>
+<p>We have concluded the chapters on regression. In the <span class="xref myst">next chapter</span>, on classification you will look at different approaches to the classification of data points.</p>
+<div class="section" id="summary">
+<h3>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h3>
+<p>We saw how Bayesian updates naturally support online or incremental learning. The old posterior is multiplied by the new likelihood and renormalised to get the new posterior. Over the course of online learning, the posterior typically evolves from a diffuse initial prior, through to a concentrated posterior as more data arrive and the likelihood functions rule out many parameter settings.</p>
+<br></div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./content/regression"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+    <a class='left-prev' id="prev-link" href="regression-bayesian.html" title="previous page">Bayesian linear regression</a>
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Stratis Markou, Rich Turner<br/>
+        
+            &copy; Copyright 2021.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../../_static/js/index.3da636dd464baa7582d2.js"></script>
+
+
+    
+  </body>
+</html>

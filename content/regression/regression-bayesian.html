@@ -58,6 +58,7 @@
     <script async="async" src="../../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Visualising Bayesian linear regression: Online learning" href="regression-bayesian-online-visualisations.html" />
     <link rel="prev" title="Avoiding overfitting using regularisation" href="regression-regularisation.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -124,6 +125,11 @@
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
      Bayesian Regression
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="regression-bayesian-online-visualisations.html">
+     Bayesian Online Learning
     </a>
    </li>
   </ul>
@@ -624,7 +630,7 @@ p(y^* | \mathbf{x}^*, \mathbf{y},\mathbf{X},\sigma_y^2,\sigma_{\mathbf{w}}^2)  =
 <div class="cell_output docutils container">
 <img alt="../../_images/regression-bayesian_10_0.svg" src="../../_images/regression-bayesian_10_0.svg" /></div>
 </div>
-<p>In the next <a class="reference internal" href="regression_bayesian-online-visualisations.html"><span class="doc std std-doc">chapter</span></a> we will look at how to visualise and better understand the posterior distribution over the weights using a process called <em>online learning</em>.</p>
+<p>In the next <span class="xref myst">chapter</span> we will look at how to visualise and better understand the posterior distribution over the weights using a process called <em>online learning</em>.</p>
 </div>
 </div>
 <div class="section" id="summary">
@@ -670,7 +676,7 @@ p(y^* | \mathbf{x}^*, \mathbf{y},\mathbf{X},\sigma_y^2,\sigma_{\mathbf{w}}^2)  =
 \[\begin{align}
 \Sigma^{(N)}_{d,d'} &amp;= \frac{1}{N} \phi_d(\mathbf{x}_N) \phi_{d'}(\mathbf{x}_N) + \frac{N-1}{N} \Sigma^{(N-1)}_{d,d'}. 
 \end{align}\]</div>
-<p>These updates do not require the entire dataset to be retained. They just require the old statistics and the current datapoint, which can be much more efficient in terms of memory. This idea relates to <a class="reference internal" href="regression_bayesian-online-visualisations.html"><span class="doc std std-doc">online inference</span></a>.</p>
+<p>These updates do not require the entire dataset to be retained. They just require the old statistics and the current datapoint, which can be much more efficient in terms of memory. This idea relates to <span class="xref myst">online inference</span>.</p>
 </details>
 <br> </li>
 </ol>
@@ -706,6 +712,7 @@ p(y^* | \mathbf{x}^*, \mathbf{y},\mathbf{X},\sigma_y^2,\sigma_{\mathbf{w}}^2)  =
     <div class='prev-next-bottom'>
         
     <a class='left-prev' id="prev-link" href="regression-regularisation.html" title="previous page">Avoiding overfitting using regularisation</a>
+    <a class='right-next' id="next-link" href="regression-bayesian-online-visualisations.html" title="next page">Visualising Bayesian linear regression: Online learning</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">
