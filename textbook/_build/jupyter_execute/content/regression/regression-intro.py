@@ -52,4 +52,5 @@ regression-nonlinear
 Overfitting <regression-overfitting>
 Regularisation <regression-regularisation>
 Bayesian Regression <regression-bayesian>
+Bayesian Online Learning <regression-bayesian-online-visualisations>
 ```

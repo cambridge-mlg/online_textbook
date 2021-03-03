@@ -10,3 +10,5 @@
         title: Regularisation
       - file: content/regression/regression-bayesian
         title: Bayesian Regression
+      - file: content/regression/regression-bayesian-online-visualisations
+        title: Bayesian Online Learning
