@@ -12,3 +12,9 @@
         title: Bayesian Regression
       - file: content/regression/regression-bayesian-online-visualisations
         title: Bayesian Online Learning
+        
+- file: content/classification/classification-intro
+  sections:
+      - file: content/classification/classification-logistic-regression-model
+      - file: content/classification/classification-gradient-case-study
+        title: Classification case study

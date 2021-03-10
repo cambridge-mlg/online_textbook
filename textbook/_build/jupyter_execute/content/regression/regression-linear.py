@@ -14,8 +14,8 @@ HTML(f'<style>{css_style}</style>')
 %config InlineBackend.figure_format = 'svg'
 
 # Load some prepared data
-x_lin = np.load('reg_lin_x.npy')
-y_lin = np.load('reg_lin_y.npy')
+x_lin = np.load('data/reg_lin_x.npy')
+y_lin = np.load('data/reg_lin_y.npy')
 
 # Plot data
 plt.figure(figsize=(8, 3))
@@ -50,7 +50,7 @@ where equality with 0 holds only if \\(~y_n = w_1x_n + w_0\\) for every \\(n\\).
 
 The following animation encapsulates the proposed approach problem. In the left plot, we visualise lines corresponding to different settings of the parameters $(w_0, w_1)$ in data space $(x,y)$. The distances between the observed data and the fit are shown by grey dashes. The sum of the squares of these distances is $C_2$. The right plot shows contours of the cost $C_2$ in parameter space with blue indicating the cost is low and red high. The black cross shows the parameters of the line displayed on the left. When the cross moves horizontally in parameter space the intercept of the line changes and when the cross moves vertically the slope changes.
 
-![](reg_lin_weight_excursion.gif)
+![](imgs/reg_lin_weight_excursion.gif)
 
 ### Analytic solution
 
@@ -284,7 +284,7 @@ Having covered linear regression, you should now understand:
 
   A machine learner observes two separate regression datasets comprising scalar inputs and outputs $\{ x_n, y_n \}_{n=1}^N$ shown below.   
    
-![](dataset_regression.svg)
+![](imgs/dataset_regression.svg)
 
   * Suggest a suitable regression model, $p(y_n|x_n)$ for the dataset A. Indicate sensible settings for the parameters in your proposed model where possible. Explain your modelling choices.  
   
