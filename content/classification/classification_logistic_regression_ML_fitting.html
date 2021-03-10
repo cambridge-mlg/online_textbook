@@ -1,0 +1,854 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Logistic classification: Maximum-likelihood fitting &#8212; Probabilistic Modelling and Inference</title>
+    
+  <link rel="stylesheet" href="../../_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom_style.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/.ipynb_checkpoints/custom_style-checkpoint.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../../_static/js/index.3da636dd464baa7582d2.js">
+
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../../index.html">
+  
+  <img src="../../_static/logo.png" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">Probabilistic Modelling and Inference</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../home.html">
+   Online Inference Textbook
+  </a>
+ </li>
+</ul>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../regression/regression-intro.html">
+   Regression
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../regression/regression-linear.html">
+     Linear regression
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../regression/regression-nonlinear.html">
+     Non-linear basis regression
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../regression/regression-overfitting.html">
+     Overfitting
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../regression/regression-regularisation.html">
+     Regularisation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../regression/regression-bayesian.html">
+     Bayesian Regression
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../regression/regression-bayesian-online-visualisations.html">
+     Bayesian Online Learning
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="classification-intro.html">
+   Classification
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="classification-logistic-regression-model.html">
+     Logistic classification
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="classification-gradient-case-study.html">
+     Classification case study
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../../_sources/content/classification/classification_logistic_regression_ML_fitting.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+        <!-- Source interaction buttons -->
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/cambridge-mlg/online_textbook/master?urlpath=tree/./content/classification/classification_logistic_regression_ML_fitting.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#maximum-likelihood-estimation">
+   Maximum likelihood estimation
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#summary">
+   Summary
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#questions">
+   Questions
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">config</span> InlineBackend.figure_format = &#39;svg&#39; # change output plot display format to &#39;svg&#39;
+
+<span class="c1"># import the required modules for this notebook</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="c1"># import the helper functions from the parent directory,</span>
+<span class="c1"># these help with things like graph plotting and notebook layout</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;..&#39;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">helper_functions</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c1"># set things like fonts etc - comes from helper_functions</span>
+<span class="n">set_notebook_preferences</span><span class="p">()</span>
+
+<span class="c1"># add a show/hide code button - also from helper_functions</span>
+<span class="n">toggle_code</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;setup code&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><style>.output {
+    font-family: ariel;
+    align-items: normal;
+    text-align: normal;
+}
+
+div.output_svg div { margin : auto; }
+.div.output_area.MathJax_Display{ text-align: center; }
+div.text_cell_render { font-family: sans-serif; }
+
+details {
+    margin: 20px 0px;
+    padding: 0px 10px;
+    border-radius: 3px;
+    border-style: solid;
+    border-color: black;
+    border-width: 2px;
+}
+details div{padding: 20px 30px;}
+details summary{font-size: 18px;}
+
+table {
+     margin: calc(auto + 10px) !important;
+     border: solid !important;
+ }
+
+ th, td {
+    text-align: left !important;
+ }
+
+ .further_box {
+    background-color:rgb(230, 230, 230);
+    border-style: solid;
+    margin: 10px 10px 10px 0px;
+    padding: 10px;
+    left:calc(auto - 20px);
+ }
+
+ .question_box {
+    background-color:rgb(255, 255, 225);
+    border-style: solid;
+    margin: 10px 10px 10px 0px;
+    padding: 10px;
+    left:calc(auto - 20px);
+ }</style>
+     <input type="submit" value='Home' id="initiated" class='home_button' onclick='window.location="../index.ipynb"' style='float: right; margin-right: 40px;'>
+    <script>
+    $('.home_button').not('#initiated').remove();
+    $('.home_button').removeAttr('id');
+    $(".home_button").insertBefore($("div.cell").first());
+
+    $('div.input.init_hidden').hide()
+    $('div.input.init_shown').show()
+    $('.toggle_button').each(function( index, element ) {
+       var prefix;
+       if (this.classList.contains('init_show')) {
+           prefix = 'Show '
+       }
+       else if (this.classList.contains('init_hide')) {
+           prefix = 'Hide '
+       };
+       $(this).val(prefix + $(this).val().substr($(this).val().indexOf(" ") + 1))
+    });
+    IPython.OutputArea.prototype._should_scroll = function(lines) {
+        return false;
+    }
+    </script>
+</div><div class="output text_html">
+    <script>
+      function get_new_label(butn, hide) {
+          var shown = $(butn).parents("div.cell.code_cell").find('div.input').is(':visible');
+          var title = $(butn).val().substr($(butn).val().indexOf(" ") + 1)
+          return ((shown) ? 'Show ' : 'Hide ') + title
+      }
+      function code_toggle(butn, hide) {
+        $(butn).val(get_new_label(butn,hide));
+        $(hide).slideToggle();
+      };
+    </script>
+    <input type="submit" value='initiated' class='toggle_button'>
+    <script>
+        var hide_area = $(".toggle_button[value='initiated']").parents('div.cell').prevAll().addBack().slice(-1)
+        hide_area = $(hide_area).find("div.input").add($(hide_area).filter("div.text_cell"))
+        $(".toggle_button[value='initiated']").prop("hide_area", hide_area)
+        $(".toggle_button[value='initiated']").click(function(){
+            code_toggle(this, $(this).prop("hide_area"))
+        }); 
+$(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($(".toggle_button[value='initiated']").parents("div.output").find('div.output_area').first());
+    var shown = $(".toggle_button[value='initiated']").parents("div.cell.code_cell").find('div.input').is(':visible');
+    var title = ((shown) ? 'Hide ' : 'Show ') + 'setup code'; 
+     $(".toggle_button[value='initiated']").addClass("init_show");
+            $(hide_area).addClass("init_hidden");  $(".toggle_button[value='initiated']").val(title);
+    </script></div></div>
+</div>
+<div class="section" id="logistic-classification-maximum-likelihood-fitting">
+<h1>Logistic classification: Maximum-likelihood fitting<a class="headerlink" href="#logistic-classification-maximum-likelihood-fitting" title="Permalink to this headline">¶</a></h1>
+<p>In the <span class="xref myst">last notebook</span> we decribed the logistic classification model which comprised two stages. First a linear transformation of the inputs produces the activations</p>
+<div class="math notranslate nohighlight">
+\[
+a_n = \mathbf{w}^\top \mathbf{x}_n = \sum_{d=1}^D w_d x_{n,d}.
+\]</div>
+<p>Second, the model passes the activation through a non-linear logistic function to yield the probability that the data point belongs to the first class</p>
+<div class="math notranslate nohighlight">
+\[
+p(y_n = 1 | \mathbf{x}_n, \mathbf{w}) = \sigma(a_n)  = \frac{1}{1 + \text{exp}({-\mathbf{w}_n^\top \mathbf{x}})} .
+\]</div>
+<p>The last notebook aimed to understand the model. The next question is how to go about learning the weights <span class="math notranslate nohighlight">\(\mathbf{w}\)</span>, given the training examples <span class="math notranslate nohighlight">\(\{\mathbf{x}_n, y_n\}^N_{n=1}\)</span>. Here we describe how to do this using maximum likelihood estimation.</p>
+<div class="section" id="maximum-likelihood-estimation">
+<h2>Maximum likelihood estimation<a class="headerlink" href="#maximum-likelihood-estimation" title="Permalink to this headline">¶</a></h2>
+<p>In the maximum likelihood approach the aim is to maximise the probability of the training outputs given the training inputs and the weights</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbf{w}_{\text{ML}} = \arg\min\limits_{\mathbf{w}} p(\{ y_n \}_{n=1}^N|\{\mathbf{x}_n\}_{n=1}^N, \mathbf{w}) \;\; \text{where} \;\;
+p(\{ y_n \}_{n=1}^N|\{\mathbf{x}_n\}_{n=1}^N, \mathbf{w}) = \prod^N_{n = 1} p(y_n|\mathbf{x}_n, \mathbf{w}).
+\]</div>
+<p>We can now substitute in the model’s input-output function <span class="math notranslate nohighlight">\(p(y_n=1|\mathbf{x}_n, \mathbf{w}) = \sigma(\mathbf{w}^\top\mathbf{x}_n)\)</span> into the likelihood. Using the fact that the ouput <span class="math notranslate nohighlight">\(y_n\)</span> is either <span class="math notranslate nohighlight">\(0\)</span> or <span class="math notranslate nohighlight">\(1\)</span> leads to a compact expression</p>
+<div class="math notranslate nohighlight">
+\[
+p(\{ y_n \}_{n=1}^N|\{\mathbf{x}_n\}_{n=1}^N, \mathbf{w}) = \prod^N_{n = 1} \sigma(\mathbf{w}^\top\mathbf{x}_n)^{y_n} \big(1 - \sigma(\mathbf{w}^\top\mathbf{x}_n)\big)^{1-y_n}.
+\]</div>
+<p>If this step is not obvious, consider one datapoint <span class="math notranslate nohighlight">\(N=1\)</span> and the cases where <span class="math notranslate nohighlight">\(y_1 = 0\)</span> and <span class="math notranslate nohighlight">\(y_1=1\)</span> and show the expression above recovers the correct result. As we previously stated in the regression section, maximising the likelihood is equivalent to maximising the log-likelihood (or minimising the negative log-likelihood). Taking the logarithm turns the product of data-points into a sum which is mathematically and computationally simpler to handle</p>
+<div class="math notranslate nohighlight">
+\[
+\mathcal{L}(\mathbf{w}) =\text{log}~p(\{ y_n \}_{n=1}^N|\{\mathbf{x}_n\}_{n=1}^N, \mathbf{w}) = \sum^N_{n = 1} \left[ y_n\text{log}~\sigma(\mathbf{w}^\top\mathbf{x}_n)+(1-y_n)\text{log}~\big(1 - \sigma(\mathbf{w}^\top\mathbf{x}_n)\big) \right].
+\]</div>
+<p>In order to locate the maximum of this quantity we take derivatives with respect to the weights
+\begin{align}
+\frac{\partial \mathcal{L}(\mathbf{w})}{\partial \mathbf{w}} = \sum^N_{n = 1} \big(y_n - \sigma(\mathbf{w}^\top\mathbf{x}_n)\big)\mathbf{x}_n\
+\end{align}</p>
+<p>This expression takes a few lines to derive (see below for full details). The derivative has an intuitive form: for each training data-point take the prediction error <span class="math notranslate nohighlight">\(y_n - \sigma(\mathbf{w}^\top\mathbf{x}_n)\)</span>, multiply it by the input <span class="math notranslate nohighlight">\(\mathbf{x}_n\)</span> and sum to get the derivative. In this way, points that are correctly predicted don’t contribute to the derivative: they are happy already!</p>
+<details>
+<summary>Detailed computation of derivative</summary>
+<div class="row">
+  <div class="column">
+   In order to take the derivative of $\mathcal{L}$ with respect to $\mathbf{w}$, we use the following handy result for the derviative of the logistic function:
+<p>\begin{align}
+\frac{\partial \sigma(x)}{\partial x} = \frac{e^{-x}}{(1 + e^{-x})^2} = \big(1 - \sigma(x)\big)\sigma(x)
+\end{align}</p>
+<p>This identity can be used as follows:</p>
+<p>\begin{align}
+\frac{\partial \mathcal{L}(\mathbf{w})}{\partial \mathbf{w}} &amp;= \nabla\sum^N_{n = 1} \left[ y_n\text{log}~\sigma(\mathbf{w}^\top\mathbf{x}_n)+(1-y_n)\text{log}~\big(1 - \sigma(\mathbf{w}^\top\mathbf{x}<em>n)\big)\right]\
+~\
+&amp;= \sum^N</em>{n = 1} \left[ y_n \big(1 - \sigma(\mathbf{w}^\top\mathbf{x}_n)\big)\mathbf{x}_n - (1-y_n)\sigma(\mathbf{w}^\top\mathbf{x}_n)\mathbf{x}<em>n\right]\
+~\
+&amp;= \sum^N</em>{n = 1} \big(y_n - \sigma(\mathbf{w}^\top\mathbf{x}_n)\big)\mathbf{x}_n\
+\end{align}</p>
+  </div>
+</div>
+</details>
+<p>Ideally, one might like to analytically find the maximum likelihood weights by setting this derivative to zero and solving for <span class="math notranslate nohighlight">\(\mathbf{w}_{\text{ML}}\)</span>, just as is done for linear regression. Unfortunately, there is no general analytic solution for classification. Instead, the likelihood can be numerically optimised. Here we will use one of the most simple and widely used numerical optimisation algorithms called <strong>gradient ascent</strong>. Gradient ascent is an iterative procedure that produces weights on iteration i+1,  <span class="math notranslate nohighlight">\(\mathbf{w}_{i+1}\)</span>, by adding to the old weight <span class="math notranslate nohighlight">\(\mathbf{w}_{i}\)</span> the gradient of the objective at the old weight <span class="math notranslate nohighlight">\(\frac{\partial \mathcal{L}(\mathbf{w})}{\partial \mathbf{w}}\bigg|_{\mathbf{w}_{i}}\)</span> times a learning rate <span class="math notranslate nohighlight">\(\eta\)</span> (also called the stepsize),</p>
+<p>\begin{align}
+\mathbf{w}<em>{i+1} = \mathbf{w}</em>{i} + \eta \frac{\partial \mathcal{L}(\mathbf{w})}{\partial \mathbf{w}}\bigg|<em>{\mathbf{w}</em>{i}}.
+\end{align}</p>
+<p>The rationale for this update is shown in the schematic below.</p>
+<img src="gradient-ascent-schematic.svg" alt="Snow" style="width:80%; float: center; padding: 0px; padding : 20px">
+<p>The gradient of the objective at the current parameter value points uphill towards the (local) maximum. The update therefore takes a small step <span class="math notranslate nohighlight">\(\eta\)</span> in the direction of the gradient. If this step is small enough, the objective function will increase. Moreover, the maximum likelihood parameters are a fixed-point of the algorithm since here the gradient is zero and so the weight parameters will not change. Any local maximum (or stationary point more generally) will also be a fixed point.</p>
+<p>Choosing an appropriate learning rate is important. Too big and the maximum can be hopped over causing a decrease in the objective; too small and the algorithm takes a long time to converge. It is also worth noting that this method of maximising <span class="math notranslate nohighlight">\(\mathcal{L}(\mathbf{w})\)</span> is not the only way: there are a host of different approaches which can be used.</p>
+<p>Let’s look at an implementation of gradient ascent for binary logistic classification:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">sig</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
+    
+    <span class="k">return</span> <span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">a</span><span class="p">))</span> <span class="c1"># define logistic function for convenience</span>
+
+<span class="k">def</span> <span class="nf">gradient_ascent</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">init_weights</span><span class="p">,</span> <span class="n">no_steps</span><span class="p">,</span> <span class="n">stepsize</span><span class="p">):</span> <span class="c1"># x: train inputs, y: train labels, rest self explanatory</span>
+    
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">x</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="c1"># add 1&#39;s to the inputs as usual</span>
+        
+    <span class="n">w</span> <span class="o">=</span> <span class="n">init_weights</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="c1"># copy weights (to prevent changing init_weights as a side-effect - don&#39;t dwell on this)</span>
+    
+    <span class="n">w_history</span><span class="p">,</span> <span class="n">log_liks</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span> <span class="c1"># arrays for storing weights and log-liklihoods at each step</span>
+    
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">no_steps</span><span class="p">):</span> <span class="c1"># in this part we optimise log-lik w.r.t. w</span>
+        
+        <span class="n">log_liks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">y</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">sig</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">)))</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">sig</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">)))))</span> <span class="c1"># record current log-lik</span>
+        
+        <span class="n">w_history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span> <span class="c1"># record current weights (use w.copy() to prevent aliasing - don&#39;t dwell on this)</span>
+    
+        <span class="n">sigs</span> <span class="o">=</span> <span class="n">sig</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">))</span> <span class="c1"># using our neat convenience function</span>
+        
+        <span class="n">dL_dw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">y</span> <span class="o">-</span> <span class="n">sigs</span><span class="p">)</span><span class="o">*</span><span class="n">x</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="c1"># calculate gradient of log-likelihood w.r.t. w</span>
+        
+        <span class="n">w</span> <span class="o">+=</span> <span class="n">stepsize</span> <span class="o">*</span> <span class="n">dL_dw</span> <span class="c1"># update weights and repeat</span>
+    
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">w_history</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">log_liks</span><span class="p">)</span> 
+
+<span class="n">toggle_code</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;gradient ascent algorithm&quot;</span><span class="p">,</span> <span class="n">on_load_hide</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">
+    <script>
+      function get_new_label(butn, hide) {
+          var shown = $(butn).parents("div.cell.code_cell").find('div.input').is(':visible');
+          var title = $(butn).val().substr($(butn).val().indexOf(" ") + 1)
+          return ((shown) ? 'Show ' : 'Hide ') + title
+      }
+      function code_toggle(butn, hide) {
+        $(butn).val(get_new_label(butn,hide));
+        $(hide).slideToggle();
+      };
+    </script>
+    <input type="submit" value='initiated' class='toggle_button'>
+    <script>
+        var hide_area = $(".toggle_button[value='initiated']").parents('div.cell').prevAll().addBack().slice(-1)
+        hide_area = $(hide_area).find("div.input").add($(hide_area).filter("div.text_cell"))
+        $(".toggle_button[value='initiated']").prop("hide_area", hide_area)
+        $(".toggle_button[value='initiated']").click(function(){
+            code_toggle(this, $(this).prop("hide_area"))
+        }); 
+$(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($(".toggle_button[value='initiated']").parents("div.output").find('div.output_area').first());
+    var shown = $(".toggle_button[value='initiated']").parents("div.cell.code_cell").find('div.input').is(':visible');
+    var title = ((shown) ? 'Hide ' : 'Show ') + 'gradient ascent algorithm'; 
+     $(".toggle_button[value='initiated']").addClass("init_hide");
+            $(hide_area).addClass("init_shown");  $(".toggle_button[value='initiated']").val(title);
+    </script></div></div>
+</div>
+<p>Lets now apply this algorithm. We peform the fitting first on a 1D dataset derived from the  <strong><a class="reference external" href="https://en.wikipedia.org/wiki/Iris_flower_data_set">Iris dataset</a></strong>. This low dimensional problem enables us to visualise the weight updates as there are only two weights to learn (the constant bias <span class="math notranslate nohighlight">\(w_0\)</span> and the coefficient <span class="math notranslate nohighlight">\(w_1\)</span>). The dataset contains <span class="math notranslate nohighlight">\(40\)</span> datapoints labeled <span class="math notranslate nohighlight">\(y = 0,~\text{or}~1\)</span>, which we split 50:50 to form a training set and a testing set.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;class_1d_inputs.npy&#39;</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;class_1d_labels.npy&#39;</span><span class="p">)</span>
+
+<span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:</span><span class="mi">20</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">20</span><span class="p">:],</span> <span class="n">y</span><span class="p">[:</span><span class="mi">20</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="mi">20</span><span class="p">:]</span>
+
+<span class="n">w_0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span> <span class="c1"># set initial weights to 0</span>
+
+<span class="n">w_history</span><span class="p">,</span> <span class="n">log_liks</span> <span class="o">=</span> <span class="n">gradient_ascent</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">w_0</span><span class="p">,</span> <span class="mi">10</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="c1"># calling the function on the dataset</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Weights before: w =&#39;</span><span class="p">,</span> <span class="n">w_0</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="s1">&#39; and after: w = &#39;</span><span class="p">,</span> <span class="n">w_history</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+
+<span class="c1"># plotting code</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">log_liks</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">)</span> <span class="c1"># plot log likelihoods</span>
+<span class="n">beautify_plot</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span><span class="sa">r</span><span class="s2">&quot;Evolution of $\mathcal</span><span class="si">{L}</span><span class="s2">$&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span><span class="s2">&quot;Step #&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span><span class="s2">&quot;Log-likelihood $\mathcal</span><span class="si">{L}</span><span class="s2">$&quot;</span><span class="p">})</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="n">x_1</span><span class="p">,</span> <span class="n">x_2</span> <span class="o">=</span> <span class="n">x_train</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">y_train</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">x_train</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">y_train</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]</span>
+
+<span class="n">xs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">2.2</span><span class="p">,</span> <span class="mf">4.2</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">sig</span><span class="p">(</span><span class="n">xs</span> <span class="o">*</span> <span class="n">w_history</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">w_history</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">zorder</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;Before&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">sig</span><span class="p">(</span><span class="n">xs</span> <span class="o">*</span> <span class="n">w_history</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">w_history</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">zorder</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;After&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">x_1</span><span class="p">),</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">edgecolor</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span>
+            <span class="n">zorder</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;$y = 0$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">x_2</span><span class="p">),</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">40</span><span class="p">,</span> <span class="n">zorder</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;$y = 1$&#39;</span><span class="p">)</span>
+
+<span class="n">beautify_plot</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span><span class="sa">r</span><span class="s2">&quot;Data space&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span><span class="s2">&quot;$x$&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span><span class="s2">&quot;$p(y = 1|\mathbf</span><span class="si">{w}</span><span class="s2">, x)$&quot;</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">toggle_code</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Weights before: w = [0. 0.]  and after: w =  [ 1.89 -2.17]
+</pre></div>
+</div>
+<img alt="../../_images/classification_logistic_regression_ML_fitting_5_1.svg" src="../../_images/classification_logistic_regression_ML_fitting_5_1.svg" /><div class="output text_html">
+    <script>
+      function get_new_label(butn, hide) {
+          var shown = $(butn).parents("div.cell.code_cell").find('div.input').is(':visible');
+          var title = $(butn).val().substr($(butn).val().indexOf(" ") + 1)
+          return ((shown) ? 'Show ' : 'Hide ') + title
+      }
+      function code_toggle(butn, hide) {
+        $(butn).val(get_new_label(butn,hide));
+        $(hide).slideToggle();
+      };
+    </script>
+    <input type="submit" value='initiated' class='toggle_button'>
+    <script>
+        var hide_area = $(".toggle_button[value='initiated']").parents('div.cell').prevAll().addBack().slice(-1)
+        hide_area = $(hide_area).find("div.input").add($(hide_area).filter("div.text_cell"))
+        $(".toggle_button[value='initiated']").prop("hide_area", hide_area)
+        $(".toggle_button[value='initiated']").click(function(){
+            code_toggle(this, $(this).prop("hide_area"))
+        }); 
+$(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($(".toggle_button[value='initiated']").parents("div.output").find('div.output_area').first());
+    var shown = $(".toggle_button[value='initiated']").parents("div.cell.code_cell").find('div.input').is(':visible');
+    var title = ((shown) ? 'Hide ' : 'Show ') + 'code'; 
+     $(".toggle_button[value='initiated']").addClass("init_show");
+            $(hide_area).addClass("init_hidden");  $(".toggle_button[value='initiated']").val(title);
+    </script></div></div>
+</div>
+<p>The weights were initialised to zero leading to a flat input-ouput function <span class="math notranslate nohighlight">\(p(y=1|\mathbf{w},x) = 1/2\)</span>. The gradient ascent algorithm has converges quite quickly, with the log-likelihood starting to plateau within the first 20 iterations. After optimisation, the input-ouput function is sigmoid with a steep slope aligned with the transition in the data between the two classes. This next animation shows what is happening during the training:</p>
+<div class="row">
+  <div class="column">
+    <img src="class_1d_animation.gif" style="width:100%; float: center; padding: 0px">
+  </div>
+</div>
+<p>As the gradient ascent progresses, we can see the weights <span class="math notranslate nohighlight">\((w_0, w_1)\)</span> climb up the likelihood, in a direction normal to the functions contours. The log-likelihood <span class="math notranslate nohighlight">\(\mathcal{L}\)</span> rapidly increases at first and then flattens out as <span class="math notranslate nohighlight">\((w_0, w_1)\)</span> approach the maximum of the likelihood. Close to the maximum, the gradient <span class="math notranslate nohighlight">\(\partial \mathcal{L}/\partial \mathbf{w}\)</span> becomes smaller and smaller and so the optimiser takes smaller and smaller steps until it finally converges to the maximum.</p>
+<p>The contour plot of the log-likelihood suggests that for this dataset, the maximum is a global one. This begs the question: Can we prove that the logistic classification likelihood always has a single global optimum? The answer is ‘yes’ and a sketch proof is given below (for enthusiasts only).</p>
+<details>
+<summary>Global maximum in probabilistic linear classification</summary>
+<div>
+In order to prove that there is a unique global maximum of the log-likelihood:
+<div class="math notranslate nohighlight">
+\[
+\mathcal{L}(\mathbf{w}) =\text{log}~p(\mathbf{y}|\{\mathbf{x}_n\}_{n=1}^N, \mathbf{w}) = \sum^N_{n = 1} \left[ y_n\text{log}~\sigma(\mathbf{w}^\top\mathbf{x}_n)+(1-y_n)\text{log}~\big(1 - \sigma(\mathbf{w}^\top\mathbf{x}_n)\big) \right]
+\]</div>
+<p>We must show that the second derivative matrix of the log-likelihood (also known as the Hessian matrix, which we will see again in chapter 3.3) is negative definite. This will demonstrate that the function is <a class="reference external" href="https://en.wikipedia.org/wiki/Concave_function">concave</a>, and that there is a unique maximum. We therefore start by taking the derivative of <span class="math notranslate nohighlight">\(\mathcal{L}\)</span> with respect to <span class="math notranslate nohighlight">\(\mathbf{w}\)</span>. Note that in the following equations, for simplicity we shall use <span class="math notranslate nohighlight">\(\sigma(\cdot)\)</span> to denote <span class="math notranslate nohighlight">\(\sigma(\mathbf{w}^\top\mathbf{x}_n)\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[
+\frac{\partial \mathcal{L}(\mathbf{w})}{\partial \mathbf{w}} = \nabla\mathcal{L}(\mathbf{w})=\sum^N_{n = 1}\left[ \frac{y_n\nabla\sigma(\cdot)}{\sigma(\cdot)}-\frac{(1 - y_n)\nabla\sigma(\cdot)}
+{1 - \nabla\sigma(\cdot)}\right]
+\]</div>
+<p>Now we find the derivative of <span class="math notranslate nohighlight">\(\sigma(\cdot)\)</span> and substitute it back into the equation.</p>
+<p>\begin{align}
+\nabla\sigma(\mathbf{w}^\top\mathbf{x}_n) &amp;= \sigma(\mathbf{w}^\top\mathbf{x}_n)(1 - \sigma(\mathbf{w}^\top\mathbf{x}_n))\mathbf{x}_n\
+~\
+&amp;= \sigma(\cdot)(1 - \sigma(\cdot))\mathbf{x}<em>n\
+~\
+\nabla\mathcal{L} &amp;= \sum^N</em>{n = 1}\left[y_n(1 - \sigma(\cdot))\mathbf{x}_n - (1 - y_n)\sigma(\cdot)\mathbf{x}<em>n\right]\
+~\
+&amp;=  \sum^N</em>{n = 1}\left[\mathbf{x}_n(y_n - \sigma(\cdot)\right]\
+\end{align}</p>
+<p>Now differentiating again:</p>
+<p>\begin{align}
+\nabla\nabla\mathcal{L}(\mathbf{w}) &amp;= -\sum^N_{n = 1}\left[\sigma(\cdot)(1-\sigma(\cdot))\mathbf{x}_n\mathbf{x}_n^\top\right]
+\end{align}</p>
+<p>At this stage we now need to define a diagonal matrix <span class="math notranslate nohighlight">\(\mathbf{R}\)</span>, where <span class="math notranslate nohighlight">\(\mathbf{R}_{nn} = \sigma(\cdot)(1-\sigma(\cdot))\)</span>. This means we can write:</p>
+<p>\begin{align}
+\nabla\nabla\mathcal{L}(\mathbf{w}) &amp;= -\mathbf{X}^\top\mathbf{R}\mathbf{X}
+\end{align}</p>
+<p>Where <span class="math notranslate nohighlight">\(\mathbf{X}\)</span> is the design matrix (in this case just a matrix where <span class="math notranslate nohighlight">\(\mathbf{R}_{n} = \mathbf{x}_n\)</span>).</p>
+<p>Here we notice that <span class="math notranslate nohighlight">\(\sigma(\cdot)(1-\sigma(\cdot))\)</span> must always be positive as <span class="math notranslate nohighlight">\(0 &lt; \sigma(\cdot) &lt; 1\)</span>. Therefore we can write:</p>
+<p>\begin{align}
+\nabla\nabla\mathcal{L}(\mathbf{w}) &amp;= -\mathbf{X}^\top\mathbf{R}^{\frac{1}{2}\top}\mathbf{R}^{\frac{1}{2}}\mathbf{X}
+\end{align}</p>
+<p>Now we recall the definition of a negative definite matrix, which is that a matrix <span class="math notranslate nohighlight">\(\mathbf{M}\)</span>, is postivie definite if and only if: <span class="math notranslate nohighlight">\((\mathbf{v}^\top\mathbf{M}\mathbf{v})_{ij} &lt; 0 \hspace{0.3cm}\forall\mathbf{v},i,j\)</span>.</p>
+<p>Substituting in our Hessian matrix we get:</p>
+<p>\begin{align}
+-\mathbf{v}^\top\mathbf{X}^\top\mathbf{R}^{\frac{1}{2}\top}\mathbf{R}^{\frac{1}{2}}\mathbf{X}\mathbf{v}\
+~\
+= -(\mathbf{R}^{\frac{1}{2}}\mathbf{X}\mathbf{v})^\top\mathbf{R}^{\frac{1}{2}}\mathbf{X}\mathbf{v}
+\end{align}</p>
+<p>Notice that this is of the form <span class="math notranslate nohighlight">\(-\mathbf{M}^\top\mathbf{M}\)</span>, and that the elements of a matrix of this form are always negative as they are always the negative of a sum of squares. Therefore, the Hessian matrix is negative definite, and there is a unique global maximum for both the likelihood and the log-likelihood.</p>
+</div>
+</details><p>And now for the moment of truth, let’s see how well our classifier performs on the test set <span class="math notranslate nohighlight">\(-\)</span> so far we’ve only looked at what happens during optimisation. Since we’ll want to test our model’s accuracy on the iris dataset too, we’ll write this up as a function:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_accuracy</span><span class="p">(</span><span class="n">test_x</span><span class="p">,</span> <span class="n">test_y</span><span class="p">,</span> <span class="n">w</span><span class="p">):</span>
+    <span class="n">x_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">test_x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">test_x</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">y_</span> <span class="o">=</span> <span class="n">sig</span><span class="p">(</span><span class="n">x_</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">))</span>
+    <span class="k">return</span> <span class="mi">1</span> <span class="o">-</span> <span class="nb">abs</span><span class="p">((</span><span class="n">y_</span><span class="o">.</span><span class="n">round</span><span class="p">()</span> <span class="o">-</span> <span class="n">test_y</span><span class="p">))</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Classifier accuracy for 1D dataset = </span><span class="si">{}</span><span class="s1">%&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">test_accuracy</span><span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">w_history</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">*</span><span class="mi">100</span><span class="p">))</span>
+
+<span class="n">toggle_code</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Classifier accuracy for 1D dataset = 80.0%
+</pre></div>
+</div>
+<div class="output text_html">
+    <script>
+      function get_new_label(butn, hide) {
+          var shown = $(butn).parents("div.cell.code_cell").find('div.input').is(':visible');
+          var title = $(butn).val().substr($(butn).val().indexOf(" ") + 1)
+          return ((shown) ? 'Show ' : 'Hide ') + title
+      }
+      function code_toggle(butn, hide) {
+        $(butn).val(get_new_label(butn,hide));
+        $(hide).slideToggle();
+      };
+    </script>
+    <input type="submit" value='initiated' class='toggle_button'>
+    <script>
+        var hide_area = $(".toggle_button[value='initiated']").parents('div.cell').prevAll().addBack().slice(-1)
+        hide_area = $(hide_area).find("div.input").add($(hide_area).filter("div.text_cell"))
+        $(".toggle_button[value='initiated']").prop("hide_area", hide_area)
+        $(".toggle_button[value='initiated']").click(function(){
+            code_toggle(this, $(this).prop("hide_area"))
+        }); 
+$(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($(".toggle_button[value='initiated']").parents("div.output").find('div.output_area').first());
+    var shown = $(".toggle_button[value='initiated']").parents("div.cell.code_cell").find('div.input').is(':visible');
+    var title = ((shown) ? 'Hide ' : 'Show ') + 'code'; 
+     $(".toggle_button[value='initiated']").addClass("init_show");
+            $(hide_area).addClass("init_hidden");  $(".toggle_button[value='initiated']").val(title);
+    </script></div></div>
+</div>
+<p>The trained model has performed reasonably well for the given dataset, with an accuracy of 80%. We can see from the data that there is considerable overlap in the classes and, even though we have used only a linear classifier, it’s unclear whether an ideal classifier would improve greatly over this performance.</p>
+<p>Next we visualise a fit to a two dimensional dataset derived from the Iris dataset. In the 3D plot on the lefthand side we show the data which comprised two classes (class 0 in red and class 1 in green). Superposed is the current input-output function. The parameters are a two dimensional weight vector and a bias. On the righthand side the top plot shows the log-likelihood. The bottom plot shows a contour plot of the input-ouput function along with the data.</p>
+<div class="row">
+  <div class="column">
+    <img src="training_single_neuron.gif" style="width:100%; float: center; padding: 0px">
+  </div>
+</div></div>
+<div class="section" id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<ol class="simple">
+<li><p>The logistic classification model can be fit using maximum likelihood estimation.</p></li>
+<li><p>There is no analytic closed form solution to this fitting problem, unlike linear regression.</p></li>
+<li><p>Gradient descent can be used to numerically optimise the likelihood.</p></li>
+</ol>
+<p>For a further look at binary logistic classification using the gradient ascent algorithm see the <span class="xref myst">case study</span> which uses the full four dimensional input space in the Iris dataset. In the next <a class="reference internal" href="classification_multiclass.html"><span class="doc std std-doc">notebook</span></a> we will look at how to extend bnary logistic classification to handle more than <span class="math notranslate nohighlight">\(2\)</span> classes.</p>
+</div>
+<div class="section" id="questions">
+<h2>Questions<a class="headerlink" href="#questions" title="Permalink to this headline">¶</a></h2>
+<p><strong>1. Loss functions and decision boundaries</strong></p>
+<p>Logistic classification is deployed in an x-ray machine at an airport for detecting illegal items in luggage. Let the prediction made by the classifier be denoted <span class="math notranslate nohighlight">\(\hat{y}\)</span> with <span class="math notranslate nohighlight">\(\hat{y}=1\)</span> indicating an illegal item, and <span class="math notranslate nohighlight">\(\hat{y}=0\)</span> indicating none. Let the true state of the world be denoted <span class="math notranslate nohighlight">\(y\)</span> with <span class="math notranslate nohighlight">\(y=1\)</span> indicating an illegal item is present and <span class="math notranslate nohighlight">\(y=0\)</span> indicating it is not.</p>
+<p>The cost of making a prediction <span class="math notranslate nohighlight">\(\hat{y}\)</span> when the world is in state <span class="math notranslate nohighlight">\(y\)</span> is <span class="math notranslate nohighlight">\(L(y,\hat{y})\)</span> where</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\left [ \begin{array}{cc}
+L(y=0,\hat{y}=0)&amp;L(y=0,\hat{y}=1)\\
+L(y=1,\hat{y}=0)&amp;L(y=1,\hat{y}=1)
+\end{array} \right]
+=
+\left [ \begin{array}{cc}
+1&amp;-10\\
+-1000&amp;100
+\end{array} \right]
+\end{split}\]</div>
+<p>These costs encode the fact that there are serious reprecussions associated with missing an illegal item (a <strong>false negative</strong>), and relatively lower cost associated with flagging up luggage for more tests if it doesn’t contain an illegal item (a <strong>false positive</strong>).</p>
+<p>At what output probability <span class="math notranslate nohighlight">\(p(y=1|\mathbf{x},\mathbf{w})\)</span> should you switch from predicting <span class="math notranslate nohighlight">\(y=0\)</span> to <span class="math notranslate nohighlight">\(y=1\)</span>?</p>
+<details>
+<summary>Answer</summary>
+<div>
+The average cost is
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>$$ \mathbb{E} [ L(\hat{y}) ] = \sum_{y=0}^1 L(y,\hat{y}) p(y|\mathbf{x},\mathbf{w}) $$
+</pre></div>
+</div>
+<p>Let <span class="math notranslate nohighlight">\(\rho = p(y=1|\mathbf{x},\mathbf{w})\)</span>.</p>
+<p>The average cost of predicting an illegal item is</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{E} [ L(\hat{y}=1) ] =  L(y=0,\hat{y}=1) (1-\rho) + L(y=1,\hat{y}=1) \rho = 110 \rho -10 \]</div>
+<p>The average cost of predicting no illegal item is</p>
+<div class="math notranslate nohighlight">
+\[ \mathbb{E} [ L(\hat{y}=0) ] =  L(y=0,\hat{y}=0) (1-\rho) + L(y=1,\hat{y}=0) \rho = 1 - 1001 \rho\]</div>
+<p>Equality occurs when <span class="math notranslate nohighlight">\(\rho = p(y=1|\mathbf{x},\mathbf{w}) = 1/101\)</span>. I.e. when the classifier indicates that there is less than a 1% chance that the luggage contains an illegal item.<br><br></p>
+<p>The locus of points in input space that are associated with this output probability is called the <strong>decision boundary</strong> of the classifier. Note that a decision boundary will not always be at the 50% point in a binary classification problem: it depends on the</p>
+</div>
+</details>
+<p><strong>2. Discriminative and generative models for classification</strong></p>
+<p>Consider the following generative model</p>
+<p>For each data point we first we draw a binary label <span class="math notranslate nohighlight">\(y_n\)</span> from a Bernoulli distribution such that <span class="math notranslate nohighlight">\(p(y_n = 1) = \pi\)</span>.
+Second, we draw a vector of features <span class="math notranslate nohighlight">\(\mathbf{x}_n\)</span> from a multivariate Gaussian whose mean depends on the label, that is</p>
+<p>\begin{align}
+p(y_n) &amp; = \pi^{y_n}(1-\pi)^{1-y_n}\
+p(\mathbf{x}<em>n| y_n = k ) &amp; = \frac{1}{(2\pi)^{D/2} |\boldsymbol{\Sigma}|^{1/2}}\text{exp}\bigg{-\frac{1}{2}(\mathbf{x} - \boldsymbol{\mu}</em>{k})^\top\boldsymbol{\Sigma}^{-1}(\mathbf{x} - \boldsymbol{\mu}_k)\bigg}.
+\end{align}</p>
+<p>Compute the probability that the label belongs to class 1 given a set of observed features. How does this quantity relate to logistic classification?</p>
+<details>
+<summary>Answer</summary>
+<div>
+We apply Bayes' rule:
+<p>\begin{align}
+p(y_n = 1 | \mathbf{x}_n) &amp; = \frac{p(\mathbf{x}_n| y_n = 1)p(y_n = 1)}{p(\mathbf{x}_n| y_n = 0)p(y_n = 0) + p(\mathbf{x}_n| y_n = 1)p(y_n = 1)}\
+&amp; = \frac{1}{\frac{p(\mathbf{x}_n| y_n = 0)p(y_n = 0)}{p(\mathbf{x}_n| y_n = 1)p(y_n = 1)} + 1}
+\end{align}</p>
+<p>We now notice that this can be written in terms of the logistic function <span class="math notranslate nohighlight">\(\sigma(a)\)</span> since</p>
+<p>\begin{align}
+p(y_n = 1 | \mathbf{x}_n) &amp; = \frac{1}{1 +  \text{exp}(-a_n)} = \sigma(a_n),~;;\text{where} ;;a_n = \log \bigg(\frac{p(\mathbf{x}_n| y_n = 0)p(y_n = 0)}{p(\mathbf{x}_n| y_n = 1)p(y_n = 1)}\bigg).
+\end{align}</p>
+<p>Substituting the expression for <span class="math notranslate nohighlight">\(p(\mathbf{x}| y_n)\)</span> into the expression for <span class="math notranslate nohighlight">\(a_n\)</span>, we note that terms which are quadratic in <span class="math notranslate nohighlight">\(\mathbf{x}_n\)</span> will cancel out from the numerator and denominator because they involve the same covariance matrix <span class="math notranslate nohighlight">\(\boldsymbol{\Sigma}\)</span>. Also, the normalising constants will also cancel. As a result <span class="math notranslate nohighlight">\(a_n\)</span> is linear in <span class="math notranslate nohighlight">\(\mathbf{x}_n\)</span>. It is left as an exercise to show that</p>
+<p>\begin{align}
+a_n &amp;= \mathbf{w}^\top \mathbf{x}_n + w_0,\
+\mathbf{w} &amp;= \Sigma^{-1}(\mu_1 - \mu_2),\
+w_0 &amp;= -\frac{1}{2}\boldsymbol{\mu}_1^\top \Sigma^{-1} \boldsymbol{\mu}_1 + \frac{1}{2}\boldsymbol{\mu}_2^\top \Sigma^{-1} \boldsymbol{\mu}_2 + \text{log}\frac{1-\pi}{\pi}
+\end{align}</p>
+<p>This model - in which the class labels are generated first and then the observed features - is called a <a class="reference external" href="https://en.wikipedia.org/wiki/Naive_Bayes_classifier">naive Bayes classifier</a>. This is an example of a <strong>generative model for classification</strong>.  Logistic classification is called a <strong>disciminative model for classification</strong> as it directly models the mapping from features (inputs) to outputs, rather than recovering this from Bayes’ rule.</p>
+<p>Note that although the form of the predictive distribtion is the same in both models, maximum likelihood training will give different parameter estimates. In the case of the naive Bayes model, fitting will model the joint distribution over labels and inputs. In the case of logistic classification, only the mapping from inputs to outputs is modelled.</p>
+</div>
+</details>
+<p><strong>3. An alternative squashing function: Probit classification</strong></p>
+<p>Consider an alternative approach to classification which first linearly transforms the inputs, as with logistic classication <span class="math notranslate nohighlight">\(a_n = \mathbf{w}^{\top} \mathbf{x}_n\)</span>. Second, instead of passing the resulting activation through the logistic function, it adds some Gaussian noise <span class="math notranslate nohighlight">\(\epsilon_n \sim \mathcal{N}(0,\sigma^2)\)</span> and then applies the <a class="reference external" href="https://en.wikipedia.org/wiki/Heaviside_step_function">Heaviside step function</a> <span class="math notranslate nohighlight">\(H(\cdot)\)</span> to map the result to either zero or one:</p>
+<p>\begin{align}
+y_n = H(\mathbf{w}^{\top} \mathbf{x}_n + \epsilon_n). \nonumber
+\end{align}</p>
+<p>a. Compute the probability  <span class="math notranslate nohighlight">\(P(y_n =1|\mathbf{x}_n,\mathbf{w},\sigma^2)\)</span> in terms of the Gaussian cumulative distribution <span class="math notranslate nohighlight">\(\text{CDF}(a) = \int_{-\infty}^a \mathcal{N}(z;0, 1) dz\)</span>. Sketch <span class="math notranslate nohighlight">\(P(y_n =1|\mathbf{x}_n,\mathbf{w},\sigma^2)\)</span> as a function of the inputs <span class="math notranslate nohighlight">\(\mathbf{x}_n\)</span> in the case where they are one dimensional.</p>
+<p>b. What happens as the noise variance tends to infinity <span class="math notranslate nohighlight">\(\sigma^2 \rightarrow \infty\)</span>?</p>
+<details>
+<summary>Answer</summary>
+<div>
+   <div class="row">
+  <div class="column">
+    <img src="probit-solution.png" alt="Snow" style="width:100%; float: center; padding: 0px">
+  </div>
+</div>
+<p>Notice that there is a degeneracy between the scale of the noise <span class="math notranslate nohighlight">\(\sigma\)</span> and the magnitude of the weights <span class="math notranslate nohighlight">\(|\mathbf{w}|\)</span>. This allows us to set the noise to unit variance without loss of generality.</p>
+<p>So, to recap, we now have two different ways of performing binary classification. Both start by computing activations <span class="math notranslate nohighlight">\(a_n = \mathbf{w}^{\top} \mathbf{x}_n\)</span>, but we have two choices for how to squash this to a number between 0 and 1:</p>
+<p><br><br></p>
+<ol class="simple">
+<li><p>the <em>logistic</em> function, <span class="math notranslate nohighlight">\(\sigma(a) = \frac{1}{1 + \text{exp}(-a)}\)</span>.
+<br></p></li>
+<li><p>the <em>probit</em> function, <span class="math notranslate nohighlight">\(\text{CDF}(a) = \int_{-\infty}^a \mathcal{N}(a;0, 1) dz\)</span>.
+<br><br></p></li>
+</ol>
+<p>These functions are quite similar, both being sigmoidal non-linearities:</p>
+<div class="row">
+  <div class="column">
+    <img src="logit_probit.svg" alt="Snow" style="width:50%; float: center; padding: 0px">
+  </div>
+</div>
+Although the probit function is steeper, the weights can adjust to compensate so this difference is cosmetic. Usually the reason for selecting one of these non-linearities over the other is not due to their differing shapes, but rather due to analytic tractability reasons.
+</div>
+</details>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./content/classification"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Stratis Markou, Rich Turner<br/>
+        
+            &copy; Copyright 2021.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../../_static/js/index.3da636dd464baa7582d2.js"></script>
+
+
+    
+  </body>
+</html>

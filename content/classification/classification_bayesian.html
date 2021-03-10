@@ -1,0 +1,750 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>3.5 Bayesian logistic regression &#8212; Probabilistic Modelling and Inference</title>
+    
+  <link rel="stylesheet" href="../../_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom_style.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/.ipynb_checkpoints/custom_style-checkpoint.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../../_static/js/index.3da636dd464baa7582d2.js">
+
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../../index.html">
+  
+  <img src="../../_static/logo.png" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">Probabilistic Modelling and Inference</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../home.html">
+   Online Inference Textbook
+  </a>
+ </li>
+</ul>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../regression/regression-intro.html">
+   Regression
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../regression/regression-linear.html">
+     Linear regression
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../regression/regression-nonlinear.html">
+     Non-linear basis regression
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../regression/regression-overfitting.html">
+     Overfitting
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../regression/regression-regularisation.html">
+     Regularisation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../regression/regression-bayesian.html">
+     Bayesian Regression
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../regression/regression-bayesian-online-visualisations.html">
+     Bayesian Online Learning
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="classification-intro.html">
+   Classification
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="classification-logistic-regression-model.html">
+     Logistic classification
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="classification-gradient-case-study.html">
+     Classification case study
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../../_sources/content/classification/classification_bayesian.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+        <!-- Source interaction buttons -->
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/cambridge-mlg/online_textbook/master?urlpath=tree/./content/classification/classification_bayesian.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#">
+   3.5 Bayesian logistic regression
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#laplace-approximation">
+   Laplace approximation
+  </a>
+ </li>
+ <li class="toc-h1 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#laplace-approximation-applied-to-bayesian-logistic-regression">
+   Laplace approximation applied to Bayesian logistic regression
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%javascript</span>
+<span class="nx">IPython</span><span class="p">.</span><span class="nx">OutputArea</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">_should_scroll</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">lines</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/javascript">IPython.OutputArea.prototype._should_scroll = function(lines) {
+    return false;
+}
+</script></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The usual notebook preferences</span>
+
+<span class="o">%</span><span class="k">config</span> InlineBackend.figure_format = &#39;svg&#39;
+
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;..&#39;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">helper_functions</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">HTML</span><span class="p">(</span><span class="n">toggle_code</span><span class="p">(</span><span class="s2">&quot;import functions&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">
+    <script>
+      function get_new_label(butn, hide) {
+          var shown = $(butn).parents("div.cell.code_cell").find('div.input').is(':visible');
+          var title = $(butn).val().substr($(butn).val().indexOf(" ") + 1)
+          return ((shown) ? 'Show ' : 'Hide ') + title
+      }
+      function code_toggle(butn, hide) {
+        $(butn).val(get_new_label(butn,hide));
+        $(hide).slideToggle();
+      };
+    </script>
+    <input type="submit" value='initiated' class='toggle_button'>
+    <script>
+        var hide_area = $(".toggle_button[value='initiated']").parents('div.cell').prevAll().addBack().slice(-1)
+        hide_area = $(hide_area).find("div.input").add($(hide_area).filter("div.text_cell"))
+        $(".toggle_button[value='initiated']").prop("hide_area", hide_area)
+        $(".toggle_button[value='initiated']").click(function(){
+            code_toggle(this, $(this).prop("hide_area"))
+        }); 
+$(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($(".toggle_button[value='initiated']").parents("div.output").find('div.output_area').first());
+    var shown = $(".toggle_button[value='initiated']").parents("div.cell.code_cell").find('div.input').is(':visible');
+    var title = ((shown) ? 'Hide ' : 'Show ') + 'import functions'; 
+     $(".toggle_button[value='initiated']").addClass("init_show");
+            $(hide_area).addClass("init_hidden");  $(".toggle_button[value='initiated']").val(title);
+    </script></div><div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;IPython.core.display.HTML object&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">set_notebook_preferences</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><style>.output {
+    font-family: ariel;
+    align-items: normal;
+    text-align: normal;
+}
+
+div.output_svg div { margin : auto; }
+.div.output_area.MathJax_Display{ text-align: center; }
+div.text_cell_render { font-family: sans-serif; }
+
+details {
+    margin: 20px 0px;
+    padding: 0px 10px;
+    border-radius: 3px;
+    border-style: solid;
+    border-color: black;
+    border-width: 2px;
+}
+details div{padding: 20px 30px;}
+details summary{font-size: 18px;}
+
+table {
+     margin: calc(auto + 10px) !important;
+     border: solid !important;
+     text-align:center;
+ }
+
+ th, td {
+    text-align: left !important;
+ }
+
+ .further_box {
+    background-color:rgb(230, 230, 230);
+    border-style: solid;
+    margin: 10px 10px 10px 0px;
+    padding: 10px;
+    left:calc(auto - 20px);
+ }
+
+ .question_box {
+    background-color:rgb(255, 255, 225);
+    border-style: solid;
+    margin: 10px 10px 10px 0px;
+    padding: 10px;
+    left:calc(auto - 20px);
+ }</style>
+     <input type="submit" value='Home' id="initiated" class='home_button' onclick='window.location="../index.ipynb"' style='float: right; margin-right: 40px;'>
+    <script>
+    $('.home_button').not('#initiated').remove();
+    $('.home_button').removeAttr('id');
+    $(".home_button").insertBefore($("div.cell").first());
+
+    $('div.input.init_hidden').hide()
+    $('div.input.init_shown').show()
+    $('.toggle_button').each(function( index, element ) {
+       var prefix;
+       if (this.classList.contains('init_show')) {
+           prefix = 'Show '
+       }
+       else if (this.classList.contains('init_hide')) {
+           prefix = 'Hide '
+       };
+       $(this).val(prefix + $(this).val().substr($(this).val().indexOf(" ") + 1))
+    });
+    IPython.OutputArea.prototype._should_scroll = function(lines) {
+        return false;
+    }
+    </script>
+</div></div>
+</div>
+<div class="section" id="bayesian-logistic-regression">
+<h1>3.5 Bayesian logistic regression<a class="headerlink" href="#bayesian-logistic-regression" title="Permalink to this headline">¶</a></h1>
+<p>Previously, in <a class="reference internal" href="classification_multiclass.html"><span class="doc std std-doc">section 3.3</span></a>, we have been using gradient ascent to find weights <span class="math notranslate nohighlight">\(\mathbf{w}\)</span> which maximise the log-likelihood <span class="math notranslate nohighlight">\(\mathcal{L}\)</span>. However this is not the only approach, and we now turn to a Bayesian treatment of logistic regression. Re-iterating our recipe for Bayesian approaches:</p>
+<ol class="simple">
+<li><p>Write down the likelihood <span class="math notranslate nohighlight">\(p(\mathcal{D}|\mathbf{w})\)</span> of the generative model.</p></li>
+<li><p>Assume a prior <span class="math notranslate nohighlight">\(p(\mathbf{w})\)</span> over the parameter(s) of the model.</p></li>
+<li><p>Apply Bayes’ rule to find the posterior <span class="math notranslate nohighlight">\(p(\mathbf{w}|\mathcal{D})\)</span>.</p></li>
+<li><p>Calculate the predictive distribution <span class="math notranslate nohighlight">\(p(y^*| \mathcal{D})\)</span>.</p></li>
+</ol>
+<p>We have already looked at step 1 here; this is just the likelihood of the complete dataset. Regarding the prior (step 2), in the regression example we picked a gaussian conjugate prior, in order to aid calculations down the line. Here however, the form of the likelihood makes exact inference intractable <span class="math notranslate nohighlight">\(-\)</span> that’s why we used gradient ascent <span class="math notranslate nohighlight">\(-\)</span> and it is not possible to find a prior conjugate to this likelihood. Let us then assume an isotropic gaussian prior with mean <span class="math notranslate nohighlight">\(0\)</span> and covariance matrix <span class="math notranslate nohighlight">\(\boldsymbol{\Sigma}_0 = \lambda I\)</span> over the model weights. Step 3 is now more challenging than in regression where the gaussian form of the likelihood and prior gave an exact closed form for the posterior, so our calculation will need to be approximate. There are several ways to go about this approximation, one of which is to use the Laplace approximation which amounts to approximating the likelihood using a multivariate gaussian. The approximate posterior will then also be gaussian, and from there we will be able to obtain the predictive distribution <span class="math notranslate nohighlight">\(p(y^*| \mathcal{D})\)</span> in step 4. To summarise, for logistic regression our approach will be</p>
+<ol class="simple">
+<li><p>Likelihood <span class="math notranslate nohighlight">\(p(\mathcal{D}|\mathbf{w})\)</span> as obtained already.</p></li>
+<li><p>Assume a gaussian prior <span class="math notranslate nohighlight">\(\mathcal{N}(\mathbf{w}; 0, \boldsymbol{\Sigma}_0)\)</span>.</p></li>
+<li><p>Apply the Laplace approximation <span class="math notranslate nohighlight">\(p(\mathcal{D}|\mathbf{w}) \approx \mathcal{N}(\mathbf{w}; \boldsymbol{\mu}, \boldsymbol{\Sigma})\)</span> and use it to calulate an approximation of the posterior <span class="math notranslate nohighlight">\(p(\mathbf{w}|\mathcal{D})\)</span>.</p></li>
+<li><p>Calculate the approximate predictive distribution <span class="math notranslate nohighlight">\(p(y^*| \mathcal{D})\)</span>.</p></li>
+</ol>
+</div>
+<div class="section" id="laplace-approximation">
+<h1>Laplace approximation<a class="headerlink" href="#laplace-approximation" title="Permalink to this headline">¶</a></h1>
+<p>Consider a distribution <span class="math notranslate nohighlight">\(p(z)\)</span> with its mode at <span class="math notranslate nohighlight">\(z_0\)</span>. Expanding the logarithm of <span class="math notranslate nohighlight">\(p(z)\)</span> using a Taylor expansion, remembering that the linear term will vanish because we are at a maximum:</p>
+<p>\begin{align}
+\text{log}~p(z) \approx \text{log}~p(z_0) + \frac{1}{2}(z - z_0)^2\frac{d^2}{dz^2}\text{log}~p(z)
+\end{align}</p>
+<p>The Laplace approximation of <span class="math notranslate nohighlight">\(p(z)\)</span> is the gaussian which has its mean at the mode of <span class="math notranslate nohighlight">\(p(z)\)</span>, and a variance <span class="math notranslate nohighlight">\(\sigma^2\)</span> to match the quadratic coefficient of the above expansion. For a gaussian we have</p>
+<p>\begin{align}
+\text{log}~\mathcal{N}(z; z_0, \sigma^2) = \text{const. } - \frac{1}{2\sigma^2}(z - z_0)^2
+\end{align}</p>
+<p>so we will pick <span class="math notranslate nohighlight">\(1/\sigma^2 = - \frac{d^2}{dz^2}\text{log}~p(z)\)</span>, so that the second-order term of the (exact) expansion of the gaussian matches the corresponding term in the approximate expansion of <span class="math notranslate nohighlight">\(p(x)\)</span>. Let’s work through the example distribution</p>
+<p>\begin{align}
+p(z) = \frac{a}{\pi}\frac{1}{a^2 + z^2}~\text{ (already normalised).}
+\end{align}</p>
+<p>The mode of this distribution is at <span class="math notranslate nohighlight">\(z = 0\)</span> and the second derivative at <span class="math notranslate nohighlight">\(z = 0\)</span> is</p>
+<p>\begin{align}
+\frac{d^2 p(z)}{dz^2} = \bigg[ \frac{4z^2}{(a^2 + z^2)^2} - \frac{2}{a^2 + z^2} \bigg]_{z = 0} = -\frac{2}{a^2}
+\end{align}</p>
+<p>Therefore the Laplace approximation of this distribution is a gaussian with its mean at
+<span class="math notranslate nohighlight">\(0\)</span> and a variance <span class="math notranslate nohighlight">\(\sigma^2 = a^2/2\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathcal{N}(z; 0, a^2/2)
+\]</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">z_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>
+<span class="n">p_</span> <span class="o">=</span> <span class="n">a</span><span class="o">/</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="p">(</span><span class="n">a</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">z_</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+<span class="n">gaussian</span> <span class="o">=</span> <span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">a</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="n">a</span><span class="o">**</span><span class="mi">2</span><span class="o">*</span><span class="n">z_</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">z_</span><span class="p">,</span> <span class="n">p_</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;Exact dist.&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">z_</span><span class="p">,</span> <span class="n">gaussian</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;Laplace approx.&#39;</span><span class="p">)</span>
+<span class="n">beautify_plot</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span><span class="sa">r</span><span class="s2">&quot;Laplace approximation in 1D&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span><span class="s2">&quot;$z$&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span><span class="s2">&quot;$p(z)$&quot;</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span> <span class="o">=</span> <span class="mi">12</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">HTML</span><span class="p">(</span><span class="n">toggle_code</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/classification_bayesian_4_0.svg" src="../../_images/classification_bayesian_4_0.svg" /><div class="output text_html">
+    <script>
+      function get_new_label(butn, hide) {
+          var shown = $(butn).parents("div.cell.code_cell").find('div.input').is(':visible');
+          var title = $(butn).val().substr($(butn).val().indexOf(" ") + 1)
+          return ((shown) ? 'Show ' : 'Hide ') + title
+      }
+      function code_toggle(butn, hide) {
+        $(butn).val(get_new_label(butn,hide));
+        $(hide).slideToggle();
+      };
+    </script>
+    <input type="submit" value='initiated' class='toggle_button'>
+    <script>
+        var hide_area = $(".toggle_button[value='initiated']").parents('div.cell').prevAll().addBack().slice(-1)
+        hide_area = $(hide_area).find("div.input").add($(hide_area).filter("div.text_cell"))
+        $(".toggle_button[value='initiated']").prop("hide_area", hide_area)
+        $(".toggle_button[value='initiated']").click(function(){
+            code_toggle(this, $(this).prop("hide_area"))
+        }); 
+$(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($(".toggle_button[value='initiated']").parents("div.output").find('div.output_area').first());
+    var shown = $(".toggle_button[value='initiated']").parents("div.cell.code_cell").find('div.input').is(':visible');
+    var title = ((shown) ? 'Hide ' : 'Show ') + 'code'; 
+     $(".toggle_button[value='initiated']").addClass("init_show");
+            $(hide_area).addClass("init_hidden");  $(".toggle_button[value='initiated']").val(title);
+    </script></div><div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;IPython.core.display.HTML object&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<p>** add laplace approximation examples**</p>
+<p>In this example, the approximating gaussian decays as <span class="math notranslate nohighlight">\(e^{-z^2}\)</span> whereas the exact distribution decays much slower, as <span class="math notranslate nohighlight">\(1/(z^2)\)</span>. Since both distributions must be normalised, this means that the Laplace approximation must have a higher peak than the example distribution, the later being more spread out along the x-axis.</p>
+<p>For a multivariate distribution <span class="math notranslate nohighlight">\(p(\mathbf{z})\)</span>, the Laplace approximation is a multivariate gaussian. We pick the mean of the approximating gaussian to be the mode of the exact distribution. The covariance matrix is again given in terms of the expansion of <span class="math notranslate nohighlight">\(\text{log}~p(\mathbf{z})\)</span>:</p>
+<p>\begin{align}
+\text{log}~p(\mathbf{z}) &amp;\approx \text{log}~p(\mathbf{z}<em>0) + \frac{1}{2}\sum_i\sum_j (z_j - z</em>{0i})^2\frac{d}{dz_i}\frac{d}{dz_j}\text{log}~p(x)\
+~\
+&amp;= \text{log}~p(\mathbf{z}_0) + \frac{1}{2} (\mathbf{z} - \mathbf{z}_0)^\top \bigg[\nabla \nabla \text{log}~p(x)\bigg] (\mathbf{z} - \mathbf{z}_0)\
+\end{align}</p>
+<p>In the case of a multivariate gaussian:</p>
+<p>\begin{align}
+\text{log}~q(\mathbf{z}) = \text{const. } - \frac{1}{2} (\mathbf{z} - \mathbf{z}_0)^\top \boldsymbol{\Sigma}^{-1} (\mathbf{z} - \mathbf{z}_0)\
+\end{align}</p>
+<p>So comparing the two expansions we obtain</p>
+<p>\begin{align}
+\boldsymbol{\Sigma}^{-1} = -\nabla \nabla \text{log}~p(x).\
+\end{align}</p>
+<p>The matrix <span class="math notranslate nohighlight">\(\nabla \nabla \text{log}~p(x)\)</span> is a Hessian Matrix (a matrix containing the double derivatives of a quantity as its entries) and is often referred to by this name.</p>
+</div>
+<div class="section" id="laplace-approximation-applied-to-bayesian-logistic-regression">
+<h1>Laplace approximation applied to Bayesian logistic regression<a class="headerlink" href="#laplace-approximation-applied-to-bayesian-logistic-regression" title="Permalink to this headline">¶</a></h1>
+<p>To apply the Laplace approximation to the posterior, we need to determine the mode of the posterior and calculate the Hessian at that mode. The exact solution to the maximum of the posterior is intractable, but we can use gradient ascent to approximate the mode of the posterior as we did with the likelihood <span class="math notranslate nohighlight">\(-\)</span> the only difference being that in the posterior there will be a term from the pior in the expression we are maximizing. Using a gaussian prior <span class="math notranslate nohighlight">\(\mathcal{N}(\mathbf{w}; \mathbf{m}_0, \boldsymbol{\Sigma}_0)\)</span> we can write the logarithm of the posterior using Bayes rule:</p>
+<p>\begin{align}
+p(\mathbf{w}| {\mathbf{y}_n, \mathbf{x}_n}) &amp;\propto p({\mathbf{y}_n, \mathbf{x}_n} | \mathbf{w}) p(\mathbf{w})\
+~\
+\text{log}~p(\mathbf{w}| {\mathbf{y}_n, \mathbf{x}_n}) &amp;= -\frac{1}{2} (\mathbf{w} - \mathbf{m}_0)^\top \boldsymbol{\Sigma}^{-1}_0(\mathbf{w} - \mathbf{m}<em>0) + \sum^N</em>{n = 1} y_n\text{log}~\sigma(\mathbf{w}^\top\mathbf{x}_n)+(1-y_n)\text{log}~\big(1 - \sigma(\mathbf{w}^\top\mathbf{x}_n)\big)\
+~\
+\nabla \text{log}~p(\mathbf{w}| {\mathbf{y}_n, \mathbf{x}_n}) &amp;= -\boldsymbol{\Sigma}^{-1}_0(\mathbf{w} - \mathbf{m}<em>0) + \sum^N</em>{n = 1} \big(y_n - \sigma(\mathbf{w}^\top\mathbf{x}_n)\big)\mathbf{x}_n\
+~\
+\boldsymbol{\Sigma}^{-1} = -\nabla \nabla \text{log}~p(\mathbf{w}| {\mathbf{y}_n, \mathbf{x}_n}) &amp;= \boldsymbol{\Sigma}^{-1}<em>0 + \sum^N</em>{n = 1} \sigma(\mathbf{w}^\top\mathbf{x}_n)\big(1 - \sigma(\mathbf{w}^\top\mathbf{x}_n)\big)\mathbf{x}_n \mathbf{x}_n^\top\
+\end{align}</p>
+<p>The Laplace approximation then takes the form <span class="math notranslate nohighlight">\(\mathcal{N}(\mathbf{w}; \mathbf{w}_{MAP}, \boldsymbol{\Sigma})\)</span>. We can now evaluate the predictive distribution:</p>
+<p>\begin{align}
+p(y^* = 1| \mathbf{x}^<em>, {y_n, \mathbf{x}_n}) &amp;= \int p(y^</em> = 1| \mathbf{x}^*, \mathbf{w}) p(\mathbf{w} | {y_n, \mathbf{x}_n})d\mathbf{w} = \int \sigma(\mathbf{w}^\top\mathbf{x}) p(\mathbf{w} | {y_n, \mathbf{x}_n})d\mathbf{w}\
+&amp;\approx \int \sigma(\mathbf{w}^\top\mathbf{x}) q(\mathbf{w})d\mathbf{w}\
+&amp;= \int \int \sigma(a)\delta(a - \mathbf{w}^\top\mathbf{x})da~q(\mathbf{w})d\mathbf{w}\
+&amp;= \int \sigma(a)p(a)da, \text{ where }~p(a) = \int \delta(a - \mathbf{w}^\top\mathbf{x})q(\mathbf{w})d\mathbf{w}\
+\end{align}</p>
+<p>Our expression for distribution <span class="math notranslate nohighlight">\(p(a)\)</span> can be simplified by noting that the Dirac-delta <span class="math notranslate nohighlight">\(\delta(a - \mathbf{w}^\top\mathbf{x})\)</span> imposes a linear constraint on <span class="math notranslate nohighlight">\(\mathbf{w}\)</span> so the effect of the integral <span class="math notranslate nohighlight">\(\int \delta(a - \mathbf{w}^\top\mathbf{x}) q(\mathbf{w}) d\mathbf{w}\)</span> is to integrate out <span class="math notranslate nohighlight">\(\mathbf{w}\)</span> along all directions orthogonal to <span class="math notranslate nohighlight">\(\mathbf{x}\)</span>. Since a marginal of a gaussian is also a gaussian the resulting distribution <span class="math notranslate nohighlight">\(p(a)\)</span> will also be gaussian, and it suffices to find its mean and variance to fully characterise it:</p>
+<p>\begin{align}
+\mu_a &amp;= \int a p(a) da = \int a \int \delta(a - \mathbf{w}^\top\mathbf{x}) q(\mathbf{w}) d\mathbf{w} da = \int  \mathbf{w}^\top\mathbf{x} q(\mathbf{w}) d\mathbf{w} = \mathbf{w}<em>{MAP}^\top\mathbf{x}\
+~\
+\sigma_a^2 &amp;= \int \big(a^2 - \mu_a^2\big)p(a) da = \int \big(a^2 - \mu_a^2\big)\delta(a - \mathbf{w}^\top\mathbf{x})q(\mathbf{w}) d\mathbf{w} da = \int \big((\mathbf{w}^\top\mathbf{x})^2 - (\mathbf{w}</em>{MAP}^\top\mathbf{x})^2\big)q(\mathbf{w}) d\mathbf{w}\
+&amp;= \int (\mathbf{w}^\top\mathbf{x})^2 q(\mathbf{w}) d\mathbf{w} - \mathbf{x}^\top\mathbf{w}<em>{MAP}\mathbf{w}</em>{MAP}^\top\mathbf{x}\
+&amp;= \mathbf{x}^\top \bigg[\int\mathbf{w}\mathbf{w}^\top q(\mathbf{w}) d\mathbf{w} \bigg]\mathbf{x} - \mathbf{x}^\top\mathbf{w}<em>{MAP}\mathbf{w}</em>{MAP}^\top\mathbf{x}\
+&amp;= \mathbf{x}^\top\bigg[\mathbf{w}<em>{MAP}\mathbf{w}</em>{MAP}^\top + \Sigma \bigg] \mathbf{x} - \mathbf{x}^\top\mathbf{w}<em>{MAP}\mathbf{w}</em>{MAP}^\top\mathbf{x}\
+&amp;= \mathbf{x}^\top\Sigma\mathbf{x}
+\end{align}</p>
+<p>Therefore <span class="math notranslate nohighlight">\(p(a) = \mathcal{N}(a; \mathbf{w}_{MAP}, \mathbf{x}^\top\Sigma\mathbf{x})\)</span>. Still the integral <span class="math notranslate nohighlight">\(\int \sigma(a)\mathcal{N}(a; \mathbf{w}_{MAP}, \mathbf{x}^\top\Sigma\mathbf{x})da\)</span> is the convolution of a sigmoid with a gaussian and cannot be evaluated explicitly, so another approximation must be made. In particular, approximating the sigmoid using the probit function:</p>
+<div class="math notranslate nohighlight">
+\[\sigma(a) \approx \Phi(\lambda a) = \int_{-\infty}^{\lambda a} \mathcal{N}(z|0, 1) dz\]</div>
+<p>where the scaling constant <span class="math notranslate nohighlight">\(\lambda\)</span> is picked such that the gradients of <span class="math notranslate nohighlight">\(\sigma(a)\)</span> and <span class="math notranslate nohighlight">\(\Phi(\lambda a)\)</span> are equal at the origin:</p>
+<div class="row">
+  <div class="column">
+    <img src="logit_probit_scaled.svg" alt="Snow" style="width:50%; float: center; padding: 0px">
+  </div>
+</div>
+<p>This approximation does not appear to be very severe; the scaled probit and sigmoid seem to be quite similar. Under this approximation, it can be shown that the predictive distribution integral is equal to another scaled probit:</p>
+<p>\begin{align}
+\int \sigma(a)\mathcal{N}(a; \mu, \sigma^2)da &amp;\approx \int \Phi(\lambda a)\mathcal{N}(a; \mu, \sigma^2)da\
+&amp;= \Phi\Bigg(\frac{\mu}{(\lambda^{-2} + \sigma^2)^{1/2}}\Bigg), \text{ where } \mu = \mathbf{w}_{MAP}^\top \mathbf{x}, ~\sigma^2 = \mathbf{x}^\top\Sigma\mathbf{x}\
+\end{align}</p>
+<p>Let’s apply this Bayesian approach on the <span class="math notranslate nohighlight">\(1\)</span>D example we saw previously to visualise the prior, likelihood and posterior distsributions.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">sig</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    
+    <span class="k">return</span> <span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">))</span> <span class="c1"># define logistic function for convenience</span>
+
+<span class="k">def</span> <span class="nf">gradient_ascent</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">init_weights</span><span class="p">,</span> <span class="n">no_steps</span><span class="p">,</span> <span class="n">stepsize</span><span class="p">):</span> <span class="c1"># x: train inputs, y: train labels, rest self explanatory</span>
+    
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">x</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="c1"># add 1&#39;s to the inputs as usual</span>
+    
+    <span class="n">w</span> <span class="o">=</span> <span class="n">init_weights</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="c1"># copy weights (to prevent changing init_weights as a side-effect - don&#39;t dwell on this)</span>
+    
+    <span class="n">w_history</span><span class="p">,</span> <span class="n">log_liks</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span> <span class="c1"># arrays for storing weights and log-liklihoods at each step</span>
+    
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">no_steps</span><span class="p">):</span> <span class="c1"># in this part we optimise log-lik w.r.t. w</span>
+        
+        <span class="n">log_liks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">y</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">sig</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">)))</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">sig</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">)))))</span> <span class="c1"># record current log-lik</span>
+        
+        <span class="n">w_history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span> <span class="c1"># record current weights (use w.copy() to prevent aliasing - don&#39;t dwell on this)</span>
+    
+        <span class="n">sigs</span> <span class="o">=</span> <span class="n">sig</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">))</span> <span class="c1"># using our neat convenience function</span>
+        
+        <span class="n">dL_dw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">y</span> <span class="o">-</span> <span class="n">sigs</span><span class="p">)</span><span class="o">*</span><span class="n">x</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="c1"># calculate gradient of log-likelihood w.r.t. w</span>
+        
+        <span class="n">w</span> <span class="o">+=</span> <span class="n">stepsize</span> <span class="o">*</span> <span class="n">dL_dw</span> <span class="c1"># update weights and repeat</span>
+    
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">w_history</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">log_liks</span><span class="p">)</span> 
+
+<span class="n">HTML</span><span class="p">(</span><span class="n">toggle_code</span><span class="p">(</span><span class="s2">&quot;gradient ascent function&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">
+    <script>
+      function get_new_label(butn, hide) {
+          var shown = $(butn).parents("div.cell.code_cell").find('div.input').is(':visible');
+          var title = $(butn).val().substr($(butn).val().indexOf(" ") + 1)
+          return ((shown) ? 'Show ' : 'Hide ') + title
+      }
+      function code_toggle(butn, hide) {
+        $(butn).val(get_new_label(butn,hide));
+        $(hide).slideToggle();
+      };
+    </script>
+    <input type="submit" value='initiated' class='toggle_button'>
+    <script>
+        var hide_area = $(".toggle_button[value='initiated']").parents('div.cell').prevAll().addBack().slice(-1)
+        hide_area = $(hide_area).find("div.input").add($(hide_area).filter("div.text_cell"))
+        $(".toggle_button[value='initiated']").prop("hide_area", hide_area)
+        $(".toggle_button[value='initiated']").click(function(){
+            code_toggle(this, $(this).prop("hide_area"))
+        }); 
+$(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($(".toggle_button[value='initiated']").parents("div.output").find('div.output_area').first());
+    var shown = $(".toggle_button[value='initiated']").parents("div.cell.code_cell").find('div.input').is(':visible');
+    var title = ((shown) ? 'Hide ' : 'Show ') + 'gradient ascent function'; 
+     $(".toggle_button[value='initiated']").addClass("init_show");
+            $(hide_area).addClass("init_hidden");  $(".toggle_button[value='initiated']").val(title);
+    </script></div><div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;IPython.core.display.HTML object&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;class_1d_inputs.npy&#39;</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;class_1d_labels.npy&#39;</span><span class="p">)</span>
+<span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:</span><span class="mi">20</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">20</span><span class="p">:],</span> <span class="n">y</span><span class="p">[:</span><span class="mi">20</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="mi">20</span><span class="p">:]</span>
+
+<span class="n">w_history</span><span class="p">,</span> <span class="n">log_liks</span> <span class="o">=</span> <span class="n">gradient_ascent</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span> <span class="mi">10</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">w_map</span> <span class="o">=</span> <span class="n">w_history</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="n">x_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">x</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">sigs</span> <span class="o">=</span> <span class="n">sig</span><span class="p">(</span><span class="n">x_</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w_map</span><span class="p">))</span>
+<span class="n">cov_0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="mi">1</span>
+<span class="n">cov</span> <span class="o">=</span> <span class="n">cov_0</span> <span class="o">+</span> <span class="p">(</span><span class="n">sigs</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">sigs</span><span class="p">)</span><span class="o">*</span><span class="n">x_</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x_</span><span class="p">)</span>
+
+<span class="n">xs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2000</span><span class="p">,)),</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">2000</span><span class="p">)],</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">mu</span> <span class="o">=</span> <span class="n">xs</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w_map</span><span class="p">)</span>
+<span class="n">var</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">xs</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">cov</span><span class="p">)</span><span class="o">*</span><span class="n">xs</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">norm</span>
+<span class="n">probit</span> <span class="o">=</span> <span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span>
+<span class="n">probit_scaled</span> <span class="o">=</span> <span class="n">norm</span><span class="o">.</span><span class="n">cdf</span><span class="p">(</span><span class="n">mu</span><span class="o">/</span><span class="p">(</span><span class="mi">8</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">+</span> <span class="n">var</span><span class="p">)</span><span class="o">**</span><span class="mf">0.5</span><span class="p">)</span>
+
+<span class="n">x_1</span><span class="p">,</span> <span class="n">x_2</span> <span class="o">=</span> <span class="n">x_train</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">y_train</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]],</span> <span class="n">x_train</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">y_train</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">x_1</span><span class="p">),</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">edgecolor</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">30</span><span class="p">,</span>
+            <span class="n">zorder</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;$y = 0$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">x_2</span><span class="p">),</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">40</span><span class="p">,</span> <span class="n">zorder</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;$y = 1$&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">probit_scaled</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">)</span>
+<span class="n">beautify_plot</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span><span class="sa">r</span><span class="s2">&quot;Bayesian prediction&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span><span class="s2">&quot;$x^*$&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span><span class="s2">&quot;$p(y^* = 1|\mathbf</span><span class="si">{x}</span><span class="s2">, x^*)$&quot;</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">([</span><span class="o">-</span><span class="mf">0.05</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">HTML</span><span class="p">(</span><span class="n">toggle_code</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/classification_bayesian_8_0.svg" src="../../_images/classification_bayesian_8_0.svg" /><div class="output text_html">
+    <script>
+      function get_new_label(butn, hide) {
+          var shown = $(butn).parents("div.cell.code_cell").find('div.input').is(':visible');
+          var title = $(butn).val().substr($(butn).val().indexOf(" ") + 1)
+          return ((shown) ? 'Show ' : 'Hide ') + title
+      }
+      function code_toggle(butn, hide) {
+        $(butn).val(get_new_label(butn,hide));
+        $(hide).slideToggle();
+      };
+    </script>
+    <input type="submit" value='initiated' class='toggle_button'>
+    <script>
+        var hide_area = $(".toggle_button[value='initiated']").parents('div.cell').prevAll().addBack().slice(-1)
+        hide_area = $(hide_area).find("div.input").add($(hide_area).filter("div.text_cell"))
+        $(".toggle_button[value='initiated']").prop("hide_area", hide_area)
+        $(".toggle_button[value='initiated']").click(function(){
+            code_toggle(this, $(this).prop("hide_area"))
+        }); 
+$(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($(".toggle_button[value='initiated']").parents("div.output").find('div.output_area').first());
+    var shown = $(".toggle_button[value='initiated']").parents("div.cell.code_cell").find('div.input').is(':visible');
+    var title = ((shown) ? 'Hide ' : 'Show ') + 'code'; 
+     $(".toggle_button[value='initiated']").addClass("init_show");
+            $(hide_area).addClass("init_hidden");  $(".toggle_button[value='initiated']").val(title);
+    </script></div><div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;IPython.core.display.HTML object&gt;
+</pre></div>
+</div>
+</div>
+</div>
+<p>Having covered bayesian logistic regression, you should now understand:</p>
+<ol class="simple">
+<li><p>How to approach logistic regression from a Bayesian view of probability.</p></li>
+<li><p>What a Laplace approximation is</p></li>
+<li><p>How to apply a Laplace approximation in the context of Bayesian logistic regression</p></li>
+</ol>
+<p>In <span class="xref myst">section 4</span> dimensionality we will look at dimensionality recution.</p>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./content/classification"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Stratis Markou, Rich Turner<br/>
+        
+            &copy; Copyright 2021.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../../_static/js/index.3da636dd464baa7582d2.js"></script>
+
+
+    
+  </body>
+</html>

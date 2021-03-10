@@ -1,0 +1,704 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>3.1 The k-nearest neighbours (kNN) classification algorithm &#8212; Probabilistic Modelling and Inference</title>
+    
+  <link rel="stylesheet" href="../../_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom_style.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/.ipynb_checkpoints/custom_style-checkpoint.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../../_static/js/index.3da636dd464baa7582d2.js">
+
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../../index.html">
+  
+  <img src="../../_static/logo.png" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">Probabilistic Modelling and Inference</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../home.html">
+   Online Inference Textbook
+  </a>
+ </li>
+</ul>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../regression/regression-intro.html">
+   Regression
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../regression/regression-linear.html">
+     Linear regression
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../regression/regression-nonlinear.html">
+     Non-linear basis regression
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../regression/regression-overfitting.html">
+     Overfitting
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../regression/regression-regularisation.html">
+     Regularisation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../regression/regression-bayesian.html">
+     Bayesian Regression
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../regression/regression-bayesian-online-visualisations.html">
+     Bayesian Online Learning
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="classification-intro.html">
+   Classification
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="classification-logistic-regression-model.html">
+     Logistic classification
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="classification-gradient-case-study.html">
+     Classification case study
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../../_sources/content/classification/classification_kNN.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+        <!-- Source interaction buttons -->
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/cambridge-mlg/online_textbook/master?urlpath=tree/./content/classification/classification_kNN.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#comparing-and-contrasting-k-nearest-neighbours-to-logistic-classification">
+   Comparing and contrasting k-nearest neighbours to logistic classification
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#questions">
+     Questions
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+        </nav>
+        
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%javascript</span>
+<span class="nx">IPython</span><span class="p">.</span><span class="nx">OutputArea</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">_should_scroll</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">lines</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/javascript">IPython.OutputArea.prototype._should_scroll = function(lines) {
+    return false;
+}</script></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The usual notebook preferences</span>
+
+<span class="o">%</span><span class="k">config</span> InlineBackend.figure_format = &#39;svg&#39;
+
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;..&#39;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">helper_functions</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">HTML</span><span class="p">(</span><span class="n">toggle_code</span><span class="p">(</span><span class="s2">&quot;import functions&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">
+<script>
+  function get_new_label() {
+      var shown = $('div.cell.code_cell.rendered.selected div.input').is(':visible')
+      var title = $('div.cell.code_cell.rendered.selected').find('.toggle_button').val().substring(5)
+      return ((shown) ? 'Hide ' : 'Show ') + title
+  }
+  function code_toggle() {
+      $('div.cell.code_cell.rendered.selected div.input').toggle();
+      $('div.cell.code_cell.rendered.selected').find('.toggle_button').val(get_new_label());
+  };
+</script>
+<form action="javascript:code_toggle()"><input type="submit" value ='Show import functions'class='toggle_button'></form>
+</div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">set_notebook_preferences</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">
+<style>
+.output {
+    font-family: "Georgia", serif;
+    align-items: normal;
+    text-align: normal;
+}
+
+div.output_svg div { margin : auto; }
+
+.div.output_area.MathJax_Display{ text-align: center; }
+
+div.text_cell_render { font-family: "Georgia", serif; }
+
+details {
+    margin: 20px 0px;
+    padding: 0px 10px;
+    border-radius: 3px;
+    border-style: solid;
+    border-color: black;
+    border-width: 2px;
+}
+
+details div{padding: 20px 30px;}
+
+details summary{font-size: 18px;}
+
+table { margin: auto !important; }
+
+</style>
+<script>
+$('iframe').parents('div.cell.code_cell').find('div.input').hide()
+$('.toggle_button').parents('div.cell.code_cell').find('div.input').hide()
+$('.toggle_button').each(function( index, element ) {
+   $(this).val('Show ' + $(this).val().substring(5))
+});
+</script>
+</div></div>
+</div>
+<div class="section" id="the-k-nearest-neighbours-knn-classification-algorithm">
+<h1>3.1 The k-nearest neighbours (kNN) classification algorithm<a class="headerlink" href="#the-k-nearest-neighbours-knn-classification-algorithm" title="Permalink to this headline">¶</a></h1>
+<p>In this section we will look at the k-nearest neighbour algorithm and how it can be used in relation to the Iris dataset we saw in the <span class="xref myst">introduction</span>.</p>
+<p>One simple algorithm is to classify any given point according to the membership of its closest point. That is to say, given an unseen point <span class="math notranslate nohighlight">\(\mathbf{x}^*\)</span>, we would assign it to the same class as the nearest data point <span class="math notranslate nohighlight">\(\mathbf{x}_i\)</span> such that:</p>
+<div class="math notranslate nohighlight">
+\[
+i = \arg\min\limits_{n}\big|\big|\mathbf{x}^* - \mathbf{x}_n\big|\big|
+\]</div>
+<p>There is an important question here which concerns how to define <em>closest</em> and in particular how to define <em>distance</em>. This issue is more obvious for a high-dimensional case, or a case where inputs have different units <span class="math notranslate nohighlight">\(-\)</span> such as a dataset containing heights and weights of animals. In neither case is it clear that the usual Euclidian distance is the most appropriate way to tackle the problem. Some possibilities for our definition of distance are</p>
+<p>\begin{align}
+~\
+d(\mathbf{x}<em>1, \mathbf{x}<em>2) &amp;= \sum</em>{d} \big|x</em>{1,d} - x_{2,d}\big|,~\text{sum of absolute values (<span class="math notranslate nohighlight">\(L1\)</span> distance)}\
+~\
+d(\mathbf{x}<em>1, \mathbf{x}<em>2) &amp;= \bigg[\sum</em>{d} \big|x</em>{1,d} - x_{2,d}\big|^2\bigg]^{1/2},~\text{Euclidian distance (<span class="math notranslate nohighlight">\(L2\)</span> distance)}\
+~\
+d(\mathbf{x}<em>1, \mathbf{x}<em>2) &amp;= \bigg[\sum</em>{d} \big|x</em>{1,d} - x_{2,d}\big|^p\bigg]^{1/p},~\text{<span class="math notranslate nohighlight">\(p^{th}\)</span> norm  (<span class="math notranslate nohighlight">\(Lp\)</span> distance)}\
+\end{align}</p>
+<p><strong>How should we choose the appropriate measure of distance?</strong> We could test the candidate measures and pick the one which performs best on the training set, however for the moment let’s stick with <span class="math notranslate nohighlight">\(L2\)</span> and address this choice later. It is also worth noting that this method does not require any training: there are no parameters to optimise and the “training” effectively consists of storing the training set to compare with future datapoints <span class="math notranslate nohighlight">\(-\)</span> making the algorithm easy to implement:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;iris_inputs_2d.npy&#39;</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;iris_labels.npy&#39;</span><span class="p">)</span>
+
+<span class="n">no_train</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)</span> <span class="o">//</span> <span class="mi">4</span> <span class="c1"># keep 3/4 points in the training and 1/4 in the test sets</span>
+
+<span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:</span><span class="n">no_train</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="n">no_train</span><span class="p">:],</span> <span class="n">y</span><span class="p">[:</span><span class="n">no_train</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">no_train</span><span class="p">:]</span> <span class="c1"># select training/test points</span>
+
+<span class="n">s_len</span><span class="p">,</span> <span class="n">s_wid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">500</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">1.75</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span> <span class="c1"># sepal lengths/widths to evaluate class membership</span>
+
+<span class="n">grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">s_len</span><span class="p">,</span> <span class="n">s_wid</span><span class="p">),</span> <span class="n">axis</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># stack into (500, 500, 2) array to do arithmetic</span>
+
+<span class="n">cloned_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">grid</span><span class="p">]</span> <span class="o">*</span> <span class="n">no_train</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="c1"># copy grid no_train times into a (500, 500, no_train, 2) array</span>
+
+
+<span class="c1"># the whole algorithm is contained in these 3 lines</span>
+<span class="n">distances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">cloned_grid</span> <span class="o">-</span> <span class="n">x_train</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># compute L2 to get a (500, 500, no_train) array</span>
+
+<span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">distances</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,))</span> <span class="c1"># find closest point to each training point, then flatten</span>
+
+<span class="n">classes</span> <span class="o">=</span> <span class="n">y_train</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">500</span><span class="p">,</span> <span class="mi">500</span><span class="p">)</span> <span class="c1"># classify each grid point according to the closest training point</span>
+
+
+<span class="n">plt</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">s_len</span><span class="p">,</span> <span class="n">s_wid</span><span class="p">,</span> <span class="n">classes</span><span class="p">,</span> <span class="n">cmap</span> <span class="o">=</span> <span class="s1">&#39;brg&#39;</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.4</span><span class="p">)</span> <span class="c1"># plot membership areas</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_train</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">x_train</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="s1">&#39;g&#39;</span><span class="p">])[</span><span class="n">y_train</span><span class="p">])</span> <span class="c1"># plot data</span>
+<span class="n">beautify_plot</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span><span class="s2">&quot;Nearest Neighbour class memebership (L2)&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span><span class="s2">&quot;Sepal length (cm)&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span><span class="s2">&quot;Sepal width (cm)&quot;</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">HTML</span><span class="p">(</span><span class="n">toggle_code</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/classification_kNN_4_0.svg" src="../../_images/classification_kNN_4_0.svg" /><div class="output text_html">
+<script>
+  function get_new_label() {
+      var shown = $('div.cell.code_cell.rendered.selected div.input').is(':visible')
+      var title = $('div.cell.code_cell.rendered.selected').find('.toggle_button').val().substring(5)
+      return ((shown) ? 'Hide ' : 'Show ') + title
+  }
+  function code_toggle() {
+      $('div.cell.code_cell.rendered.selected div.input').toggle();
+      $('div.cell.code_cell.rendered.selected').find('.toggle_button').val(get_new_label());
+  };
+</script>
+<form action="javascript:code_toggle()"><input type="submit" value ='Show code'class='toggle_button'></form>
+</div></div>
+</div>
+<p>The borders between the classes in such a graph are refered to as <strong>decision boundaries</strong> or <strong>decision surfaces</strong>. The blue class is well separated from the red and green classes resulting in the large chunk of blue with one continuous decision boundary. However, the red and blue crosses are more intermixed, resulting in small islands of red membership in the green region and vice versa, which are caused by individual points. Having these small islands may or may not be reasonable, and we will shortly address this point. Before that, let’s evaluate the algorithm’s performance. <strong>What should the accuracy of a random classification algorithm be?</strong> Let’s evaluate the test set accuracy:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_test_clone</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">x_test</span><span class="p">]</span> <span class="o">*</span> <span class="n">no_train</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="c1"># clone test points into (no_test, no_train, 2) array</span>
+
+<span class="n">distances_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">x_test_clone</span> <span class="o">-</span> <span class="n">x_train</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># compute L2 distances as before</span>
+
+<span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">distances_test</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># find closest point to each training point ()</span>
+
+<span class="n">classes_test</span> <span class="o">=</span> <span class="n">y_train</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="c1"># classify training points</span>
+
+<span class="n">accuracy</span> <span class="o">=</span> <span class="p">(</span><span class="n">classes_test</span> <span class="o">==</span> <span class="n">y_test</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">*</span> <span class="mi">100</span> <span class="c1"># calculate classification accuracy</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Classification accuracy on test set of </span><span class="si">{}</span><span class="s2"> points = </span><span class="si">{}</span><span class="s2">%&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">y_test</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">accuracy</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Classification accuracy on test set of 38 points = 78.95%
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># plot class the memebrships and the test points</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">s_len</span><span class="p">,</span> <span class="n">s_wid</span><span class="p">,</span> <span class="n">classes</span><span class="p">,</span> <span class="n">cmap</span> <span class="o">=</span> <span class="s1">&#39;brg&#39;</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.4</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_test</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">x_test</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="s1">&#39;g&#39;</span><span class="p">])[</span><span class="n">y_test</span><span class="p">])</span>
+<span class="n">beautify_plot</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span><span class="s2">&quot;Nearest Neighbour class memebership test(L2)&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span><span class="s2">&quot;Sepal length (cm)&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span><span class="s2">&quot;Sepal width (cm)&quot;</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">HTML</span><span class="p">(</span><span class="n">toggle_code</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/classification_kNN_7_0.svg" src="../../_images/classification_kNN_7_0.svg" /><div class="output text_html">
+<script>
+  function get_new_label() {
+      var shown = $('div.cell.code_cell.rendered.selected div.input').is(':visible')
+      var title = $('div.cell.code_cell.rendered.selected').find('.toggle_button').val().substring(5)
+      return ((shown) ? 'Hide ' : 'Show ') + title
+  }
+  function code_toggle() {
+      $('div.cell.code_cell.rendered.selected div.input').toggle();
+      $('div.cell.code_cell.rendered.selected').find('.toggle_button').val(get_new_label());
+  };
+</script>
+<form action="javascript:code_toggle()"><input type="submit" value ='Show code'class='toggle_button'></form>
+</div></div>
+</div>
+<p>A variation on this algorithm, that may produce smoother decision boundaries that account for the class overlap that is to be expected from such measurements, is to instead look at the <span class="math notranslate nohighlight">\(k\)</span> nearest neighbours for each unseen point  <span class="math notranslate nohighlight">\(\mathbf{x}^*\)</span> for some value <span class="math notranslate nohighlight">\(k &gt; 0\)</span>. We do this by <strong>choosing the most commonly occuring class among the <span class="math notranslate nohighlight">\(k\)</span> nearest neighbours</strong>, and using this as our estimate for the class of <span class="math notranslate nohighlight">\(\mathbf{x}^*\)</span>. In the event that there are 2 or more classes with the most occurences, we choose randomly among these classes. This is known as the <strong>k-nearest neighbour algorithm</strong>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">kNN</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">Y_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="mi">2</span><span class="p">):</span>
+    
+    <span class="n">X_test_clone</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">X_test</span><span class="p">]</span> <span class="o">*</span> <span class="n">X_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">axis</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="c1"># clone test points for comparisons as before</span>
+    
+    <span class="n">distances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">X_test_clone</span> <span class="o">-</span> <span class="n">X_train</span><span class="p">)</span> <span class="o">**</span> <span class="n">p</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># compute Lp distances</span>
+    
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">distances</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)[:,</span> <span class="p">:</span><span class="n">k</span><span class="p">]</span> <span class="c1"># find k smallest distances</span>
+    
+    <span class="n">classes</span> <span class="o">=</span> <span class="n">y_train</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="c1"># classes corresponding to the k smallest distances</span>
+    
+    <span class="n">predictions</span> <span class="o">=</span> <span class="p">[]</span>
+    
+    <span class="k">for</span> <span class="n">class_</span> <span class="ow">in</span> <span class="n">classes</span><span class="p">:</span>
+        
+        <span class="n">uniques</span><span class="p">,</span> <span class="n">counts</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">class_</span><span class="p">,</span> <span class="n">return_counts</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="c1"># getting the set of classes, and counting the occurences</span>
+        
+        <span class="k">if</span> <span class="p">(</span><span class="n">counts</span> <span class="o">==</span> <span class="n">counts</span><span class="o">.</span><span class="n">max</span><span class="p">())</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span> <span class="c1"># checking if there is a unique class with the most occurences in the kNN</span>
+            
+            <span class="n">predictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">uniques</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">counts</span><span class="p">)])</span> <span class="c1"># adding the class with the most occurences to predictions</span>
+            
+        <span class="k">else</span><span class="p">:</span>
+            
+            <span class="c1"># if multiple classes have the maximum occurences in the kNN, choose randomly among them</span>
+            
+            <span class="n">predictions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">uniques</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">counts</span> <span class="o">==</span> <span class="n">counts</span><span class="o">.</span><span class="n">max</span><span class="p">())[</span><span class="mi">0</span><span class="p">]]))</span> 
+            
+            
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">predictions</span><span class="p">)</span> <span class="c1"># return the predictions</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">no_train</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)</span> <span class="o">//</span> <span class="mi">4</span> <span class="c1"># keep 3/4 points in the training and 1/4 in the test sets</span>
+
+<span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:</span><span class="n">no_train</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="n">no_train</span><span class="p">:],</span> <span class="n">y</span><span class="p">[:</span><span class="n">no_train</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">no_train</span><span class="p">:]</span> <span class="c1"># select training/test points</span>
+
+<span class="n">s_len</span><span class="p">,</span> <span class="n">s_wid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">1.75</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span> <span class="c1"># sepal lengths/widths to evaluate class membership</span>
+
+<span class="n">grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">s_len</span><span class="p">,</span> <span class="n">s_wid</span><span class="p">),</span> <span class="n">axis</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># stack into (500, 500, 2) array to do arithmetic</span>
+
+<span class="n">flat_grid</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">x_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span> <span class="c1"># </span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span>  <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">17</span><span class="p">):</span>
+
+    <span class="n">classes</span> <span class="o">=</span> <span class="n">kNN</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">flat_grid</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span> <span class="c1"># call the kNN function to get the classes of the points</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">s_len</span><span class="p">,</span> <span class="n">s_wid</span><span class="p">,</span> <span class="n">classes</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span> <span class="n">cmap</span> <span class="o">=</span> <span class="s1">&#39;brg&#39;</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.4</span><span class="p">)</span> <span class="c1"># plot membership areas</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mf">7.8</span><span class="p">,</span> <span class="mf">1.8</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;k = &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">),</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">12</span><span class="p">,</span>
+                 <span class="n">horizontalalignment</span> <span class="o">=</span> <span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">verticalalignment</span> <span class="o">=</span> <span class="s1">&#39;bottom&#39;</span><span class="p">)</span>
+    <span class="n">remove_axes</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">HTML</span><span class="p">(</span><span class="n">toggle_code</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/classification_kNN_10_0.svg" src="../../_images/classification_kNN_10_0.svg" /><div class="output text_html">
+<script>
+  function get_new_label() {
+      var shown = $('div.cell.code_cell.rendered.selected div.input').is(':visible')
+      var title = $('div.cell.code_cell.rendered.selected').find('.toggle_button').val().substring(5)
+      return ((shown) ? 'Hide ' : 'Show ') + title
+  }
+  function code_toggle() {
+      $('div.cell.code_cell.rendered.selected div.input').toggle();
+      $('div.cell.code_cell.rendered.selected').find('.toggle_button').val(get_new_label());
+  };
+</script>
+<form action="javascript:code_toggle()"><input type="submit" value ='Show code'class='toggle_button'></form>
+</div></div>
+</div>
+<p>Here we can  see how the graphs tend towards smoother boundaries for higher values of <span class="math notranslate nohighlight">\(k\)</span>. However, <strong>is a larger value of <span class="math notranslate nohighlight">\(k\)</span> always preferable to a smaller one?</strong> Would it not be possible to over smooth and lose some of the nuance in the decision boundaries? This raises the question of how to choose <span class="math notranslate nohighlight">\(k\)</span>, and how to test for which value of <span class="math notranslate nohighlight">\(k\)</span> will be most likely to lead to a higher classification accuracy in testing, without observing the test data.</p>
+<p>One approach to choosing <span class="math notranslate nohighlight">\(k\)</span> is to take a small portion of your training set and use this as what is known as a <strong>validation set</strong>. We use the remainder of the training set as before, and then test the classification accuracy of the model on the validation set, and use this as a measure of how optimal our choice of <span class="math notranslate nohighlight">\(k\)</span> is. By doing this, we can iterate over different values of <span class="math notranslate nohighlight">\(k\)</span> and choose the value with the best accuracy on the validation set.</p>
+<p>This approach can be problematic, however, if there is insufficient data to use a large validation set and still have enough training data. To avoid this we can employ a method known as <strong>n-fold cross-validation</strong> which involves splitting the training data into n folds (or sections), and performing validation for each of these folds as your validation set, and using the mean of the accuracies accross these different validation sets as your measure of optimality for each value of <span class="math notranslate nohighlight">\(k\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[\]</div>
+<div>
+    <img src="validation_set.GIF" alt="Snow" style="width:90%; float: center;">
+</div><p>Now lets apply this method to the iris dataset, to see if it helps find an optimal value of <span class="math notranslate nohighlight">\(k\)</span>. In the below figure, we plot mean accuracy <span class="math notranslate nohighlight">\(\pm\)</span> the standard deviation, accross each validation set, for each value of <span class="math notranslate nohighlight">\(k\)</span> in a given range. For clarity we have used the full 4D iris dataset, as this gives a clearer demonstration of validation sets. Try varying the number of folds, or the values of k to test accross (bear in mind <span class="math notranslate nohighlight">\(0 &lt; k &lt; 150\)</span> by definition, as there are 150 datapoints) and see how the graph changes.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">no_folds</span> <span class="o">=</span> <span class="mi">15</span>
+
+<span class="n">k_max</span> <span class="o">=</span> <span class="mi">50</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;iris_inputs_full.npy&#39;</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;iris_labels.npy&#39;</span><span class="p">)</span>
+
+<span class="n">no_train</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)</span> <span class="o">//</span> <span class="mi">4</span> <span class="c1"># keep 3/4 points in the training and 1/4 in the test sets</span>
+
+<span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:</span><span class="n">no_train</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="n">no_train</span><span class="p">:],</span> <span class="n">y</span><span class="p">[:</span><span class="n">no_train</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">no_train</span><span class="p">:]</span> <span class="c1"># select training/test points</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span>  <span class="o">=</span> <span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+
+<span class="n">means</span><span class="p">,</span> <span class="n">stdevs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="n">k_max</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">k_max</span><span class="p">):</span>
+    
+    <span class="n">accuracies</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">no_folds</span><span class="p">,))</span>
+    
+    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">no_folds</span><span class="p">):</span>
+        
+        <span class="n">x_folds</span><span class="p">,</span> <span class="n">y_folds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array_split</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">no_folds</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array_split</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">no_folds</span><span class="p">)</span>
+        
+        <span class="n">x_validation</span><span class="p">,</span> <span class="n">y_validation</span> <span class="o">=</span> <span class="n">x_folds</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">v</span><span class="p">),</span> <span class="n">y_folds</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+        
+        <span class="n">x_train_rem</span><span class="p">,</span> <span class="n">y_train_rem</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">x_folds</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">y_folds</span><span class="p">)</span>
+
+        <span class="n">classes</span> <span class="o">=</span> <span class="n">kNN</span><span class="p">(</span><span class="n">x_train_rem</span><span class="p">,</span> <span class="n">y_train_rem</span><span class="p">,</span> <span class="n">x_validation</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">p</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span> <span class="c1"># call the kNN function to get the classes of the points</span>
+        
+        <span class="n">accuracies</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">classes</span> <span class="o">==</span> <span class="n">y_validation</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">*</span> <span class="mi">100</span>
+    
+    <span class="n">means</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">accuracies</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    
+    <span class="n">stdevs</span><span class="p">[</span><span class="n">k</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">accuracies</span><span class="o">.</span><span class="n">var</span><span class="p">()</span> <span class="o">**</span> <span class="mf">0.5</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">50</span><span class="p">),</span> <span class="n">means</span> <span class="o">+</span> <span class="n">stdevs</span><span class="p">,</span> <span class="n">means</span> <span class="o">-</span> <span class="n">stdevs</span><span class="p">,</span> <span class="n">facecolor</span> <span class="o">=</span> <span class="s1">&#39;grey&#39;</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">50</span><span class="p">),</span> <span class="n">means</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">)</span>
+<span class="n">beautify_plot</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span><span class="s2">&quot;Accuracy vs k for kNN&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span><span class="s2">&quot;$k$&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span><span class="s2">&quot;Accuracy (%)&quot;</span><span class="p">})</span>
+<span class="n">x1</span><span class="p">,</span><span class="n">x2</span><span class="p">,</span><span class="n">y1</span><span class="p">,</span><span class="n">y2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">((</span><span class="n">x1</span><span class="p">,</span><span class="n">x2</span><span class="p">,</span><span class="n">y1</span><span class="p">,</span><span class="mi">100</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">HTML</span><span class="p">(</span><span class="n">toggle_code</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/classification_kNN_13_0.svg" src="../../_images/classification_kNN_13_0.svg" /><div class="output text_html">
+<script>
+  function get_new_label() {
+      var shown = $('div.cell.code_cell.rendered.selected div.input').is(':visible')
+      var title = $('div.cell.code_cell.rendered.selected').find('.toggle_button').val().substring(5)
+      return ((shown) ? 'Hide ' : 'Show ') + title
+  }
+  function code_toggle() {
+      $('div.cell.code_cell.rendered.selected div.input').toggle();
+      $('div.cell.code_cell.rendered.selected').find('.toggle_button').val(get_new_label());
+  };
+</script>
+<form action="javascript:code_toggle()"><input type="submit" value ='Show code'class='toggle_button'></form>
+</div></div>
+</div>
+<p>It is worth noting that the same approach can be used to decide the value of <span class="math notranslate nohighlight">\(p\)</span> from the distance equations, for datasets with more dimensions, although for the iris dataset the value of p does not affect the accuracy hugely.</p>
+<p>As we have shown, the kNN algorithm can be effective in certain settings, including classifying low dimensional data. There are, however, several major drawbacks of this algorithm. For instance, whilst it does not require any time to train, it can be very <strong>computationally expensive to store and perform computation on the entire training set</strong>, especially for large data sets. This is unsatisfactory and in practice we often prefer models that are expensive to train but cheap to use to classify new data points over models that are the reverse. Another major drawback of kNN is that it <strong>only accounts for hard (discrete) decision boundaries and doesn’t tell us anything about the uncertainty</strong>. This can be costly in situations where uncertainty is important, such as classifying an image of a tumour as either malignant or benign. Here the goal is not simply to be correct as often as possible, but also to minimize repurcussions in cases where the model is incorrect. This can be done with soft decision boundaries, in which the the output is not a 1-of-k encoding, but a probability for each of the possible classes.</p>
+<div class="section" id="comparing-and-contrasting-k-nearest-neighbours-to-logistic-classification">
+<h2>Comparing and contrasting k-nearest neighbours to logistic classification<a class="headerlink" href="#comparing-and-contrasting-k-nearest-neighbours-to-logistic-classification" title="Permalink to this headline">¶</a></h2>
+<p>The model based approach will … <a class="reference internal" href="#"><span class="doc std std-doc">nearest neighbours</span></a> computational cost in higher dimesions, soft classification ?</p>
+<p>Having covered the k-nearest neighbours algorithm, you should now understand:</p>
+<ol class="simple">
+<li><p>The nearest neighbour algorithm (and note that this is a special case of the kNN algorithm where <span class="math notranslate nohighlight">\(k = 1\)</span>)</p></li>
+<li><p>The meaning of the <span class="math notranslate nohighlight">\(Lp\)</span> distance between two points, and why the Euclidean distance (<span class="math notranslate nohighlight">\(L2\)</span>) is not always the best measure of distance</p></li>
+<li><p>The k-nearest neighbour algorithm, and why it can outperform the nearest neighbour approach</p></li>
+<li><p>How validation and n-fold cross-validation can be used to determine the optimal values for parameters</p></li>
+<li><p>The limitations of the k-nearest neighbours algorithm</p></li>
+</ol>
+<p>In <span class="xref myst">section 3.2</span>. we will look at models that work with soft as opposed to hard decision boundaries.</p>
+<div class="section" id="questions">
+<h3>Questions<a class="headerlink" href="#questions" title="Permalink to this headline">¶</a></h3>
+<ol class="simple">
+<li><p>Devise a k nearest neighbours approach to classification.</p></li>
+</ol>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./content/classification"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Stratis Markou, Rich Turner<br/>
+        
+            &copy; Copyright 2021.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../../_static/js/index.3da636dd464baa7582d2.js"></script>
+
+
+    
+  </body>
+</html>

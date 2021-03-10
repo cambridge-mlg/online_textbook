@@ -1,0 +1,452 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Logistic classification &#8212; Probabilistic Modelling and Inference</title>
+    
+  <link rel="stylesheet" href="../../_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom_style.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/.ipynb_checkpoints/custom_style-checkpoint.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../../_static/js/index.3da636dd464baa7582d2.js">
+
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Logistic regression on the Iris dataset" href="classification-gradient-case-study.html" />
+    <link rel="prev" title="Classification" href="classification-intro.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../../index.html">
+  
+  <img src="../../_static/logo.png" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">Probabilistic Modelling and Inference</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../home.html">
+   Online Inference Textbook
+  </a>
+ </li>
+</ul>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../regression/regression-intro.html">
+   Regression
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../regression/regression-linear.html">
+     Linear regression
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../regression/regression-nonlinear.html">
+     Non-linear basis regression
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../regression/regression-overfitting.html">
+     Overfitting
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../regression/regression-regularisation.html">
+     Regularisation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../regression/regression-bayesian.html">
+     Bayesian Regression
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../regression/regression-bayesian-online-visualisations.html">
+     Bayesian Online Learning
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 current active collapsible-parent">
+  <a class="reference internal" href="classification-intro.html">
+   Classification
+  </a>
+  <ul class="current collapse-ul">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Logistic classification
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="classification-gradient-case-study.html">
+     Classification case study
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../../_sources/content/classification/classification-logistic-regression-model.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+        <!-- Source interaction buttons -->
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/cambridge-mlg/online_textbook/master?urlpath=tree/./content/classification/classification-logistic-regression-model.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#the-logistic-classification-model">
+   The Logistic Classification Model
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#understanding-the-model">
+   Understanding the model
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#summary">
+   Summary
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="logistic-classification">
+<h1>Logistic classification<a class="headerlink" href="#logistic-classification" title="Permalink to this headline">¶</a></h1>
+<p>In this section we’re going to consider an approach to classification that, i) employs a simple probabilistic model to encode the relationship between inputs and outputs which is controlled by a set of parameters, and ii) estimates the parameters of the model from data using the maximum-likelihood approach. In this notebook we’ll describe the model and consider toy examples to understand its properties. In the <a class="reference internal" href="classification_logistic_regression_ML_fitting.html"><span class="doc std std-doc">next notebook</span></a> we’ll consider maximum-likelihood fitting.</p>
+<p>The model considered initially will be called <strong>linear</strong> as it produces probability contours that lie on straight lines in the input space and consequently linear boundaries between classes. We will then generalise this model to capture non-linear contours using basis functions. The development of logistic regression will therefore parallel the development for <span class="xref myst">linear regression</span>.</p>
+<p>For simplicity we will initially consider <strong>binary classification</strong> where the outputs belong to two classes (e.g. classifying email according to whether it is spam or not). Later will we generalise the model to handle <strong>mulitiple classes</strong>.</p>
+<div class="section" id="the-logistic-classification-model">
+<h2>The Logistic Classification Model<a class="headerlink" href="#the-logistic-classification-model" title="Permalink to this headline">¶</a></h2>
+<p>Each datapoint comprises an input <span class="math notranslate nohighlight">\(\mathbf{x}_n\)</span> and an output value <span class="math notranslate nohighlight">\(y_n\)</span>. The outputs indicate the binary class of the <span class="math notranslate nohighlight">\(n^{th}\)</span> datapoint: <span class="math notranslate nohighlight">\(y_n = 0\)</span> when the datapoint belongs to the first class (e.g. an email from a contact in your address book) and <span class="math notranslate nohighlight">\(y_n = 1\)</span> when it belongs to the second class (e.g. an email from a spammer).</p>
+<p>The model specifies the probability that a datapoint at input location <span class="math notranslate nohighlight">\(\mathbf{x}_n\)</span> takes an output value <span class="math notranslate nohighlight">\(y_n = 1\)</span> using parameters <span class="math notranslate nohighlight">\(\mathbf{w}\)</span>. The model comprises two steps.</p>
+<p>First the model linearly transforms the inputs to produce a scalar real-valued activation:</p>
+<div class="math notranslate nohighlight">
+\[
+a_n = \mathbf{w}^\top \mathbf{x}_n = \sum_{d=1}^D w_d x_{n,d}.
+\]</div>
+<p>Note here that an offset or bias term can easily be incorporated by augmenting the inputs with a constant input <span class="math notranslate nohighlight">\(\mathbf{x} = [x_0, x_1,...,x_D]^\top = [1, x_1,...,x_D]\)</span> so that <span class="math notranslate nohighlight">\(a_n = \mathbf{w}^\top \mathbf{x}_n = \sum_{d=0}^D w_d x_{n,d} = w_0 + \sum_{d=1}^D w_d x_{n,d}\)</span>. For this reason, we can suppress biases in what follows.</p>
+<p>Second, the model passes the activation through a non-linear logistic function</p>
+<div class="math notranslate nohighlight">
+\[
+p(y_n = 1 | \mathbf{x}_n, \mathbf{w}) = \sigma(a_n)  = \frac{1}{1 + \text{exp}({-\mathbf{w}_n^\top \mathbf{x}})} .
+\]</div>
+</div>
+<div class="section" id="understanding-the-model">
+<h2>Understanding the model<a class="headerlink" href="#understanding-the-model" title="Permalink to this headline">¶</a></h2>
+<p>Let’s understand the two steps in the logistic classifiction model. The first step is the only one that includes parameters. If we break the inputs into components that are parallel and perpedicular to the weight <span class="math notranslate nohighlight">\(\mathbf{w}\)</span> so that <span class="math notranslate nohighlight">\(\mathbf{x} =  \mathbf{x}_\parallel + \mathbf{x}_\bot\)</span>, then it is clear that the linear stage retains only the parallel component of the input. In other words, the weights define a direction in input space onto which the input is projected.</p>
+<p>Below we visualise the activation for a two-dimensional input space as we change the weights. We do not use a bias. The weights are a two-dimensional vector. To begin with we rotate the direction of the weight which changes the orientation of the activation function in the input space. Then we change the magnitude of the weight vector, which changes the slope of the activation function.</p>
+<p><img alt="" src="../../_images/linear_neuron.gif" /></p>
+<p>The second stage maps the activation - which is a real-valued linear projection of the input - to a valid probability with a value between <span class="math notranslate nohighlight">\(0\)</span> and <span class="math notranslate nohighlight">\(1\)</span>. Here’s a plot of the logistic function <span class="math notranslate nohighlight">\(\sigma(a) = \frac{1}{1 + \text{exp}(-a)}\)</span> which is monotonically increasing, takes the value 1/2 when <span class="math notranslate nohighlight">\(a = 0\)</span>, and asymptotes to zero for large input magnitudes.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">sigma</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_center-output tag_hide-input docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Logistic function&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;$a$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;$\sigma(a)$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="o">-</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/classification-logistic-regression-model_3_0.svg" src="../../_images/classification-logistic-regression-model_3_0.svg" /></div>
+</div>
+<p>Now let’s compose the two stages and visualise the input-output function of logistic classification, <span class="math notranslate nohighlight">\(p(y_n = 1 | \mathbf{x}_n, \mathbf{w})\)</span>, as we change the direction and magnitude of the weights in our two dimensional example. The direction of the weights encodes the orientation of the boundary between the two classes and the magnitude encodes the steepness of the boundary.</p>
+<p><img alt="" src="../../_images/single_neuron.gif" /></p>
+<p>Each of the frames of the animation above shows a possible input-output function that the model can implement. Here’s another way to visualise the family of implementable functions. We consider the <strong>weight space</strong> of model: that is, any possible setting of the 2D weights. For selected points in this space we plot the input-output function. Again, moving around a circle centred on the origin changes the orientation of the input-output function. Moving along a line passing through the origin changes the steepness of the function.</p>
+<p><img alt="" src="../../_images/weight_space_single_neuron.svg" /></p>
+<p>The goal of learning is to select from amongst these functions the one(s) that are compatible with observed data.</p>
+<div class="further_box">
+<p><b>A brief note on terminology</b><br></p>
+<p>We have refered to the model described here as <strong>logistic classification</strong>. Often the model is referred to as <strong><a class="reference external" href="https://en.wikipedia.org/wiki/Logistic_regression">logistic regression</a></strong>, but this can be confusing terminology given that the model is appropriate for classification problems, not regression problems. The model is also sometime referred to as a <strong>single neuron</strong> since neural networks comprise many such units.</p>
+</div></div>
+<div class="section" id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<ol class="simple">
+<li><p>In the binary logistic regression model the probability of an input belonging to class 1 is specified through an input-ouput function that comprises a linear projection of the input and a logistic function, <span class="math notranslate nohighlight">\(
+p(y_n = 1 | \mathbf{x}_n, \mathbf{w}) = \sigma(a_n)  = \frac{1}{1 + \text{exp}({-\mathbf{w}_n^\top \mathbf{x}})} .
+\)</span>.</p></li>
+<li><p>This input-output function is a soft-step function whose orientation is set by the the direction of the weight vector <span class="math notranslate nohighlight">\(\hat{\mathbf{w}} = \mathbf{w}/|\mathbf{w}|\)</span> and whose steepness is set by the magnitude of the weights <span class="math notranslate nohighlight">\(|\mathbf{w}|\)</span>.</p></li>
+<li><p>Learning will select a setting(s) of the weights, equivalently a direction and steepness of the input-output function, that is compatible with the observed data.</p></li>
+</ol>
+<p>In the next <a class="reference internal" href="classification_logistic_regression_ML_fitting.html"><span class="doc std std-doc">section</span></a> we will look at how to learn the parameters of the model using maximum likelihood estimation.</p>
+<ol>
+<li> Alice has crowdsourced a binary classification dataset by showing an input \(\mathbf{x}_n\) to a labeller who provides a binary label \(y_n\) to yield a dataset \(\{ \mathbf{x}_n, y_n\}_{n=1}^N\). Due to inadequate financial incentive, the labelers are not well motivated and lose concentration 1% of the time, picking a label uniformly at random in these cases. Is logistic classification a suitable model for these data? If not, suggest a modification that will improve it. 
+<p><br><br></p>
+<details class="graydrop">
+<summary>Answer</summary>
+<p>The standard binary logistic regression model described above is not suitable: as the magnitude of the inputs increases, the model’s predictions will asymptote to one or zero. I.e. when <span class="math notranslate nohighlight">\(|\mathbf{x}| \rightarrow 0\)</span> then <span class="math notranslate nohighlight">\(p(y_n = 1 | \mathbf{x}_n, \mathbf{w}) \rightarrow 0 \;\ \text{or} \;\; 1\)</span>. That is, the model becomes certain about the output label. However, for Alice’s dataset, the model should never be certain due to the <strong>label noise</strong>.<br></p>
+<p>One way to fix the model is to introduce a binary variable <span class="math notranslate nohighlight">\(c_n\)</span> that takes a value <span class="math notranslate nohighlight">\(1\)</span> when the labeller loses concentration, and a value <span class="math notranslate nohighlight">\(0\)</span> if they do not. We know from the information in the question that <span class="math notranslate nohighlight">\(p(c_n = 1) = 0.01\)</span>. Now, consider the classification step. If the labeller has not lost concentration, we can employ logistic classification as normal:</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+p(y_n = 1 | \mathbf{x}_n, \mathbf{w},c_n=0) = \frac{1}{1 + \text{exp}({-\mathbf{w}_n^\top \mathbf{x}})}
+\end{align}\]</div>
+<p>If they have lost concentration, the labeller will guess so</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+p(y_n = 1 | \mathbf{x}_n, \mathbf{w},c_n=0) = 1/2
+\end{align}\]</div>
+<p>Now we can marginalise out the concentration variable using the sum rule to recover an appropriate input-output function:</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+p(y_n = 1 | \mathbf{x}_n, \mathbf{w})  = p(c_n=0) p(y_n = 1 | \mathbf{x}_n, \mathbf{w},c_n=0) + p(c_n=1) p(y_n = 1 | \mathbf{x}_n, \mathbf{w},c_n=0)
+\end{align}\]</div>
+<p>Substituting in values yields</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+p(y_n = 1 | \mathbf{x}_n, \mathbf{w},c_n=0) = 0.99 \times \frac{1}{1 + \text{exp}({-\mathbf{w}_n^\top \mathbf{x}})} + 1/2 \times 0.01
+\end{align}\]</div>
+<p>Now the model asymptotes to 0.005 or 0.995. This accounts for the fact that when the labeller guess in these limiting cases, they will still get the answer correct half of the time.</p>
+</details>
+<br> </li>
+</ol>
+<ol start="2">
+<li> Bob has the dataset shown below and applies the following binary logistic classification model:
+<div class="math notranslate nohighlight">
+\[p(y_n = 1 | x_n, \mathbf{w},c_n=0) = \frac{1}{1 + \text{exp}(-w_1 x - w_0)} \]</div>
+<p>Will any setting of <span class="math notranslate nohighlight">\(w_0\)</span> and <span class="math notranslate nohighlight">\(w_1\)</span> result in a good model for these data? If not, how could the model be extended to better handle the data?</p>
+<p><img alt="" src="../../_images/1d-non-linear-model.svg" /></p>
+<br>
+<details class="graydrop">
+<summary>Answer</summary>
+<p>As we move from right to left across the input space the data initially belong to class 1, then class 0, then class 1 again and finally back to class 0.<br></p>
+<p>Let’s contrast this behvious to the model. The linear logistic classification model will fit a logistic function to this data with <span class="math notranslate nohighlight">\(w_0\)</span> determining the shift of the function and <span class="math notranslate nohighlight">\(w_1\)</span> the steepness. As the logistic function is monotonically increasing, it can only handle 1D datasets that start with one class and end with another as we traverse the input space.<br></p>
+<p>One way to improve the model would be to include non-linear basis functions. For example, a set of Gaussian basis functions with centres spread across the input domain would work well. For more about these models see the notebook on <a class="reference internal" href="classification_non-linear.html"><span class="doc std std-doc">non-linear logistic classification</span></a>.</p>
+</details>
+<br> </li>
+</ol>
+<ol start="3">
+<li> Chris has the binary classification dataset shown below and would like to predict the output at a new unseen input location. She decides to treat the task as a <b>regression problem</b> using linear regression to fit the data. In order to make predictions, she computes the prediction from linear regression and applies a threshold: if the prediction is greater than 1/2 she predicts class 1 and if it is less than 1/2 she predicts class 0. Predict how the method will perform?
+<p><img alt="" src="../../_images/1d-regression-classification-q.svg" /></p>
+<br>
+<details class="graydrop">
+<summary>Answer</summary>
+<p>Treating a classification problem with binary outputs as if it were a regression problem with  real valued outputs can perform very poorly. In this case the <strong>classes are imbalanced</strong>: there are more of class 0 than of class 1. When fitting the straight line to these data, there are many more contributions from class 0 than class 1. So the straight line tries to model class 0, taking the hit on the small number of data from class 1. In the limit where almost all the data belong to the 0 class, the fit would be a horizontal line <span class="math notranslate nohighlight">\(y(x) = 0\)</span>. The result here is that the fit will end up miss classifying half of the class 1 training data, which will presumably lead to poor generalisation. Fitting logistic classification would perform much more sensibly in this case.</p>
+<p><img alt="" src="../../_images/1d-regression-classification.svg" /></p>
+</details> </li>
+</ol>
+<br></div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./content/classification"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+    <a class='left-prev' id="prev-link" href="classification-intro.html" title="previous page">Classification</a>
+    <a class='right-next' id="next-link" href="classification-gradient-case-study.html" title="next page">Logistic regression on the Iris dataset</a>
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Stratis Markou, Rich Turner<br/>
+        
+            &copy; Copyright 2021.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../../_static/js/index.3da636dd464baa7582d2.js"></script>
+
+
+    
+  </body>
+</html>
