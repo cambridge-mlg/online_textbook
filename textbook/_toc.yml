@@ -16,5 +16,8 @@
 - file: content/classification/classification-intro
   sections:
       - file: content/classification/classification-logistic-regression-model
+      - file: content/classification/classification-logistic-regression-ML-fitting
       - file: content/classification/classification-gradient-case-study
         title: Classification case study
+        
+        
