@@ -145,6 +145,11 @@
     </a>
    </li>
    <li class="toctree-l2">
+    <a class="reference internal" href="classification-logistic-regression-ML-fitting.html">
+     Maximum likelihood fitting
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="classification-gradient-case-study.html">
      Classification case study
     </a>
@@ -390,7 +395,7 @@ $(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($
 </div>
 <div class="section" id="multi-class-softmax-classification">
 <h1>Multi-class softmax classification<a class="headerlink" href="#multi-class-softmax-classification" title="Permalink to this headline">¶</a></h1>
-<p>We will now extend the <a class="reference internal" href="classification_logistic_regression_ML_fitting.html"><span class="doc std std-doc">binary logistic regression model</span></a> to handle multiple classes.</p>
+<p>We will now extend the <span class="xref myst">binary logistic regression model</span> to handle multiple classes.</p>
 <div class="section" id="the-softmax-classification-model">
 <h2>The Softmax Classification Model<a class="headerlink" href="#the-softmax-classification-model" title="Permalink to this headline">¶</a></h2>
 <p>As before, each datapoint comprises an input <span class="math notranslate nohighlight">\(\mathbf{x}_n\)</span> and an output value <span class="math notranslate nohighlight">\(y_n\)</span>. Now the output <span class="math notranslate nohighlight">\(y_n = k\)</span> indicates which of <span class="math notranslate nohighlight">\(K\)</span> classes the <span class="math notranslate nohighlight">\(n^{th}\)</span> datapoint belongs to. Binary classification is recovered when <span class="math notranslate nohighlight">\(K=2\)</span>.</p>
