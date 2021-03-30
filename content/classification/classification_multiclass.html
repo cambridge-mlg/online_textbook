@@ -58,6 +58,7 @@
     <script async="async" src="../../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
+    <link rel="prev" title="Logistic regression on the Iris dataset" href="classification-gradient-case-study.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="en" />
@@ -94,7 +95,7 @@
   </a>
  </li>
 </ul>
-<ul class="nav sidenav_l1">
+<ul class="current nav sidenav_l1">
  <li class="toctree-l1 collapsible-parent">
   <a class="reference internal" href="../regression/regression-intro.html">
    Regression
@@ -134,11 +135,11 @@
   <i class="fas fa-chevron-down">
   </i>
  </li>
- <li class="toctree-l1 collapsible-parent">
+ <li class="toctree-l1 current active collapsible-parent">
   <a class="reference internal" href="classification-intro.html">
    Classification
   </a>
-  <ul class="collapse-ul">
+  <ul class="current collapse-ul">
    <li class="toctree-l2">
     <a class="reference internal" href="classification-logistic-regression-model.html">
      Logistic classification
@@ -152,6 +153,11 @@
    <li class="toctree-l2">
     <a class="reference internal" href="classification-gradient-case-study.html">
      Classification case study
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Multi-class softmax classification
     </a>
    </li>
   </ul>
@@ -299,99 +305,19 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_html"><style>.output {
-    font-family: ariel;
-    align-items: normal;
-    text-align: normal;
-}
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">6</span><span class="o">-</span><span class="mi">77</span><span class="n">aa9334fdd8</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="kn">import</span> <span class="nn">sys</span>
+<span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;..&#39;</span><span class="p">)</span>
+<span class="ne">---&gt; </span><span class="mi">11</span> <span class="kn">from</span> <span class="nn">helper_functions</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="g g-Whitespace">     </span><span class="mi">12</span> 
+<span class="g g-Whitespace">     </span><span class="mi">13</span> <span class="c1"># set things like fonts etc - comes from helper_functions</span>
 
-div.output_svg div { margin : auto; }
-.div.output_area.MathJax_Display{ text-align: center; }
-div.text_cell_render { font-family: sans-serif; }
-
-details {
-    margin: 20px 0px;
-    padding: 0px 10px;
-    border-radius: 3px;
-    border-style: solid;
-    border-color: black;
-    border-width: 2px;
-}
-details div{padding: 20px 30px;}
-details summary{font-size: 18px;}
-
-table {
-     margin: calc(auto + 10px) !important;
-     border: solid !important;
- }
-
- th, td {
-    text-align: left !important;
- }
-
- .further_box {
-    background-color:rgb(230, 230, 230);
-    border-style: solid;
-    margin: 10px 10px 10px 0px;
-    padding: 10px;
-    left:calc(auto - 20px);
- }
-
- .question_box {
-    background-color:rgb(255, 255, 225);
-    border-style: solid;
-    margin: 10px 10px 10px 0px;
-    padding: 10px;
-    left:calc(auto - 20px);
- }</style>
-     <input type="submit" value='Home' id="initiated" class='home_button' onclick='window.location="../index.ipynb"' style='float: right; margin-right: 40px;'>
-    <script>
-    $('.home_button').not('#initiated').remove();
-    $('.home_button').removeAttr('id');
-    $(".home_button").insertBefore($("div.cell").first());
-
-    $('div.input.init_hidden').hide()
-    $('div.input.init_shown').show()
-    $('.toggle_button').each(function( index, element ) {
-       var prefix;
-       if (this.classList.contains('init_show')) {
-           prefix = 'Show '
-       }
-       else if (this.classList.contains('init_hide')) {
-           prefix = 'Hide '
-       };
-       $(this).val(prefix + $(this).val().substr($(this).val().indexOf(" ") + 1))
-    });
-    IPython.OutputArea.prototype._should_scroll = function(lines) {
-        return false;
-    }
-    </script>
-</div><div class="output text_html">
-    <script>
-      function get_new_label(butn, hide) {
-          var shown = $(butn).parents("div.cell.code_cell").find('div.input').is(':visible');
-          var title = $(butn).val().substr($(butn).val().indexOf(" ") + 1)
-          return ((shown) ? 'Show ' : 'Hide ') + title
-      }
-      function code_toggle(butn, hide) {
-        $(butn).val(get_new_label(butn,hide));
-        $(hide).slideToggle();
-      };
-    </script>
-    <input type="submit" value='initiated' class='toggle_button'>
-    <script>
-        var hide_area = $(".toggle_button[value='initiated']").parents('div.cell').prevAll().addBack().slice(-1)
-        hide_area = $(hide_area).find("div.input").add($(hide_area).filter("div.text_cell"))
-        $(".toggle_button[value='initiated']").prop("hide_area", hide_area)
-        $(".toggle_button[value='initiated']").click(function(){
-            code_toggle(this, $(this).prop("hide_area"))
-        }); 
-$(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($(".toggle_button[value='initiated']").parents("div.output").find('div.output_area').first());
-    var shown = $(".toggle_button[value='initiated']").parents("div.cell.code_cell").find('div.input').is(':visible');
-    var title = ((shown) ? 'Hide ' : 'Show ') + 'setup code'; 
-     $(".toggle_button[value='initiated']").addClass("init_show");
-            $(hide_area).addClass("init_hidden");  $(".toggle_button[value='initiated']").val(title);
-    </script></div></div>
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;helper_functions&#39;
+</pre></div>
+</div>
+</div>
 </div>
 <div class="section" id="multi-class-softmax-classification">
 <h1>Multi-class softmax classification<a class="headerlink" href="#multi-class-softmax-classification" title="Permalink to this headline">¶</a></h1>
@@ -464,32 +390,19 @@ p(y_{n} = k |\mathbf{x}_n, \{\mathbf{w}_k\}_{k=1}^K) = \frac{\exp(a_{n,k})}{\sum
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/classification_multiclass_3_0.svg" src="../../_images/classification_multiclass_3_0.svg" /><div class="output text_html">
-    <script>
-      function get_new_label(butn, hide) {
-          var shown = $(butn).parents("div.cell.code_cell").find('div.input').is(':visible');
-          var title = $(butn).val().substr($(butn).val().indexOf(" ") + 1)
-          return ((shown) ? 'Show ' : 'Hide ') + title
-      }
-      function code_toggle(butn, hide) {
-        $(butn).val(get_new_label(butn,hide));
-        $(hide).slideToggle();
-      };
-    </script>
-    <input type="submit" value='initiated' class='toggle_button'>
-    <script>
-        var hide_area = $(".toggle_button[value='initiated']").parents('div.cell').prevAll().addBack().slice(-1)
-        hide_area = $(hide_area).find("div.input").add($(hide_area).filter("div.text_cell"))
-        $(".toggle_button[value='initiated']").prop("hide_area", hide_area)
-        $(".toggle_button[value='initiated']").click(function(){
-            code_toggle(this, $(this).prop("hide_area"))
-        }); 
-$(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($(".toggle_button[value='initiated']").parents("div.output").find('div.output_area').first());
-    var shown = $(".toggle_button[value='initiated']").parents("div.cell.code_cell").find('div.input').is(':visible');
-    var title = ((shown) ? 'Hide ' : 'Show ') + 'code'; 
-     $(".toggle_button[value='initiated']").addClass("init_show");
-            $(hide_area).addClass("init_hidden");  $(".toggle_button[value='initiated']").val(title);
-    </script></div></div>
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">ebd08698827f</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span>     <span class="k">return</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">T</span> <span class="c1"># define softmax function</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> 
+<span class="ne">----&gt; </span><span class="mi">4</span> <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> 
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="n">no_increments</span> <span class="o">=</span> <span class="mi">100</span>
+
+<span class="ne">NameError</span>: name &#39;plt&#39; is not defined
+</pre></div>
+</div>
+</div>
 </div>
 </div>
 <div class="section" id="fitting-using-maximum-likelihood-estimation">
@@ -565,38 +478,21 @@ p({y_{n}}<em>{n=1}^N|{\mathbf{x}<em>n}</em>{n=1}^N, {\mathbf{w}<em>k}</em>{k=1}^
         <span class="n">w</span> <span class="o">+=</span> <span class="n">stepsize</span><span class="o">*</span><span class="n">dL_dw</span> <span class="c1"># update weights and repeat</span>
     
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">w_history</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">log_liks</span><span class="p">)</span>
-
-<span class="n">toggle_code</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;gradient ascent algorithm&quot;</span><span class="p">,</span> <span class="n">on_load_hide</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_html">
-    <script>
-      function get_new_label(butn, hide) {
-          var shown = $(butn).parents("div.cell.code_cell").find('div.input').is(':visible');
-          var title = $(butn).val().substr($(butn).val().indexOf(" ") + 1)
-          return ((shown) ? 'Show ' : 'Hide ') + title
-      }
-      function code_toggle(butn, hide) {
-        $(butn).val(get_new_label(butn,hide));
-        $(hide).slideToggle();
-      };
-    </script>
-    <input type="submit" value='initiated' class='toggle_button'>
-    <script>
-        var hide_area = $(".toggle_button[value='initiated']").parents('div.cell').prevAll().addBack().slice(-1)
-        hide_area = $(hide_area).find("div.input").add($(hide_area).filter("div.text_cell"))
-        $(".toggle_button[value='initiated']").prop("hide_area", hide_area)
-        $(".toggle_button[value='initiated']").click(function(){
-            code_toggle(this, $(this).prop("hide_area"))
-        }); 
-$(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($(".toggle_button[value='initiated']").parents("div.output").find('div.output_area').first());
-    var shown = $(".toggle_button[value='initiated']").parents("div.cell.code_cell").find('div.input').is(':visible');
-    var title = ((shown) ? 'Hide ' : 'Show ') + 'gradient ascent algorithm'; 
-     $(".toggle_button[value='initiated']").addClass("init_hide");
-            $(hide_area).addClass("init_shown");  $(".toggle_button[value='initiated']").val(title);
-    </script></div></div>
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">2</span><span class="o">-</span><span class="mi">6</span><span class="n">c8eadfb00cf</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="g g-Whitespace">     </span><span class="mi">24</span>     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">w_history</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">log_liks</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">25</span> 
+<span class="ne">---&gt; </span><span class="mi">26</span> <span class="n">toggle_code</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;gradient ascent algorithm&quot;</span><span class="p">,</span> <span class="n">on_load_hide</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+
+<span class="ne">NameError</span>: name &#39;toggle_code&#39; is not defined
+</pre></div>
+</div>
+</div>
 </div>
 <p>We can now run gradient ascent on the Iris dataset with all 3 classes included. Let’s start by running it with just two of the input dimensions retained (sepal length and width) so that we can visualise the results easily. In the plot below, each point is coloured with the RGB value representing the probabilistic prediction the trained model makes for each class (<span class="math notranslate nohighlight">\(0\)</span>,<span class="math notranslate nohighlight">\(1\)</span> and <span class="math notranslate nohighlight">\(2\)</span> respectively) at this location.</p>
 <div class="cell docutils container">
@@ -625,38 +521,23 @@ $(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($
 <span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_train</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">x_train</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="s1">&#39;g&#39;</span><span class="p">])[</span><span class="n">y</span><span class="p">[:</span><span class="n">no_train</span><span class="p">]])</span>
 <span class="n">beautify_plot</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span><span class="sa">r</span><span class="s2">&quot;Likelihood in data space&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span><span class="s2">&quot;Sepal length (cm)&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span><span class="s2">&quot;Sepal width (cm)&quot;</span><span class="p">})</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-
-<span class="n">toggle_code</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/classification_multiclass_8_0.svg" src="../../_images/classification_multiclass_8_0.svg" /><div class="output text_html">
-    <script>
-      function get_new_label(butn, hide) {
-          var shown = $(butn).parents("div.cell.code_cell").find('div.input').is(':visible');
-          var title = $(butn).val().substr($(butn).val().indexOf(" ") + 1)
-          return ((shown) ? 'Show ' : 'Hide ') + title
-      }
-      function code_toggle(butn, hide) {
-        $(butn).val(get_new_label(butn,hide));
-        $(hide).slideToggle();
-      };
-    </script>
-    <input type="submit" value='initiated' class='toggle_button'>
-    <script>
-        var hide_area = $(".toggle_button[value='initiated']").parents('div.cell').prevAll().addBack().slice(-1)
-        hide_area = $(hide_area).find("div.input").add($(hide_area).filter("div.text_cell"))
-        $(".toggle_button[value='initiated']").prop("hide_area", hide_area)
-        $(".toggle_button[value='initiated']").click(function(){
-            code_toggle(this, $(this).prop("hide_area"))
-        }); 
-$(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($(".toggle_button[value='initiated']").parents("div.output").find('div.output_area').first());
-    var shown = $(".toggle_button[value='initiated']").parents("div.cell.code_cell").find('div.input').is(':visible');
-    var title = ((shown) ? 'Hide ' : 'Show ') + 'code'; 
-     $(".toggle_button[value='initiated']").addClass("init_show");
-            $(hide_area).addClass("init_hidden");  $(".toggle_button[value='initiated']").val(title);
-    </script></div></div>
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">3</span><span class="o">-</span><span class="mf">172e01</span><span class="n">a4e3e3</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;iris_inputs_full.npy&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;iris_labels.npy&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> 
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">y_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">3</span><span class="p">))</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="n">y_</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="ne">NameError</span>: name &#39;np&#39; is not defined
+</pre></div>
+</div>
+</div>
 </div>
 <p>Now that we have visualised the probabilities, we can apply the gradient-ascent algorithm to the full Iris dataset, with all of the input dimesions retained. First lets see how the log-likelihood changes with iteration number:</p>
 <div class="cell docutils container">
@@ -676,38 +557,23 @@ $(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($
 <span class="n">beautify_plot</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span><span class="sa">r</span><span class="s2">&quot;Optimisation of $\mathcal</span><span class="si">{L}</span><span class="s2">$&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span><span class="s2">&quot;Step #&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span><span class="s2">&quot;Log-likelihood $\mathcal</span><span class="si">{L}</span><span class="s2">$&quot;</span><span class="p">})</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">log_liks</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-
-<span class="n">toggle_code</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/classification_multiclass_10_0.svg" src="../../_images/classification_multiclass_10_0.svg" /><div class="output text_html">
-    <script>
-      function get_new_label(butn, hide) {
-          var shown = $(butn).parents("div.cell.code_cell").find('div.input').is(':visible');
-          var title = $(butn).val().substr($(butn).val().indexOf(" ") + 1)
-          return ((shown) ? 'Show ' : 'Hide ') + title
-      }
-      function code_toggle(butn, hide) {
-        $(butn).val(get_new_label(butn,hide));
-        $(hide).slideToggle();
-      };
-    </script>
-    <input type="submit" value='initiated' class='toggle_button'>
-    <script>
-        var hide_area = $(".toggle_button[value='initiated']").parents('div.cell').prevAll().addBack().slice(-1)
-        hide_area = $(hide_area).find("div.input").add($(hide_area).filter("div.text_cell"))
-        $(".toggle_button[value='initiated']").prop("hide_area", hide_area)
-        $(".toggle_button[value='initiated']").click(function(){
-            code_toggle(this, $(this).prop("hide_area"))
-        }); 
-$(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($(".toggle_button[value='initiated']").parents("div.output").find('div.output_area').first());
-    var shown = $(".toggle_button[value='initiated']").parents("div.cell.code_cell").find('div.input').is(':visible');
-    var title = ((shown) ? 'Hide ' : 'Show ') + 'code'; 
-     $(".toggle_button[value='initiated']").addClass("init_show");
-            $(hide_area).addClass("init_hidden");  $(".toggle_button[value='initiated']").val(title);
-    </script></div></div>
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">4</span><span class="o">-</span><span class="n">be5f7890707a</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;iris_inputs_full.npy&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;iris_labels.npy&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> 
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">y_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">3</span><span class="p">))</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="n">y_</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">y</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="ne">NameError</span>: name &#39;np&#39; is not defined
+</pre></div>
+</div>
+</div>
 </div>
 <p>Now lets test the accuracy of our model on the test data:</p>
 <div class="cell docutils container">
@@ -718,41 +584,23 @@ $(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($
     <span class="k">return</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">y_</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Classification accuracy for full iris dataset = </span><span class="si">{0:.1f}</span><span class="s1">%&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">softmax_test_accuracy</span><span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">w_history</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">*</span><span class="mi">100</span><span class="p">))</span>
-
-<span class="n">toggle_code</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Classification accuracy for full iris dataset = 94.7%
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">5</span><span class="o">-</span><span class="mi">06188231</span><span class="n">ec00</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span>     <span class="k">return</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">y_</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> 
+<span class="ne">----&gt; </span><span class="mi">6</span> <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Classification accuracy for full iris dataset = </span><span class="si">{0:.1f}</span><span class="s1">%&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">softmax_test_accuracy</span><span class="p">(</span><span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">w_history</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span><span class="o">*</span><span class="mi">100</span><span class="p">))</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span> 
+<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="n">toggle_code</span><span class="p">()</span>
+
+<span class="ne">NameError</span>: name &#39;x_test&#39; is not defined
 </pre></div>
 </div>
-<div class="output text_html">
-    <script>
-      function get_new_label(butn, hide) {
-          var shown = $(butn).parents("div.cell.code_cell").find('div.input').is(':visible');
-          var title = $(butn).val().substr($(butn).val().indexOf(" ") + 1)
-          return ((shown) ? 'Show ' : 'Hide ') + title
-      }
-      function code_toggle(butn, hide) {
-        $(butn).val(get_new_label(butn,hide));
-        $(hide).slideToggle();
-      };
-    </script>
-    <input type="submit" value='initiated' class='toggle_button'>
-    <script>
-        var hide_area = $(".toggle_button[value='initiated']").parents('div.cell').prevAll().addBack().slice(-1)
-        hide_area = $(hide_area).find("div.input").add($(hide_area).filter("div.text_cell"))
-        $(".toggle_button[value='initiated']").prop("hide_area", hide_area)
-        $(".toggle_button[value='initiated']").click(function(){
-            code_toggle(this, $(this).prop("hide_area"))
-        }); 
-$(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($(".toggle_button[value='initiated']").parents("div.output").find('div.output_area').first());
-    var shown = $(".toggle_button[value='initiated']").parents("div.cell.code_cell").find('div.input').is(':visible');
-    var title = ((shown) ? 'Hide ' : 'Show ') + 'code'; 
-     $(".toggle_button[value='initiated']").addClass("init_show");
-            $(hide_area).addClass("init_hidden");  $(".toggle_button[value='initiated']").val(title);
-    </script></div></div>
+</div>
 </div>
 </div>
 <div class="section" id="summary">
@@ -833,6 +681,7 @@ There are a variety of ways of transforming a multi-class classification problem
     
     <div class='prev-next-bottom'>
         
+    <a class='left-prev' id="prev-link" href="classification-gradient-case-study.html" title="previous page">Logistic regression on the Iris dataset</a>
 
     </div>
     <footer class="footer mt-5 mt-md-0">
