@@ -155,8 +155,8 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="classification_multiclass.html">
-     Multi-class softmax classification
+    <a class="reference internal" href="classification-multiclass.html">
+     Multi-class classification
     </a>
    </li>
   </ul>
@@ -396,7 +396,7 @@ $(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($
 </div>
 <div class="section" id="non-linear-classification">
 <h1>Non-linear classification<a class="headerlink" href="#non-linear-classification" title="Permalink to this headline">¶</a></h1>
-<p>We have previously encountered the <span class="xref myst">binary logistic classification</span> and <a class="reference internal" href="classification_multiclass.html"><span class="doc std std-doc">multi-class softmax classification</span></a> models. Both models were decribed as linear in the sense that any decision boundary corresponds to a set of straight lines. This is a severe assumption that is not typically appropriate. In this section we will consider data where non-linear models are required. We will focus on non-linear binary logistic classification, but it will be straight forward to use the same approach for non-linear multi-class softmax classification. As a running example we will use the synthetic crescent dataset shown below.</p>
+<p>We have previously encountered the <span class="xref myst">binary logistic classification</span> and <span class="xref myst">multi-class softmax classification</span> models. Both models were decribed as linear in the sense that any decision boundary corresponds to a set of straight lines. This is a severe assumption that is not typically appropriate. In this section we will consider data where non-linear models are required. We will focus on non-linear binary logistic classification, but it will be straight forward to use the same approach for non-linear multi-class softmax classification. As a running example we will use the synthetic crescent dataset shown below.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;class_crescent_inputs.npy&#39;</span><span class="p">)</span>

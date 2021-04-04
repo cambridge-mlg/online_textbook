@@ -1,0 +1,771 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Multi-class classification &#8212; Probabilistic Modelling and Inference</title>
+    
+  <link rel="stylesheet" href="../../_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom_style.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/.ipynb_checkpoints/custom_style-checkpoint.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../../_static/js/index.3da636dd464baa7582d2.js">
+
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="prev" title="Logistic regression on the Iris dataset" href="classification-gradient-case-study.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../../index.html">
+  
+  <img src="../../_static/logo.png" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">Probabilistic Modelling and Inference</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../home.html">
+   Online Inference Textbook
+  </a>
+ </li>
+</ul>
+<ul class="current nav sidenav_l1">
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../regression/regression-intro.html">
+   Regression
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../regression/regression-linear.html">
+     Linear regression
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../regression/regression-nonlinear.html">
+     Non-linear basis regression
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../regression/regression-overfitting.html">
+     Overfitting
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../regression/regression-regularisation.html">
+     Regularisation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../regression/regression-bayesian.html">
+     Bayesian Regression
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../regression/regression-bayesian-online-visualisations.html">
+     Bayesian Online Learning
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 current active collapsible-parent">
+  <a class="reference internal" href="classification-intro.html">
+   Classification
+  </a>
+  <ul class="current collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="classification-logistic-regression-model.html">
+     Logistic classification
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="classification-logistic-regression-ML-fitting.html">
+     Maximum likelihood fitting
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="classification-gradient-case-study.html">
+     Classification case study
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Multi-class classification
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../../_sources/content/classification/classification-multiclass.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+        <!-- Source interaction buttons -->
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/cambridge-mlg/online_textbook/master?urlpath=tree/./content/classification/classification-multiclass.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#the-softmax-classification-model">
+   The Softmax classification model
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#visualising-softmax-models">
+     Visualising softmax models
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#fitting-using-maximum-likelihood">
+   Fitting using maximum likelihood
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#summary">
+     Summary
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#questions">
+   Questions
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="multi-class-classification">
+<h1>Multi-class classification<a class="headerlink" href="#multi-class-classification" title="Permalink to this headline">¶</a></h1>
+<p>Previously, we looked at how the <a class="reference internal" href="classification-logistic-regression-model.html"><span class="doc std std-doc">logistic regression model</span></a> can be used to tackle two-class classification problems. In many problems of interest there are multiple classes. In this section we extend the logistic regression classifier to handle multiple classes.</p>
+<div class="section" id="the-softmax-classification-model">
+<h2>The Softmax classification model<a class="headerlink" href="#the-softmax-classification-model" title="Permalink to this headline">¶</a></h2>
+<p>As before, each datapoint comprises an input <span class="math notranslate nohighlight">\(\mathbf{x}_n\)</span> and an output value <span class="math notranslate nohighlight">\(y_n\)</span>. Now the output <span class="math notranslate nohighlight">\(y_n = k\)</span> indicates which of <span class="math notranslate nohighlight">\(K\)</span> classes the <span class="math notranslate nohighlight">\(n^{th}\)</span> datapoint belongs to. Binary classification is recovered when <span class="math notranslate nohighlight">\(K = 2\)</span>, wheras <span class="math notranslate nohighlight">\(K &gt; 2\)</span> corresponds to multi-class classification.</p>
+<p>The equivalent of the logistic regression model for multiple classes is the softmax classification model. Like logistic regression, softmax is also comprised of two stages. The first stage computes <span class="math notranslate nohighlight">\(k\)</span> activations <span class="math notranslate nohighlight">\(a_{n,k} = \mathbf{w}_k^\top \mathbf{x}_n\)</span> using a weight vector for each class <span class="math notranslate nohighlight">\(\{\mathbf{w}_k\}_{k=1}^K\)</span>. The second stage passes this set of activations into a <strong>softmax function</strong> which returns the probability that the datapoint belongs to each of the K classes (i.e. a K dimensional vector of probabilities) which has elements</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+p(y_{n} = k |\mathbf{x}_n, \{\mathbf{w}_k\}_{k=1}^K) = \frac{\exp(a_{n,k})}{\sum_{k'=1}^K \text{exp}(a_{n,k'})} = \frac{\text{exp}(\mathbf{w}_k^\top \mathbf{x}_n)}{\sum_{k'=1}^K \exp(\mathbf{w}_{k'}^\top \mathbf{x}_n)}.
+\end{align}\]</div>
+<p>Notice that by construction the softmax function is normalised</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+\sum_{k=1}^K p(y_{n} = k |\mathbf{x}_n, \{\mathbf{w}_k\}_{k=1}^K) = \frac{\sum_{k=1}^K \exp(a_{n,k})}{\sum_{k'=1}^K \text{exp}(a_{n,k'})} = 1.
+\end{align}\]</div>
+<p>In this way, the softmax parameterises a <a class="reference external" href="https://en.wikipedia.org/wiki/Categorical_distribution">categorical distribution</a> over the output variable, whereas the logistic function parameterised a <a class="reference external" href="https://en.wikipedia.org/wiki/Bernoulli_distribution">Bernoulli distribution</a>.</p>
+<div class="section" id="visualising-softmax-models">
+<h3>Visualising softmax models<a class="headerlink" href="#visualising-softmax-models" title="Permalink to this headline">¶</a></h3>
+<p>Let’s plot some examples of this model for <span class="math notranslate nohighlight">\(K = 3\)</span> classes and <span class="math notranslate nohighlight">\(D = 2\)</span> dimensional inputs. Each column of the plot below corresponds to a different softmax model each with its own weights <span class="math notranslate nohighlight">\(W^{(m)} = [\mathbf{w}_1^{(m)},\mathbf{w}_2^{(m)},\mathbf{w}^{(m)}_3]\)</span>. Each row shows how the probability of one of the three classes varies across the input space. The probability contours are not linear, however it turns out that the decision boundaries are. For more insight into the softmax function, see <a class="reference external" href="#Questions">question 1</a> below. First we implement the <code class="docutils literal notranslate"><span class="pre">softmax</span></code> function for convenience. We then draw four different random realisations of the matrix <span class="math notranslate nohighlight">\(W^{(m)}, m = 1, 2, ...\)</span> and plot the corresponding softmax probabilities for each of the three classes, over a grid of input locations.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">softmax</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)[:,</span> <span class="kc">None</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_center-output tag_hide-input docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Number of points in each dimension for grid discretisation</span>
+<span class="n">num_grid_pts</span> <span class="o">=</span> <span class="mi">100</span>
+
+<span class="c1"># Number of softmax samples to draw</span>
+<span class="n">num_samples</span> <span class="o">=</span> <span class="mi">4</span>
+
+<span class="c1"># Input coordinates of grid points</span>
+<span class="n">x1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">num_grid_pts</span><span class="p">)</span>
+<span class="n">x2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">num_grid_pts</span><span class="p">)</span>
+
+<span class="c1"># Figure to plot on</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
+
+<span class="c1"># Loop over number of samples</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_samples</span><span class="p">):</span>
+    
+    <span class="c1"># Draw matrix of weights</span>
+    <span class="n">W</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+    
+    <span class="c1"># Create grid of points</span>
+    <span class="n">grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">grid</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+    <span class="n">grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">grid</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    
+    <span class="c1"># Compute softmax probabilities</span>
+    <span class="n">probs</span> <span class="o">=</span> <span class="n">softmax</span><span class="p">(</span><span class="n">grid</span> <span class="o">@</span> <span class="n">W</span><span class="p">)</span>
+    <span class="n">probs</span> <span class="o">=</span> <span class="n">probs</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">num_grid_pts</span><span class="p">,</span> <span class="n">num_grid_pts</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+    
+    <span class="c1"># For each of the three classes, plot the class probability over the grid</span>
+    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+        
+        <span class="c1"># adding a subplot in appropriate location</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">i</span> <span class="o">+</span> <span class="n">c</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        
+        <span class="n">ax</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span><span class="n">x2</span><span class="p">,</span><span class="n">probs</span><span class="p">[:,:,</span><span class="n">c</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">coolwarm</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">c</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;$x_2$&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">yticks</span><span class="p">([])</span>
+            
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;$x_1$&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">([])</span>
+            
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Sampled model </span><span class="si">{</span><span class="n">c</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">hspace</span> <span class="o">=</span> <span class="mf">0.4</span><span class="p">,</span><span class="n">wspace</span> <span class="o">=</span> <span class="mf">0.3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/classification-multiclass_4_0.svg" src="../../_images/classification-multiclass_4_0.svg" /></div>
+</div>
+<p>Note that the probability contours for a given class are not linear. However it turns out that the decision boundaries, that is the boundaries where the most probable class changes from one to another, are in fact linear. For more insight into the softmax function, see <a class="reference external" href="#Questions">question 1</a> below.</p>
+</div>
+</div>
+<div class="section" id="fitting-using-maximum-likelihood">
+<h2>Fitting using maximum likelihood<a class="headerlink" href="#fitting-using-maximum-likelihood" title="Permalink to this headline">¶</a></h2>
+<p>Having gained some intuition about the model, we now consider maximum likelihood fitting. The likelihood can be written in a compact form using a one-hot encoding of the class labels. That is, we can encode the output <span class="math notranslate nohighlight">\(y_n=k\)</span> into a vector of length <span class="math notranslate nohighlight">\(K\)</span> comprising <span class="math notranslate nohighlight">\(K-1\)</span> zeros and a one in the <span class="math notranslate nohighlight">\(k^{\text{th}}\)</span> element e.g. for <span class="math notranslate nohighlight">\(K=4\)</span> classes if the <span class="math notranslate nohighlight">\(n^{\text{th}}\)</span> datapoint belongs to the third class <span class="math notranslate nohighlight">\(y_n=3\)</span> we have <span class="math notranslate nohighlight">\(\mathbf{y}_n = [0,0,1,0]\)</span>. These one-hot encodings can be stacked into an N-by-K matrix with elements <span class="math notranslate nohighlight">\(y_{n,k}\)</span> and will help us do the book keeping associated with computing the correct output probability for each datapoint. Armed with this new representation of the output, we can write the probability of the output given the weights and the inputs as,</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+p(\{y_{n}\}_{n=1}^N|\{\mathbf{x}_n\}_{n=1}^N, \{\mathbf{w}_k\}_{k=1}^K) &amp;= \prod_{n = 1}^N \prod_{k = 1}^K s_{n,k}^{y_{n,k}}.
+\end{align}\]</div>
+<p>Here we have denoted the output of the softmax function for each datapoint as</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+s_{n,k} = p(y_{n} = k |\mathbf{x}_n, \{\mathbf{w}_k\}_{k=1}^K) = \text{exp}(\mathbf{w}_k^\top \mathbf{x}_n)\big/\sum_{k'} \exp(\mathbf{w}_{k'}^\top \mathbf{x}_n).
+\end{align}\]</div>
+<p>In case it is not clear, let’s briefly consider the the trick of raising the softmax output to the power <span class="math notranslate nohighlight">\(y_{n,k}\)</span> through a simple example. Let <span class="math notranslate nohighlight">\(N=1\)</span> and <span class="math notranslate nohighlight">\(y_1 = 3\)</span> so that <span class="math notranslate nohighlight">\(\mathbf{y}_1 = [y_{1,1},y_{1,2},y_{1,3},y_{1,4}] = [0,0,1,0]\)</span>. The right hand side of the likelihood is therefore</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+\prod_{k = 1}^K s_{n,k}^{y_{n,k}} = s_{n,1}^{0} s_{n,2}^{0} s_{n,3}^{1} s_{n,4}^{0} = s_{n,3}^{1} = p(y_{1} = 3 |\mathbf{x}_n, \{\mathbf{w}_k\}_{k=1}^K).
+\end{align}\]</div>
+<p>So everything works as it should do. The probability of the output given the weights and the inputs is also called the likelihood of the parameters. The log-likelihood is therefore</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+\mathcal{L}(\{\mathbf{w}\}_{k=1}^K) &amp;= \sum_{n = 1}^N \sum_{k = 1}^K y_{n,k} \log s_{n,k}
+\end{align}\]</div>
+<p>Now we can numerically optimise the log-likelihood using gradient ascent. This requires computation of the derivatives of <span class="math notranslate nohighlight">\(\mathcal{L}(\{\mathbf{w}\}_{k=1}^K)\)</span> with respect to the weights,</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+\frac{\partial \mathcal{L}(\{\mathbf{w}\}_{k=1}^K)}{\partial \mathbf{w}_j} = \sum^N_{n = 1} (y_{n,j} - s_{n,j}) \mathbf{x}_n.
+\end{align}\]</div>
+<p>The full derivation of the gradient can be found below. Notice how it is composed of a sum over contributions from each datapoint, and each contribution involves the prediction error <span class="math notranslate nohighlight">\(y_{n,j} - s_{n,j}\)</span> multiplied by the input <span class="math notranslate nohighlight">\(\mathbf{x}_n\)</span>.</p>
+<details class='graydrop'>
+<summary>Derivation of the gradient of the softmax log-likelihood</summary>
+<p>Starting from the expression</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+\mathcal{L}(\{\mathbf{w}\}_{k=1}^K) &amp;= \sum_{n = 1}^N \sum_{k = 1}^K y_{n,k} \text{log}~s_{n,k},
+\end{align}\]</div>
+<p>and taking the derivative w.r.t. <span class="math notranslate nohighlight">\(\mathbf{w}_j\)</span> we see:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+\frac{\partial \mathcal{L}(\{\mathbf{w}\}_{k=1}^K)}{\partial \mathbf{w}_j} &amp;= \sum_{n = 1}^N\sum_{k = 1}^K y_{n,k} \frac{1}{s_{n,k}} \frac{\partial s_{n,k}}{\partial \mathbf{w}_j} = \sum_{n = 1}^N\sum_{k = 1}^K y_{n,k} \frac{1}{s_{n,k}} \frac{\partial s_{n,k}}{\partial a_{n,j}} \frac{\partial a_{n,j}}{\mathbf{w}_j}\\
+&amp;= \sum_{n = 1}^N\sum_{k = 1}^K y_{n,k} (\delta_{k,j} - s_{n,j}) \mathbf{x}_n
+\end{align}\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\delta_{k,j}\)</span> is a <a class="reference external" href="https://en.wikipedia.org/wiki/Kronecker_delta">Kronecker delta</a> and we have used the identity</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+\frac{\partial s_{n,k}}{ \partial a_{n,j}} = s_{n,k}(\delta_{k,j} - s_{n,j}).
+\end{align}\]</div>
+<p>Then considering that for each <span class="math notranslate nohighlight">\(n\)</span>, <span class="math notranslate nohighlight">\(y_{n,k}\)</span> is <span class="math notranslate nohighlight">\(1\)</span> for a single value of <span class="math notranslate nohighlight">\(k\)</span> and <span class="math notranslate nohighlight">\(0\)</span> for all other values of <span class="math notranslate nohighlight">\(k\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+\frac{\partial \mathcal{L}(\{\mathbf{w}\}_{k=1}^K)}{\partial \mathbf{w}_j} &amp;= \sum_{n = 1}^N\sum_{k = 1}^K y_{n,k}(\delta_{k,j} - s_{nj})\mathbf{x}_n\\
+&amp;= \sum_{n = 1}^N\sum_{k = 1}^K (y_{n,j} - s_{n,j})\mathbf{x}_n
+\end{align}\end{split}\]</div>
+<p>arriving at the final result.</p>
+</details>
+<br><p>Now let’s write down code for gradient ascent of the softmax classification likelihood, just as we did for logistic classication.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">softmax_gradient_ascent</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w0</span><span class="p">,</span> <span class="n">num_steps</span><span class="p">,</span> <span class="n">stepsize</span><span class="p">):</span>
+    
+    <span class="c1"># Add 1&#39;s to the inputs as usual, absorbing the bias term</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    
+    <span class="c1"># Copy weights (to prevent changing w0 as a side-effect)</span>
+    <span class="n">w</span> <span class="o">=</span> <span class="n">w0</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> 
+    
+    <span class="c1"># Arrays for storing weights and log-liklihoods at each step</span>
+    <span class="n">w_history</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">log_liks</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_steps</span><span class="p">):</span>
+        
+        <span class="c1"># Record current log-lik and current weights</span>
+        <span class="n">class_probs</span> <span class="o">=</span> <span class="n">softmax</span><span class="p">(</span><span class="n">x</span> <span class="o">@</span> <span class="n">w</span><span class="p">)</span>
+        <span class="n">log_lik</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">y</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">class_probs</span><span class="p">))</span>
+        
+        <span class="n">log_liks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">log_lik</span><span class="p">)</span>
+        <span class="n">w_history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+
+        <span class="n">dL_dw</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">class_probs</span><span class="p">)</span> <span class="o">/</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">w</span> <span class="o">+=</span> <span class="n">stepsize</span> <span class="o">*</span> <span class="n">dL_dw</span>
+    
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">w_history</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">log_liks</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can now run gradient ascent on the Iris dataset with all 3 classes included. Let’s start by running it with just two of the input dimensions retained (sepal length and width) so that we can visualise the results easily. In the plot below, each point is coloured with the RGB value representing the probabilistic prediction the trained model makes for each class (<span class="math notranslate nohighlight">\(0\)</span>,<span class="math notranslate nohighlight">\(1\)</span> and <span class="math notranslate nohighlight">\(2\)</span> respectively) at this location.</p>
+<div class="cell tag_center-output tag_hide-input docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load input and output data of the multi-class iris dataset</span>
+<span class="n">x_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;iris_inputs_full.npy&#39;</span><span class="p">)</span>
+<span class="n">y_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;iris_labels.npy&#39;</span><span class="p">)</span>
+
+<span class="n">num_classes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">y_data</span><span class="p">)</span>
+<span class="n">num_data</span> <span class="o">=</span> <span class="n">y_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1"># Convert output data to one-hot</span>
+<span class="n">y_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="n">num_classes</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)[</span><span class="n">y_data</span><span class="p">]</span>
+
+<span class="c1"># Number of points to use for training</span>
+<span class="n">num_train</span> <span class="o">=</span> <span class="p">(</span><span class="n">num_data</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)</span> <span class="o">//</span> <span class="mi">4</span>
+
+<span class="n">x_train</span> <span class="o">=</span> <span class="n">x_data</span><span class="p">[:</span><span class="n">num_train</span><span class="p">,</span> <span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">x_valid</span> <span class="o">=</span> <span class="n">x_data</span><span class="p">[</span><span class="n">num_train</span><span class="p">:,</span> <span class="p">:</span><span class="mi">2</span><span class="p">]</span>
+<span class="n">y_train</span> <span class="o">=</span> <span class="n">y_data</span><span class="p">[:</span><span class="n">num_train</span><span class="p">]</span>
+<span class="n">y_valid</span> <span class="o">=</span> <span class="n">y_data</span><span class="p">[</span><span class="n">num_train</span><span class="p">:]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_center-output docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initial weights</span>
+<span class="n">w0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">x_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+
+<span class="c1"># Number of training steps and stepsize</span>
+<span class="n">num_steps</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e4</span><span class="p">)</span>
+<span class="n">stepsize</span> <span class="o">=</span> <span class="mf">5e-2</span>
+
+<span class="c1"># Perform gradient ascent training</span>
+<span class="n">w_history</span><span class="p">,</span> <span class="n">log_liks</span> <span class="o">=</span> <span class="n">softmax_gradient_ascent</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span>
+                                              <span class="n">y_train</span><span class="p">,</span>
+                                              <span class="n">w0</span><span class="p">,</span>
+                                              <span class="n">num_steps</span><span class="p">,</span>
+                                              <span class="n">stepsize</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_hide-input tag_center-output docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Grid locations to plot predictive probilities</span>
+<span class="n">grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">200</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">200</span><span class="p">))</span>
+<span class="n">grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+<span class="n">grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">grid</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Compute predictive probabilities at input locations</span>
+<span class="n">probs</span> <span class="o">=</span> <span class="n">softmax</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w_history</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+<span class="n">rgb_colors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">probs</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">axis</span>  <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">datapoint_colors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="s1">&#39;g&#39;</span><span class="p">])[</span><span class="n">y</span><span class="p">[:</span><span class="n">no_train</span><span class="p">]]</span>
+
+<span class="c1"># Figure to plot on</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+
+<span class="c1"># Plot model predictions and datapoints</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">rgb_colors</span><span class="p">,</span>
+           <span class="n">extent</span><span class="o">=</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">],</span>
+           <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+           <span class="n">origin</span><span class="o">=</span><span class="s1">&#39;lower&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_train</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="n">x_train</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span>
+            <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;+&#39;</span><span class="p">,</span>
+            <span class="n">s</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="n">datapoint_colors</span><span class="p">)</span>
+
+<span class="c1"># Format plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Model predictions and data&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Sepal length (cm)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Sepal width (cm)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/classification-multiclass_12_0.svg" src="../../_images/classification-multiclass_12_0.svg" /></div>
+</div>
+<p>Now that we have visualised the probabilities, we can apply the gradient-ascent algorithm to the full Iris dataset, with all of the input dimesions retained. First lets see how the log-likelihood changes with iteration number:</p>
+<div class="cell tag_center-output tag_hide-input docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Number of training steps and stepsize</span>
+<span class="n">num_steps</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e4</span><span class="p">)</span>
+<span class="n">stepsize</span> <span class="o">=</span> <span class="mf">1e-1</span>
+
+<span class="c1"># Initial weights</span>
+<span class="n">w0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">x_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+
+<span class="n">w_history</span><span class="p">,</span> <span class="n">log_liks</span> <span class="o">=</span> <span class="n">softmax_gradient_ascent</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span>
+                                              <span class="n">y_train</span><span class="p">,</span>
+                                              <span class="n">w0</span><span class="p">,</span>
+                                              <span class="n">num_steps</span><span class="p">,</span>
+                                              <span class="n">stepsize</span><span class="p">)</span>
+
+<span class="c1"># Figure to plot on</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+
+<span class="c1"># Plot log-likelihood</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">log_liks</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Optimisation of log-likelihood $\mathcal</span><span class="si">{L}</span><span class="s1">$&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Step #&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Log-likelihood $\mathcal</span><span class="si">{L}</span><span class="s1">$&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_steps</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/classification-multiclass_14_0.svg" src="../../_images/classification-multiclass_14_0.svg" /></div>
+</div>
+<p>Now lets test the accuracy of our model on the test data. We write this as a convenient helper function <code class="docutils literal notranslate"><span class="pre">softmax_test_accuracy</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">softmax_accuracy</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">):</span>
+    
+    <span class="c1"># Append 1&#39;s to input data as before </span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">x</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    
+    <span class="c1"># Compute predictive probabilities for each class</span>
+    <span class="n">pred_probs</span> <span class="o">=</span> <span class="n">softmax</span><span class="p">(</span><span class="n">x</span> <span class="o">@</span> <span class="n">w</span><span class="p">)</span>
+    
+    <span class="c1"># Compute fraction of correct predictions</span>
+    <span class="n">corrects</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">pred_probs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">accuracy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">corrects</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">accuracy</span>
+
+<span class="n">accuracy</span> <span class="o">=</span> <span class="n">softmax_accuracy</span><span class="p">(</span><span class="n">x_valid</span><span class="p">,</span> <span class="n">y_valid</span><span class="p">,</span> <span class="n">w_history</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Classification accuracy for full iris dataset = &#39;</span>
+      <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="mi">100</span><span class="o">*</span><span class="n">accuracy</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="s1">%&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Classification accuracy for full iris dataset = 84.21%
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="summary">
+<h3>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h3>
+<p>The multi-class softmax classification model comprises two steps:</p>
+<ol class="simple">
+<li><p>Compute <span class="math notranslate nohighlight">\(K\)</span> activations, one for each class, each of which are linear projections of the input <span class="math notranslate nohighlight">\(a_{n,k} = \mathbf{w}_k^\top \mathbf{x}_n\)</span>.</p></li>
+<li><p>Pass the <span class="math notranslate nohighlight">\(K\)</span> activations into the softmax function to get a vector of <span class="math notranslate nohighlight">\(K\)</span> elements which are the class membership probabilities</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+p(y_{n} = k |\mathbf{x}_n, \{\mathbf{w}_k\}_{k=1}^K) = \frac{\text{exp}(\mathbf{w}_k^\top \mathbf{x}_n)}{\sum_{k'} \exp(\mathbf{w}_{k'}^\top \mathbf{x}_n)}.
+\end{align}\]</div>
+<p>The log-likelihood and its derivatives can be compactly written using a one-hot encoding of the training data’s outputs. Gradient ascent can then be used to numerically optimise the log-likelihood. In the <span class="xref myst">next section</span> we will look at how to generalise this method to non-linear classification.</p>
+</div>
+</div>
+<div class="section" id="questions">
+<h2>Questions<a class="headerlink" href="#questions" title="Permalink to this headline">¶</a></h2>
+<ol start="1">
+<li> <b>Why the name 'softmax' and relating softmax classification to logistic classification</b> Consider the softmax classification function:
+<div class="math notranslate nohighlight">
+\[\begin{align}
+p(y_{k} = k |\mathbf{x}, \{\mathbf{w}_k\}_{k=1}^K)  = \frac{\text{exp}(\mathbf{w}_k^\top \mathbf{x})}{\sum_{k'=1}^K \exp(\mathbf{w}_{k'}^\top \mathbf{x})},
+\end{align}\]</div>
+<p>What happens to the softmax function as the magnitude of the weights tends to infinity <span class="math notranslate nohighlight">\(|\mathbf{w}_k| \rightarrow \infty\)</span>?</p>
+<p>Consider K=2 classes, compare and contrast the softmax classification model to binary logistic classification. Is the softmax function <strong><a class="reference external" href="https://en.wikipedia.org/wiki/Identifiability">identifiable</a></strong>?</p>
+<br>
+<details class='graydrop'>
+<summary>Answer</summary>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+y_k(x, W) = \frac{e^{w_k^\top x}}{\sum_{k = 1}^K e^{w_k^\top x}}
+\end{align}\]</div>
+<p><strong>First part:</strong> We write the weight vectors as</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+w_k = \beta \hat{w}_k,
+\end{align}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\beta\)</span> is a magnitude scalar and <span class="math notranslate nohighlight">\(\hat{w}_k\)</span> is the unit vector parallel to <span class="math notranslate nohighlight">\(w_k\)</span>. We can therefore write</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+y_k(x, W) &amp;= \frac{e^{\beta\hat{w}_k^\top x}}{\sum_{k = 1}^K e^{\beta\hat{w}_k^\top x}}, \\
+          &amp;= \frac{e^{\beta(\hat{w}_k - \hat{w}_{max})^\top x}}{\sum_{k = 1}^K e^{\beta(\hat{w}_k - \hat{w}_{max})^\top x}}.
+\end{align}\end{split}\]</div>
+<p>where we have defined <span class="math notranslate nohighlight">\(\hat{w}_{max}\)</span> as</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\hat{w}_{max} = \argmax_{\hat{w}_k \in \hat{w}_1, ..., \hat{w}_K} \hat{w}_k^\top x.
+\end{align}\]</div>
+<p>Note that <span class="math notranslate nohighlight">\((\hat{w}_k - \hat{w}_{max})^\top x\)</span> are all scalars, of which at least one is zero and the others are all negative. Let the zero-terms have indices <span class="math notranslate nohighlight">\(i_1, ..., i_M\)</span>, that is</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\hat{w}_{i_m}^\top x = 0, \text{ for all } m = 1, ..., M.
+\end{align}\]</div>
+<p>Now, as <span class="math notranslate nohighlight">\(\beta \to \infty\)</span> we have</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+e^{(\hat{w}_k - \hat{w}_{max})^\top x} \to \begin{cases}
+1 &amp; \text{ if } k \not \in \{i_1, ..., i_M\}, \\
+0 &amp; \text{ otherwise.}
+\end{cases}
+\end{align}\end{split}\]</div>
+<p>Therefore, the quantity <span class="math notranslate nohighlight">\(y_k(x, W)\)</span> tends to the corresponding limit which is</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+y_k(x, W) \to \begin{cases}
+\frac{1}{M} &amp; \text{ if } k \in \{i_1, ..., i_M\}, \\
+0 &amp; \text{ otherwise.}
+\end{cases}
+\end{align}\end{split}\]</div>
+<p>In the case where <span class="math notranslate nohighlight">\(M = 1\)</span>, we have</p>
+<div class="math notranslate nohighlight">
+\[\begin{align}
+y_k(x, W) = \mathbb{1}\left(\argmax_{k'} \hat{w}_{k'}^\top x = k \right),
+\end{align}\]</div>
+<p>which is a one-zero encoding of the argmax function. The soft-max is a ‘softer’ version of the argmax function (and becomes the argmax function in the limit <span class="math notranslate nohighlight">\(\beta \to \infty\)</span>), from which it gets its name.</p>
+<p><strong>Second part:</strong> Consider the case of <span class="math notranslate nohighlight">\(K = 2\)</span> classes. Then we can write</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+y_1(x, W) &amp;= \frac{e^{w_1^\top x}}{e^{w_1^\top x} + e^{w_2^\top x}} \\
+&amp;= \frac{1}{1 + e^{(w_2 - w_1)^\top x}} \\
+&amp;= \frac{1}{1 + e^{v^\top x}},
+\end{align}\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(v = w_2 - w_1\)</span>. This is equivalent to the expression for logistic regression applied to a two-class classification problem. However, notice that although the softmax and logistic functions are identical for <span class="math notranslate nohighlight">\(K = 2\)</span> classes, the parameterisation is different. The softmax version is over-parameterised having two sets of parameters whose difference affects the input-output function. For this reason the parameters of the softmax are not identifiable: adding the same vector to each weight <span class="math notranslate nohighlight">\(\mathbf{w}_k \leftarrow \mathbf{w}_k + \mathbf{b}\)</span> causes no change in the input-output function.</p>
+</details>
+</li>
+</ol>
+<br>
+<ol start="2">
+<li> <b>Making multi-class classifiers from binary classifiers</b>
+<p>Alice has a multi-class classification problem, but only has access to code for training and making predictions from a binary classifier. Devise heuristic approaches for using a set of binary classiers to solve a multi-class problem. Compare and contrast these approaches to softmax classification.</p>
+<br>
+<details class='graydrop'>
+<summary>Answer</summary>
+<p>There are a variety of ways of transforming a multi-class classification problem to a binary one (see <a class="reference external" href="https://en.wikipedia.org/wiki/Multiclass_classification">here</a>).</p>
+<p>A simple technique is to train K all-versus-one classifiers each of which classifies an input into either belonging to class k or one of the other K-1 classes. A test point can be run through each of these classifiers and the largest output picked.</p>
+<p>Alternatively, a set of pairwise binary classifiers could be built, potentially for all <span class="math notranslate nohighlight">\(\frac{K(K - 1)}{2}\)</span> pairs of classification problems and the winning class selected by majority vote.</p>
+<p>Another approach is to build a tree of classifiers. E.g. if there are four classes, the root classifier might first split the input into classes (1 &amp; 2) vs (3 &amp; 4) with two leaf classifiers making the final classification (1 vs 2) and (3 vs 4). This approach would involve building the tree (i.e. figuring out which classes to group together at the non-leaf nodes). <strong>Decision trees</strong> and <strong>random forests</strong> take approaches of this sort.</p>
+</details>
+</li>
+</ol>
+<br></div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./content/classification"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+    <a class='left-prev' id="prev-link" href="classification-gradient-case-study.html" title="previous page">Logistic regression on the Iris dataset</a>
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Stratis Markou, Rich Turner<br/>
+        
+            &copy; Copyright 2021.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../../_static/js/index.3da636dd464baa7582d2.js"></script>
+
+
+    
+  </body>
+</html>

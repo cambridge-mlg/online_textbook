@@ -157,8 +157,8 @@
     </a>
    </li>
    <li class="toctree-l2">
-    <a class="reference internal" href="classification_multiclass.html">
-     Multi-class softmax classification
+    <a class="reference internal" href="classification-multiclass.html">
+     Multi-class classification
     </a>
    </li>
   </ul>
@@ -369,13 +369,13 @@ p(\{ y_n \}_{n=1}^N|\{\mathbf{x}_n\}_{n=1}^N, \mathbf{w}) = \prod^N_{n = 1} \sig
 <p>Then we define the function <code class="docutils literal notranslate"><span class="pre">gradient_ascent</span></code> which optimises the weights of the logistic regression model by taking gradients steps, as described above.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">gradient_ascent</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">init_weights</span><span class="p">,</span> <span class="n">num_steps</span><span class="p">,</span> <span class="n">stepsize</span><span class="p">):</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">gradient_ascent</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w0</span><span class="p">,</span> <span class="n">num_steps</span><span class="p">,</span> <span class="n">stepsize</span><span class="p">):</span>
     
     <span class="c1"># Add 1&#39;s to the inputs as usual, absorbing the bias term</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">x</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
     
     <span class="c1"># Copy weights (to prevent changing init_weights as a side-effect</span>
-    <span class="n">w</span> <span class="o">=</span> <span class="n">init_weights</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> 
+    <span class="n">w</span> <span class="o">=</span> <span class="n">w0</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> 
     
     <span class="c1"># Arrays for storing weights and log-liklihoods at each step</span>
     <span class="n">w_history</span> <span class="o">=</span> <span class="p">[]</span>
@@ -596,7 +596,7 @@ In order to prove that there is a unique global maximum of the log-likelihood:
 <li><p>There is no analytic closed form solution to this fitting problem, unlike linear regression.</p></li>
 <li><p>Gradient descent can be used to numerically optimise the likelihood.</p></li>
 </ol>
-<p>For a further look at binary logistic classification using the gradient ascent algorithm see the <a class="reference internal" href="classification-gradient-case-study.html"><span class="doc std std-doc">case study</span></a> which uses the full four dimensional input space in the Iris dataset. In the next <span class="xref myst">chapter</span> we will look at how to extend bnary logistic classification to handle more than <span class="math notranslate nohighlight">\(2\)</span> classes.</p>
+<p>For a further look at binary logistic classification using the gradient ascent algorithm see the <a class="reference internal" href="classification-gradient-case-study.html"><span class="doc std std-doc">case study</span></a> which uses the full four dimensional input space in the Iris dataset. In the next <a class="reference internal" href="classification-multiclass.html"><span class="doc std std-doc">chapter</span></a> we will look at how to extend bnary logistic classification to handle more than <span class="math notranslate nohighlight">\(2\)</span> classes.</p>
 </div>
 <div class="section" id="questions">
 <h2>Questions<a class="headerlink" href="#questions" title="Permalink to this headline">¶</a></h2>
