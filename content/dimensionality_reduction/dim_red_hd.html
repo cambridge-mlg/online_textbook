@@ -1,0 +1,709 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>4.2 High dimensional PCA &#8212; Probabilistic Modelling and Inference</title>
+    
+  <link rel="stylesheet" href="../../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/sphinx-book-theme.e7340bb3dbd8dde6db86f25597f54a1b.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom_style.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../../_static/js/index.d3f166471bb80abb5163.js">
+
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../_static/sphinx-book-theme.7d483ff0a819d6edff12ce0b1ead3928.js"></script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../../index.html">
+  
+  <img src="../../_static/logo.png" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">Probabilistic Modelling and Inference</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../home.html">
+   Online Inference Textbook
+  </a>
+ </li>
+</ul>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../regression/regression-intro.html">
+   Regression
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../regression/regression-linear.html">
+     Linear regression
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../regression/regression-nonlinear.html">
+     Non-linear basis regression
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../regression/regression-overfitting.html">
+     Overfitting
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../regression/regression-regularisation.html">
+     Regularisation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../regression/regression-bayesian.html">
+     Bayesian Regression
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../regression/regression-bayesian-online-visualisations.html">
+     Bayesian Online Learning
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../classification/classification-intro.html">
+   Classification
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../classification/classification-logistic-regression-model.html">
+     Logistic classification
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../classification/classification-logistic-regression-ML-fitting.html">
+     Maximum likelihood fitting
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../classification/classification-gradient-case-study.html">
+     Classification case study
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../classification/classification-multiclass.html">
+     Multi-class classification
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="dim-red-intro.html">
+   Dimensionality Reduction
+  </a>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../../_sources/content/dimensionality_reduction/dim_red_hd.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+            <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                    data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                    title="Fullscreen mode"><i
+                        class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/cambridge-mlg/online_textbook/master?urlpath=tree/./content/dimensionality_reduction/dim_red_hd.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">config</span> InlineBackend.figure_format = &#39;svg&#39; # change output plot display format to &#39;svg&#39;
+
+<span class="c1"># import the required modules for this notebook</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="c1"># import the helper functions from the parent directory,</span>
+<span class="c1"># these help with things like graph plotting and notebook layout</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;..&#39;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">helper_functions</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="c1"># set things like fonts etc - comes from helper_functions</span>
+<span class="n">set_notebook_preferences</span><span class="p">()</span>
+
+<span class="c1"># add a show/hide code button - also from helper_functions</span>
+<span class="n">toggle_code</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;import functions&quot;</span><span class="p">,</span> <span class="n">above</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">
+    <style>
+  .output {
+    font-family: ariel;
+    align-items: normal;
+    text-align: normal;
+}
+
+div.output_svg div { margin : auto; }
+.div.output_area.MathJax_Display{ text-align: center; }
+div.text_cell_render { font-family: sans-serif; }
+
+details {
+    margin: 20px 0px;
+    padding: 0px 10px;
+    border-radius: 3px;
+    border-style: solid;
+    border-color: black;
+    border-width: 2px;
+}
+details div{padding: 20px 30px;}
+details summary{font-size: 18px;}
+
+table {
+     margin: calc(auto + 10px) !important;
+     border: solid !important;
+ }
+
+ th, td {
+    text-align: left !important;
+ }
+
+ .further_box {
+    background-color:rgb(230, 230, 230);
+    border-style: solid;
+    margin: 10px 10px 10px 0px;
+    padding: 10px;
+    left:calc(auto - 20px);
+ }
+
+ .question_box {
+    background-color:rgb(255, 255, 225);
+    border-style: solid;
+    margin: 10px 10px 10px 0px;
+    padding: 10px;
+    left:calc(auto - 20px);
+ }
+    </style>
+     <input type="submit" value='Home' class='home_button' onclick='window.location="../index.html"' style='float: right; margin-right: 40px;'>
+    <script>
+    $('.home_button').not(':first').remove();
+    $(".home_button").insertBefore($("div.cell").first());
+    $('div.input.init_hidden').hide()
+    $('div.input.init_shown').show()
+    $('.toggle_button').each(function( index, element ) {
+       var prefix;
+       if (this.classList.contains('init_show')) {
+           prefix = 'Show '
+       }
+       else if (this.classList.contains('init_hide')) {
+           prefix = 'Hide '
+       };
+       $(this).val(prefix + $(this).val().substr($(this).val().indexOf(" ") + 1))
+    });
+    IPython.OutputArea.prototype._should_scroll = function(lines) {
+        return false;
+    }
+    </script>
+</div><div class="output text_html">
+    <script>
+      function get_new_label(butn, hide) {
+          var shown = 
+          var title = $(butn).val().substr($(butn).val().indexOf(" ") + 1)
+          return ((shown) ? 'Hide ' : 'Show ') + title
+      }
+      function code_toggle(butn, hide) {
+        $(butn).val(get_new_label(butn,hide));
+        $(hide).slideToggle();
+      };
+    </script>
+    <input type="submit" value='initiated' class='toggle_button'>
+    <script>
+        var hide_area = $(".toggle_button[value='initiated']").parents('div.cell').prevAll().addBack().slice(-1)
+        hide_area = $(hide_area).find("div.input").add($(hide_area).filter("div.text_cell"))
+        $(".toggle_button[value='initiated']").prop("hide_area", hide_area)
+        $(".toggle_button[value='initiated']").click(function(){
+            code_toggle(this, $(this).prop("hide_area"))
+        }); 
+$(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($(".toggle_button[value='initiated']").parents("div.output").find('div.output_area').first());
+    var shown = $(".toggle_button[value='initiated']").parents("div.cell.code_cell").find('div.input').is(':visible');
+    var title = ((shown) ? 'Hide ' : 'Show ') + 'import functions'; 
+     $(".toggle_button[value='initiated']").addClass("init_show");
+            $(hide_area).addClass("init_hidden");  $(".toggle_button[value='initiated']").val(title);
+    </script></div></div>
+</div>
+<div class="section" id="high-dimensional-pca">
+<h1>4.2 High dimensional PCA<a class="headerlink" href="#high-dimensional-pca" title="Permalink to this headline">¶</a></h1>
+<p>In <a class="reference internal" href="dim_red_pca.html"><span class="doc std std-doc">section 4.1</span></a> we applied PCA to the toy <span class="math notranslate nohighlight">\(2\)</span>D dataset and a subset of MNIST containing only <span class="math notranslate nohighlight">\(8\)</span>’s. Performing PCA amounted to solving an eigenproblem of the form <span class="math notranslate nohighlight">\(\mathbf{S} \mathbf{u}_d = \lambda_d\mathbf{u}_d\)</span>. One issue we have not yet addressed is the computational performance of this method. The complexity of an eigenproblem involving a matrix with dimensions <span class="math notranslate nohighlight">\(D \times D\)</span> is <span class="math notranslate nohighlight">\(\mathcal{O}(D^3)\)</span>. In the PCA eigenproblem, the dimension of <span class="math notranslate nohighlight">\(\mathbf{S}\)</span> is the number of dimensions of the dataset: <span class="math notranslate nohighlight">\(D = 2\)</span> for the <span class="math notranslate nohighlight">\(2\)</span>D example and <span class="math notranslate nohighlight">\(D = 784\)</span> for MNIST. Because the computational complexity is polynomial with <span class="math notranslate nohighlight">\(D\)</span>, PCA quickly becomes prohibitively slow for high-dimensional datasets. Consider for example a dataset consisting of <span class="math notranslate nohighlight">\(1000\)</span> coloured images of <span class="math notranslate nohighlight">\(1,920 \times 1,200\)</span> pixels each. This comes up to <span class="math notranslate nohighlight">\(\approx 7 \times 10^6\)</span> dimensions, which would take a factor of <span class="math notranslate nohighlight">\(\approx 6.8 \times 10^{11}\)</span> more computational time to run than our MNIST example.</p>
+<p>In this section we introduce a neat trick calculation which changes the computational complexity from <span class="math notranslate nohighlight">\(\mathcal{O}(D^3)\)</span> to <span class="math notranslate nohighlight">\(\mathcal{O}(N^3)\)</span> where <span class="math notranslate nohighlight">\(N\)</span> is the number of samples in the dataset. Applied to the high-resolution images example above, this trick would reduce the computational time by a factor of <span class="math notranslate nohighlight">\(\approx 3 \times 10^8\)</span>. Note that this method would be useful onyl when <span class="math notranslate nohighlight">\(N &lt; D\)</span>, but there are several situations where this might be the case. Another example could be a dataset of <span class="math notranslate nohighlight">\(500\)</span> audio samples, each <span class="math notranslate nohighlight">\(3\)</span> seconds in duration and a standard sampling rate of <span class="math notranslate nohighlight">\(44.1\)</span>kHz. Then <span class="math notranslate nohighlight">\(D = 44.1 \times 10^3 \times 3 = 132300\)</span> and <span class="math notranslate nohighlight">\(N = 1000\)</span>. Implementing the <span class="math notranslate nohighlight">\(\mathcal{O}(D^3)\to \mathcal{O}(N^3)\)</span> trick would reduce computation time by a factor of <span class="math notranslate nohighlight">\(\approx 2 \times 10^7\)</span>.</p>
+<p>As a reminder, the PCA eigenproblem is:</p>
+<p>\begin{align}
+\mathbf{S} \mathbf{u}_d = \lambda_d\mathbf{u}<em>d, \text{ where } \mathbf{S} = \frac{1}{N}\sum^N</em>{n = 1}(\mathbf{x}_n - \bar{\mathbf{x}})(\mathbf{x}_n - \bar{\mathbf{x}})^\top. \
+\end{align}</p>
+<p>Defining <span class="math notranslate nohighlight">\(\mathbf{X}\)</span> as the matrix whose <span class="math notranslate nohighlight">\(n^{th}\)</span> row is <span class="math notranslate nohighlight">\((\mathbf{x}_n - \bar{\mathbf{x}})\)</span>, the above expression can be rewritten in the form:</p>
+<p>\begin{align}
+\mathbf{S} \mathbf{u}_d = \frac{1}{N}\mathbf{X}^\top \mathbf{X} \mathbf{u}_d = \lambda_d \mathbf{u}_d\
+\end{align}</p>
+<p>The trick then amounts to premultiplying both sides by <span class="math notranslate nohighlight">\(\mathbf{X}\)</span>, to obtain another eigenproblem:</p>
+<p>\begin{align}
+\frac{1}{N}\mathbf{X} \mathbf{X}^\top \mathbf{X} \mathbf{u}_d &amp;= \lambda_d \mathbf{X} \mathbf{u}_d\
+~\
+\frac{1}{N}\mathbf{X} \mathbf{X}^\top \mathbf{v}_d &amp;= \lambda_d \mathbf{v}_d\
+\end{align}</p>
+<p>where <span class="math notranslate nohighlight">\(\mathbf{v}_d = \mathbf{X} \mathbf{u}_d\)</span>. The relevant matrix is now <span class="math notranslate nohighlight">\(\mathbf{X} \mathbf{X}^\top\)</span> which has dimensons <span class="math notranslate nohighlight">\(N \times N\)</span> instead of <span class="math notranslate nohighlight">\(\mathbf{X}^\top \mathbf{X}\)</span> which has dimensons <span class="math notranslate nohighlight">\(D \times D\)</span>. Also note that the two eigenproblems share the same eigenvalues <span class="math notranslate nohighlight">\(\lambda_d\)</span>. Once this modified eigenproblem is solved, the last step is to obtain <span class="math notranslate nohighlight">\(\mathbf{u}_d\)</span> from <span class="math notranslate nohighlight">\(\mathbf{v}_d\)</span>, which can be achieved straightfowardly after premultiplying by <span class="math notranslate nohighlight">\(\mathbf{X}^\top\)</span> and some manipulation:</p>
+<p>\begin{align}
+\boxed{\mathbf{u}_d = \frac{1}{\sqrt{N\lambda_d}} \mathbf{X}^\top \mathbf{v}_d}
+\end{align}</p>
+<p>where we have assumed <span class="math notranslate nohighlight">\(\mathbf{v}_d\)</span> is normalised, and have rescaled <span class="math notranslate nohighlight">\(\mathbf{u}_d\)</span> so as to normalise it as well.</p>
+<details>
+<summary>From $\mathbf{v}_d$ to $\mathbf{u}_d$ in detail</summary>
+<div>
+<p>\begin{align}
+\frac{1}{N}\mathbf{X} \mathbf{X}^\top \mathbf{v}_d &amp;= \lambda_d \mathbf{v}_d\
+~\
+\frac{1}{N}\mathbf{X}^\top \mathbf{X} \mathbf{X}^\top \mathbf{v}_d &amp;= \lambda_d \mathbf{X}^\top \mathbf{v}_d\
+~\
+\frac{1}{N}\mathbf{X}^\top \mathbf{X} \mathbf{X}^\top \mathbf{v}_d &amp;= \lambda_d \mathbf{X}^\top \mathbf{X} \mathbf{u}_d\
+~\
+\frac{1}{N} \mathbf{X}^\top \mathbf{v}_d &amp;= \lambda_d \mathbf{u}_d\
+~\
+\mathbf{u}_d &amp;= \frac{1}{N \lambda_d }\mathbf{X}^\top \mathbf{v}_d\
+\end{align}</p>
+<p>Assuming <span class="math notranslate nohighlight">\(\mathbf{v}_d\)</span> is normalised:</p>
+<p>\begin{align}
+\mathbf{u}_d &amp;= \frac{1}{N \lambda_d }\mathbf{X}^\top \mathbf{v}_d\
+~\
+|\mathbf{u}_d|^2 &amp;= \frac{1}{N^2 \lambda_d^2 }\mathbf{v}_d^\top \mathbf{X}\mathbf{X}^\top \mathbf{v}_d\
+~\
+|\mathbf{u}_d|^2 &amp;= \frac{1}{N \lambda_d }|\mathbf{v}_d|^2 = \frac{1}{N \lambda_d }\
+\end{align}</p>
+<p>Therefore to obtain normalised <span class="math notranslate nohighlight">\(\mathbf{u}_d\)</span>, we must rescale <span class="math notranslate nohighlight">\(1/(N \lambda_d) \mathbf{X}^\top \mathbf{v}_d\)</span> by <span class="math notranslate nohighlight">\(\sqrt{N \lambda_d }\)</span>, to obtain the result</p>
+<p>\begin{align}
+\mathbf{u}_d &amp;= \frac{1}{\sqrt{N \lambda_d}}\mathbf{X}^\top \mathbf{v}_d\
+\end{align}</p>
+</div>
+</details>
+<p>The implementation of this approach is very similar to our previous method:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">PCA_D</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    
+    <span class="n">X</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">x</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span> <span class="o">=</span> <span class="mi">0</span><span class="p">))</span>
+    
+    <span class="n">t</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">eig_values</span><span class="p">,</span> <span class="n">eig_vectors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">/</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Time taken for high-dimensional approach:&#39;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">((</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">t</span><span class="p">),</span> <span class="mi">3</span><span class="p">),</span> <span class="s1">&#39;sec&#39;</span><span class="p">)</span>
+    
+    <span class="n">sort_idx</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">eig_values</span><span class="p">)</span><span class="o">.</span><span class="n">argsort</span><span class="p">()</span>
+    <span class="n">eig_values</span><span class="p">,</span> <span class="n">eig_vectors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">eig_values</span><span class="p">[</span><span class="n">sort_idx</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">eig_vectors</span><span class="p">[:,</span> <span class="n">sort_idx</span><span class="p">])</span>
+    <span class="n">eig_vectors</span> <span class="o">=</span> <span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">eig_vectors</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">absolute</span><span class="p">(</span><span class="n">eig_values</span><span class="p">)</span><span class="o">*</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">**</span><span class="mf">0.5</span>
+    
+    
+    <span class="k">return</span> <span class="n">eig_values</span><span class="p">,</span> <span class="n">eig_vectors</span>
+
+<span class="n">toggle_code</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;high dimensional PCA function&quot;</span><span class="p">,</span> <span class="n">on_load_hide</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">
+    <script>
+      function get_new_label(butn, hide) {
+          var shown = 
+          var title = $(butn).val().substr($(butn).val().indexOf(" ") + 1)
+          return ((shown) ? 'Hide ' : 'Show ') + title
+      }
+      function code_toggle(butn, hide) {
+        $(butn).val(get_new_label(butn,hide));
+        $(hide).slideToggle();
+      };
+    </script>
+    <input type="submit" value='initiated' class='toggle_button'>
+    <script>
+        var hide_area = $(".toggle_button[value='initiated']").parents('div.cell').prevAll().addBack().slice(-1)
+        hide_area = $(hide_area).find("div.input").add($(hide_area).filter("div.text_cell"))
+        $(".toggle_button[value='initiated']").prop("hide_area", hide_area)
+        $(".toggle_button[value='initiated']").click(function(){
+            code_toggle(this, $(this).prop("hide_area"))
+        }); 
+$(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($(".toggle_button[value='initiated']").parents("div.output").find('div.output_area').first());
+    var shown = $(".toggle_button[value='initiated']").parents("div.cell.code_cell").find('div.input').is(':visible');
+    var title = ((shown) ? 'Hide ' : 'Show ') + 'high dimensional PCA function'; 
+     $(".toggle_button[value='initiated']").addClass("init_hide");
+            $(hide_area).addClass("init_shown");  $(".toggle_button[value='initiated']").val(title);
+    </script></div></div>
+</div>
+<p>We will apply this high dimensional PCA approach to a subset of the <a class="reference external" href="http://vis-www.cs.umass.edu/lfw/">Labeled Faces in the Wild</a> people dataset. The subset we will be using contains 500 images of well-known figures at <span class="math notranslate nohighlight">\(87 \times 65\)</span> resolution <span class="math notranslate nohighlight">\(-\)</span> therefore <span class="math notranslate nohighlight">\(N = 500\)</span>, while <span class="math notranslate nohighlight">\(D = 5655\)</span> so we should expect a reduction in computation time of about 3 orders of magnitude.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;dim_red_faces.npy&#39;</span><span class="p">)</span>
+<span class="n">images</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">87</span><span class="p">,</span> <span class="mi">65</span><span class="p">))</span>
+<span class="n">eig_values</span><span class="p">,</span> <span class="n">eig_vectors</span> <span class="o">=</span> <span class="n">PCA_D</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Time taken for high-dimensional approach: 0.297 sec
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># PCA_N uses regular PCA method shown in the previous section. It takes 3 orders of magnitude</span>
+<span class="c1"># longer than PCA_D to run so you can uncomment it and run if you are feeling patient</span>
+
+<span class="c1"># eig_values, eig_vectors = PCA_N(x)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Plotting the rms reconstruction error <span class="math notranslate nohighlight">\(E_{rms}\)</span>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">eig_values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">eig_values</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])[::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">)</span>
+<span class="n">beautify_plot</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span><span class="s2">&quot;Mean reconstruction error&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span><span class="s2">&quot;No. of components kept (M)&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span><span class="s2">&quot;$E_</span><span class="si">{rms}</span><span class="s2">$&quot;</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">toggle_code</span><span class="p">(</span><span class="n">above</span> <span class="o">=</span> <span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/dim_red_hd_7_0.svg" src="../../_images/dim_red_hd_7_0.svg" /><div class="output text_html">
+    <script>
+      function get_new_label(butn, hide) {
+          var shown = 
+          var title = $(butn).val().substr($(butn).val().indexOf(" ") + 1)
+          return ((shown) ? 'Hide ' : 'Show ') + title
+      }
+      function code_toggle(butn, hide) {
+        $(butn).val(get_new_label(butn,hide));
+        $(hide).slideToggle();
+      };
+    </script>
+    <input type="submit" value='initiated' class='toggle_button'>
+    <script>
+        var hide_area = $(".toggle_button[value='initiated']").parents('div.cell').prevAll().addBack().slice(-4)
+        hide_area = $(hide_area).find("div.input").add($(hide_area).filter("div.text_cell"))
+        $(".toggle_button[value='initiated']").prop("hide_area", hide_area)
+        $(".toggle_button[value='initiated']").click(function(){
+            code_toggle(this, $(this).prop("hide_area"))
+        }); 
+$(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($(".toggle_button[value='initiated']").parents("div.output").find('div.output_area').first());
+    var shown = $(".toggle_button[value='initiated']").parents("div.cell.code_cell").find('div.input').is(':visible');
+    var title = ((shown) ? 'Hide ' : 'Show ') + 'code'; 
+     $(".toggle_button[value='initiated']").addClass("init_show");
+            $(hide_area).addClass("init_hidden");  $(".toggle_button[value='initiated']").val(title);
+    </script></div></div>
+</div>
+<p>we again see that here too the dataset is dominated by a relatively small number of components compared to the dimensionality <span class="math notranslate nohighlight">\(D\)</span>. As with MNIST, we can also visualise the most important components:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rows</span><span class="p">,</span> <span class="n">cols</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span>  <span class="o">=</span> <span class="p">(</span><span class="n">cols</span><span class="p">,</span> <span class="n">rows</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">rows</span><span class="o">*</span><span class="n">cols</span><span class="p">):</span>
+    
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">eig_vectors</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">images</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:]),</span> <span class="n">cmap</span> <span class="o">=</span> <span class="s1">&#39;binary&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">62</span><span class="p">,</span> <span class="mi">83</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">16</span><span class="p">,</span>
+             <span class="n">horizontalalignment</span> <span class="o">=</span> <span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">verticalalignment</span> <span class="o">=</span> <span class="s1">&#39;bottom&#39;</span><span class="p">)</span>
+    <span class="n">remove_axes</span><span class="p">()</span>
+    
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">w_pad</span> <span class="o">=</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="n">h_pad</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">toggle_code</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/dim_red_hd_9_0.svg" src="../../_images/dim_red_hd_9_0.svg" /><div class="output text_html">
+    <script>
+      function get_new_label(butn, hide) {
+          var shown = 
+          var title = $(butn).val().substr($(butn).val().indexOf(" ") + 1)
+          return ((shown) ? 'Hide ' : 'Show ') + title
+      }
+      function code_toggle(butn, hide) {
+        $(butn).val(get_new_label(butn,hide));
+        $(hide).slideToggle();
+      };
+    </script>
+    <input type="submit" value='initiated' class='toggle_button'>
+    <script>
+        var hide_area = $(".toggle_button[value='initiated']").parents('div.cell').prevAll().addBack().slice(-1)
+        hide_area = $(hide_area).find("div.input").add($(hide_area).filter("div.text_cell"))
+        $(".toggle_button[value='initiated']").prop("hide_area", hide_area)
+        $(".toggle_button[value='initiated']").click(function(){
+            code_toggle(this, $(this).prop("hide_area"))
+        }); 
+$(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($(".toggle_button[value='initiated']").parents("div.output").find('div.output_area').first());
+    var shown = $(".toggle_button[value='initiated']").parents("div.cell.code_cell").find('div.input').is(':visible');
+    var title = ((shown) ? 'Hide ' : 'Show ') + 'code'; 
+     $(".toggle_button[value='initiated']").addClass("init_show");
+            $(hide_area).addClass("init_hidden");  $(".toggle_button[value='initiated']").val(title);
+    </script></div></div>
+</div>
+<p>We see that the top components are relatively smooth and generic, whereas the less significant ones look like noisy or deformed faces. For our own satisfaction we can wrap this up by showing how some random faces in the dataset can be reconstructed from the <span class="math notranslate nohighlight">\(M\)</span> most important components.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">no_components</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">200</span><span class="p">]</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">12</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">test_image</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">x</span><span class="p">[:</span><span class="mi">6</span><span class="p">]):</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">M</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">no_components</span><span class="p">):</span>
+        <span class="n">inner_products</span> <span class="o">=</span> <span class="p">(</span><span class="n">eig_vectors</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">test_image</span><span class="p">)</span>
+
+        <span class="n">weights</span> <span class="o">=</span> <span class="n">inner_products</span><span class="p">[:</span><span class="n">M</span><span class="p">]</span>
+        <span class="n">vectors</span> <span class="o">=</span> <span class="n">eig_vectors</span><span class="p">[:,</span> <span class="p">:</span><span class="n">M</span><span class="p">]</span>
+        <span class="n">reconstructed_img</span> <span class="o">=</span> <span class="n">vectors</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
+
+        <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="n">j</span><span class="o">*</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">no_components</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="o">-</span><span class="n">reconstructed_img</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">images</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:]),</span> <span class="n">cmap</span> <span class="o">=</span> <span class="s1">&#39;binary&#39;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">62</span><span class="p">,</span> <span class="mi">83</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="n">M</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;cyan&#39;</span><span class="p">,</span> <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">14</span><span class="p">,</span>
+                 <span class="n">horizontalalignment</span> <span class="o">=</span> <span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">verticalalignment</span> <span class="o">=</span> <span class="s1">&#39;bottom&#39;</span><span class="p">)</span>
+        <span class="n">remove_axes</span><span class="p">()</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="n">j</span><span class="o">*</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">no_components</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">no_components</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="o">-</span><span class="n">test_image</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">images</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:]),</span> <span class="n">cmap</span> <span class="o">=</span> <span class="s1">&#39;binary&#39;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="mi">62</span><span class="p">,</span> <span class="mi">83</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="s1">&#39;True&#39;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;cyan&#39;</span><span class="p">,</span> <span class="n">fontsize</span> <span class="o">=</span> <span class="mi">12</span><span class="p">,</span>
+                 <span class="n">horizontalalignment</span> <span class="o">=</span> <span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">verticalalignment</span> <span class="o">=</span> <span class="s1">&#39;bottom&#39;</span><span class="p">)</span>
+    <span class="n">remove_axes</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">(</span><span class="n">w_pad</span> <span class="o">=</span> <span class="o">-</span><span class="mi">30</span><span class="p">,</span> <span class="n">h_pad</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">toggle_code</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/dim_red_hd_11_0.svg" src="../../_images/dim_red_hd_11_0.svg" /><div class="output text_html">
+    <script>
+      function get_new_label(butn, hide) {
+          var shown = 
+          var title = $(butn).val().substr($(butn).val().indexOf(" ") + 1)
+          return ((shown) ? 'Hide ' : 'Show ') + title
+      }
+      function code_toggle(butn, hide) {
+        $(butn).val(get_new_label(butn,hide));
+        $(hide).slideToggle();
+      };
+    </script>
+    <input type="submit" value='initiated' class='toggle_button'>
+    <script>
+        var hide_area = $(".toggle_button[value='initiated']").parents('div.cell').prevAll().addBack().slice(-1)
+        hide_area = $(hide_area).find("div.input").add($(hide_area).filter("div.text_cell"))
+        $(".toggle_button[value='initiated']").prop("hide_area", hide_area)
+        $(".toggle_button[value='initiated']").click(function(){
+            code_toggle(this, $(this).prop("hide_area"))
+        }); 
+$(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($(".toggle_button[value='initiated']").parents("div.output").find('div.output_area').first());
+    var shown = $(".toggle_button[value='initiated']").parents("div.cell.code_cell").find('div.input').is(':visible');
+    var title = ((shown) ? 'Hide ' : 'Show ') + 'code'; 
+     $(".toggle_button[value='initiated']").addClass("init_show");
+            $(hide_area).addClass("init_hidden");  $(".toggle_button[value='initiated']").val(title);
+    </script></div></div>
+</div>
+<p>As we saw previously with MNIST, the number of components required until the reconstructed frace resembles the true image (<span class="math notranslate nohighlight">\(N \approx 10^2\)</span>) is significantly smaller than the dataset dimensionaality <span class="math notranslate nohighlight">\(D = 5655\)</span>.</p>
+<p>Having covered high-dimensional principal component analysis, you should now understand how to compute PCA with high-dimensional data in a computationaly effective way.</p>
+<p>In <span class="xref myst">clustering</span> we will look at how to seperate unlabelled clustered data into it’s distinct groups.</p>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./content/dimensionality_reduction"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        
+        <div class='prev-next-bottom'>
+            
+
+        </div>
+        
+        </div>
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Stratis Markou, Rich Turner<br/>
+        
+            &copy; Copyright 2021.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../../_static/js/index.d3f166471bb80abb5163.js"></script>
+
+
+    
+  </body>
+</html>

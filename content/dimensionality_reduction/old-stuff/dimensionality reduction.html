@@ -1,0 +1,594 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>4. Dimensionality Reduction &#8212; Probabilistic Modelling and Inference</title>
+    
+  <link rel="stylesheet" href="../../../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
+
+    
+  <link rel="stylesheet"
+    href="../../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../../../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../../../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/sphinx-book-theme.e7340bb3dbd8dde6db86f25597f54a1b.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom_style.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../../../_static/js/index.d3f166471bb80abb5163.js">
+
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/togglebutton.js"></script>
+    <script src="../../../_static/clipboard.min.js"></script>
+    <script src="../../../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../../_static/sphinx-book-theme.7d483ff0a819d6edff12ce0b1ead3928.js"></script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../../../_static/sphinx-thebe.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../../../index.html">
+  
+  <img src="../../../_static/logo.png" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">Probabilistic Modelling and Inference</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../home.html">
+   Online Inference Textbook
+  </a>
+ </li>
+</ul>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../../regression/regression-intro.html">
+   Regression
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../regression/regression-linear.html">
+     Linear regression
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../regression/regression-nonlinear.html">
+     Non-linear basis regression
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../regression/regression-overfitting.html">
+     Overfitting
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../regression/regression-regularisation.html">
+     Regularisation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../regression/regression-bayesian.html">
+     Bayesian Regression
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../regression/regression-bayesian-online-visualisations.html">
+     Bayesian Online Learning
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../../classification/classification-intro.html">
+   Classification
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../classification/classification-logistic-regression-model.html">
+     Logistic classification
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../classification/classification-logistic-regression-ML-fitting.html">
+     Maximum likelihood fitting
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../classification/classification-gradient-case-study.html">
+     Classification case study
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../classification/classification-multiclass.html">
+     Multi-class classification
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../dim-red-intro.html">
+   Dimensionality Reduction
+  </a>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../../../_sources/content/dimensionality_reduction/old-stuff/dimensionality reduction.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+            <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                    data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                    title="Fullscreen mode"><i
+                        class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/cambridge-mlg/online_textbook/master?urlpath=tree/./content/dimensionality_reduction/old-stuff/dimensionality reduction.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../../../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%%javascript</span>
+<span class="nx">IPython</span><span class="p">.</span><span class="nx">OutputArea</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">_should_scroll</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">lines</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<script type="application/javascript">IPython.OutputArea.prototype._should_scroll = function(lines) {
+    return false;
+}</script></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The usual notebook preferences</span>
+
+<span class="o">%</span><span class="k">config</span> InlineBackend.figure_format = &#39;svg&#39;
+
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;..&#39;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">helper_functions</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">HTML</span><span class="p">(</span><span class="n">toggle_code</span><span class="p">(</span><span class="s2">&quot;import functions&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">
+<script>
+  function get_new_label() {
+      var shown = $('div.cell.code_cell.rendered.selected div.input').is(':visible')
+      var title = $('div.cell.code_cell.rendered.selected').find('.toggle_button').val().substring(5)
+      return ((shown) ? 'Hide ' : 'Show ') + title
+  }
+  function code_toggle() {
+      $('div.cell.code_cell.rendered.selected div.input').toggle();
+      $('div.cell.code_cell.rendered.selected').find('.toggle_button').val(get_new_label());
+  };
+</script>
+<form action="javascript:code_toggle()"><input type="submit" value ='Show import functions'class='toggle_button'></form>
+</div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">set_notebook_preferences</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">
+<style>
+.output {
+    font-family: ariel;
+    align-items: normal;
+    text-align: normal;
+}
+
+div.output_svg div { margin : auto; }
+
+.div.output_area.MathJax_Display{ text-align: center; }
+
+div.text_cell_render { font-family: sans-serif; }
+
+details {
+    margin: 20px 0px;
+    padding: 0px 10px;
+    border-radius: 3px;
+    border-style: solid;
+    border-color: black;
+    border-width: 2px;
+}
+
+details div{padding: 20px 30px;}
+
+details summary{font-size: 18px;}
+
+table { margin: auto !important; }
+
+</style>
+<script>
+$('iframe').parents('div.cell.code_cell').find('div.input').hide()
+$('.toggle_button').parents('div.cell.code_cell').find('div.input').hide()
+$('.toggle_button').each(function( index, element ) {
+   $(this).val('Show ' + $(this).val().substring(5))
+});
+</script>
+</div></div>
+</div>
+<div class="section" id="dimensionality-reduction">
+<h1>4. Dimensionality Reduction<a class="headerlink" href="#dimensionality-reduction" title="Permalink to this headline">¶</a></h1>
+<p>In <span class="xref myst">classification</span>, we looked mainly at data with only a few variables per datapoints, such as the Iris dataset, which only has 4. However, in several applications, such as image classification the number of inputs per datapoint can be very large. For example, the images in the MNIST handwritten digits database are <span class="math notranslate nohighlight">\(28 \times 28\)</span> pixel images, living in a <span class="math notranslate nohighlight">\(784\)</span>-dimensional space of pixel intensities. However, the MNIST images do not populate the whole space homogeneously but rather occupy a smaller subspace: although there is variability in the dataset due to different handwritings, slightly rotated characters and so on, the characters of a given class <span class="math notranslate nohighlight">\((0, 1, 2 ..., 9)\)</span> are somewhat similar to each other:</p>
+<div>
+  <div class="column">
+    <img src="mnist.svg" alt="Forest" style="width:40%; float: center; padding: 0px">
+  </div>
+</div>
+<p>Therefore not all pixel intensities are equally important in describing the MNIST dataset, because some images are never encountered and certain parts of the <span class="math notranslate nohighlight">\(784\)</span>-dimensional space are empty. Consider for example the first three images bellow, which are examples belonging to the same <span class="math notranslate nohighlight">\(784\)</span>-dimensional space as the MNIST images but which are very different to the images of the dataset.</p>
+<div class="row">
+  <div class="column">
+    <img src="dim_red_examples.svg" alt="Snow" style="width:75%; float: center; padding: 20px">
+    <img src="dim_red_gaussian.svg" alt="Snow" style="width:40%; float: center; padding: 0px">
+  </div>
+</div>
+<p>To drive the point home with an example which can be visualised, the fourth image shows a <span class="math notranslate nohighlight">\(2\)</span>D dataset in which the points lie mostly along the direction of the arrow, and there is little variability along the direction perpendicular to the arrow.</p>
+<p>There are two main issues which arise from this discussion. In high-dimensional datasets:</p>
+<ol class="simple">
+<li><p>Certain directions of low variability may not be particularly informative about the data. For example, we could drop the direction perpendicular to the black arrow in the dataset above and still retain enough information to fit a simpler model to the now <span class="math notranslate nohighlight">\(1\)</span>D dataset. This is an example of data <strong>pre-processing</strong> which simplifies model fitting.</p></li>
+<li><p>Finding the directions of highest variability may be a question in itself if we are trying to determine which features are important or unimportant for describing a particular dataset, potentially discarding the unimportant ones.</p></li>
+</ol>
+<p>The above hint at two approaches for reducing number of dimensions of our dataset, which turn out to be equivalent. In the first approach we perform a basis change and then discard a number of dimensions of our dataset, picking the coordinate change and discarded dimensions so as to minimize the mean least-squares error from the unprocessed data <span class="math notranslate nohighlight">\(-\)</span> this is the minimisation of mean reconstruction error formulation. In the second approach, we discard a number of dimensions of low data variance whilst keeping the highest variance ones <span class="math notranslate nohighlight">\(-\)</span> this is the maximum variance formulation. This method of identifying the important directions in a dataset is called <strong>principal component analysis</strong> (PCA).</p>
+<p>We will start with the minimisation of mean reconstruction error. Our aim is to represent each point on the dataset as some constant multiplied by the same vector <span class="math notranslate nohighlight">\(\mathbf{u}_1\)</span>. To do this, we first define a complete set of orthonormal basis vectors <span class="math notranslate nohighlight">\({\mathbf{u}_d}\)</span>. Because these vectors are othonormal, it follows that each datapoint can be represented as a linear combination of these vectors:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbf{x}_n = \sum^D_{d = 1}a_{nd}\mathbf{u}_d
+\]</div>
+<p>Where <span class="math notranslate nohighlight">\(D\)</span> is the number of dimensions in the dataset. Now let’s take <span class="math notranslate nohighlight">\(M &lt; D\)</span> to be the number of dimensions we are reducing to (therefore <span class="math notranslate nohighlight">\(D-M\)</span> is the number of dimensions we are removing ). We can now write:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathbf{x}_n = \sum^M_{d = 1} a_{nd} \mathbf{u}_d +  \sum^D_{d = M + 1} a_{nd} \mathbf{u}_d
+\]</div>
+<p>The first sum here represents the orthogonal projection of the original datapoint onto the lower-dimensional subspace (as this can be expressed by the first <span class="math notranslate nohighlight">\(M\)</span>  basis vectors), and the second sum represents the vector between the original datapoint and the new datapoint. Now we need to define our error function. This is simply the Euclidean distance between the original and new datapoints. We can express this as:</p>
+<p>\begin{align}
+E &amp;=  \sum^N_{n = 1}\bigg[\sum^D_{d = M + 1} a_{nd} \mathbf{u}<em>d\bigg]^\top \bigg[\sum^D</em>{d = M + 1} a_{nd} \mathbf{u}<em>d\bigg]\
+~\
+&amp;=  \sum^N</em>{n = 1}\sum^D_{d = M + 1} a_{nd}^2\
+~\
+&amp;=  \sum^N_{n = 1}\sum^D_{d = M + 1} (\mathbf{u}_d^\top (\mathbf{x}_n - \bar{\mathbf{x}}))((\mathbf{x}_n - \bar{\mathbf{x}})^\top\mathbf{u}<em>d)\
+~\
+&amp;=  \sum^D</em>{d = M + 1} \mathbf{u}_d^\top \mathbf{S} \mathbf{u}_d\
+~\
+\end{align}</p>
+<p>We want to minimize <span class="math notranslate nohighlight">\(E\)</span> w.r.t. <span class="math notranslate nohighlight">\(\mathbf{u}_d\)</span>, however doing so directly would give the vacuous solution <span class="math notranslate nohighlight">\(\mathbf{u}_d = 0\)</span>, becuase we haven’t constrained the magnitude of the basis vectors. Requiring <span class="math notranslate nohighlight">\(||\mathbf{u}_d|| = 1\)</span> and using the method of Lagrange multipliers, we seek to minimise:</p>
+<p>\begin{align}
+E &amp;= \bigg[\sum^D_{d = M + 1} \mathbf{u}_d^\top \mathbf{S} \mathbf{u}_d \bigg] - \lambda_d(\mathbf{u}_d^\top \mathbf{u}_d - 1)\
+~\
+\frac{\partial E}{\partial \mathbf{u}_d} &amp;= 2\mathbf{S} \mathbf{u}_d - 2\lambda_d\mathbf{u}_d = 0\
+\end{align}</p>
+<p>\begin{align}
+\mathbf{S} \mathbf{u}_d = \lambda_d\mathbf{u}_d\
+\end{align}</p>
+<p>The choice of dimensions which minimize the reconstruction loss are therefore eigenvectors of <span class="math notranslate nohighlight">\(\mathbf{S}\)</span>. In addition, each eigenvalue <span class="math notranslate nohighlight">\(\lambda_d\)</span> is equal to the reconstruction loss due to discarding <span class="math notranslate nohighlight">\(\mathbf{u}_d\)</span>:</p>
+<p>\begin{align}
+\lambda_d &amp;= \mathbf{u}_d^\top\mathbf{S}\mathbf{u}<em>d =  \frac{1}{N}\sum^N</em>{n = 1} \mathbf{u}_d^\top(\mathbf{x}<em>n - \bar{\mathbf{x}})(\mathbf{x}<em>n - \bar{\mathbf{x}})^\top \mathbf{u}<em>d\
+\implies \sum</em>{d = M +1}^D \lambda_d &amp;= E =  \frac{1}{N}\sum</em>{d = M +1}^D\sum^N</em>{n = 1} \mathbf{u}_d^\top(\mathbf{x}_n - \bar{\mathbf{x}})(\mathbf{x}_n - \bar{\mathbf{x}})^\top \mathbf{u}_d\
+\end{align}</p>
+<p>We can implement PCA by solving the eigenproblem <span class="math notranslate nohighlight">\(\mathbf{S} \mathbf{u}_d = \lambda_d\mathbf{u}_d\)</span>, and retaining the dimensions <span class="math notranslate nohighlight">\(\mathbf{u}_d\)</span> with the highest eigenvalues <span class="math notranslate nohighlight">\(-\)</span> discarding low eigenvalues means low reconstruction loss. Before that however, we will show the equivalence between reconstruction loss minimisation and variance maximisation. The latter amounts to selecting <span class="math notranslate nohighlight">\(M\)</span> orthogonal directions such that the variance of the dataset in these directions is maximal:</p>
+<p>\begin{align}
+\text{Var}<em>{1:M}({\mathbf{x}}) &amp;=  \frac{1}{N}\sum^N</em>{n = 1}\bigg[\sum^M_{d = 1} a_{nd} \mathbf{u}<em>d \bigg]^2\
+~\
+&amp;=  \frac{1}{N} \sum^N</em>{n = 1}\bigg[\sum^M_{d = 1} a_{nd} \mathbf{u}<em>d \bigg]^\top \bigg[\sum^M</em>{d = 1} a_{nd} \mathbf{u}_d \bigg]\
+\end{align}</p>
+<p>The total variance of the dataset, <span class="math notranslate nohighlight">\(\text{Var}_{1:D}(\{\mathbf{x}\})\)</span>, can be expressed as</p>
+<p>\begin{align}
+\text{Var}<em>{1:D}({\mathbf{x}}) &amp;=  \frac{1}{N}\sum^N</em>{n = 1}\bigg[\sum^D_{d = 1} a_{nd} \mathbf{u}<em>d \bigg]^2\
+~\
+&amp;=  \frac{1}{N}\sum^N</em>{n = 1}\Bigg[\bigg[\sum^M_{d = 1} a_{nd} \mathbf{u}<em>d \bigg]^2 + \bigg[\sum^D</em>{d = M + 1} a_{nd} \mathbf{u}<em>d \bigg]^2\Bigg]\
+~\
+&amp;= \text{Var}</em>{1:M}({\mathbf{x}}) + \text{Var}_{M:D}({\mathbf{x}})\
+\end{align}</p>
+<p>where we have used the orthogonality of the basis vectors <span class="math notranslate nohighlight">\(\mathbf{u}_d\)</span>, where we can read off that the second term <span class="math notranslate nohighlight">\(\text{Var}_{M:D}(\{\mathbf{x}\})\)</span> is equal to the reconstruction loss found earlier. Considering that <span class="math notranslate nohighlight">\(\text{Var}_{1:D}(\{\mathbf{x}\})\)</span> is constant and independent of the orientation of the basis, we see that maximizing the variance <span class="math notranslate nohighlight">\(\text{Var}_{1:M}(\{\mathbf{x}\})\)</span> is equivalent to minimising the reconstruction loss <span class="math notranslate nohighlight">\(\text{Var}_{M:D}(\{\mathbf{x}\})\)</span>:</p>
+<p>\begin{align}
+\boxed{\text{Reconstruction loss minimisation}\Longleftrightarrow
+\text{Variance maximisation}}
+\end{align}</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">PCA</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    
+    <span class="n">S</span> <span class="o">=</span> <span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">x</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">x</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span><span class="o">/</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">eig_values</span><span class="p">,</span> <span class="n">eig_vectors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>
+    <span class="n">sort_idx</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="n">eig_values</span><span class="p">)</span><span class="o">.</span><span class="n">argsort</span><span class="p">()</span>
+    <span class="n">eig_values</span><span class="p">,</span> <span class="n">eig_vectors</span> <span class="o">=</span> <span class="n">eig_values</span><span class="p">[</span><span class="n">sort_idx</span><span class="p">],</span> <span class="n">eig_vectors</span><span class="p">[:,</span> <span class="n">sort_idx</span><span class="p">]</span>
+    
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">eig_values</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">eig_vectors</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;corr_data_2d.npy&#39;</span><span class="p">)</span> <span class="c1"># load the 2d correlated data from the example above</span>
+<span class="n">eig_values</span><span class="p">,</span> <span class="n">eig_vectors</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="c1"># perform PCA and return results</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">x</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">arrow</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">eig_vectors</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">eig_vectors</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">arrow</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">eig_vectors</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">eig_vectors</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">width</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">)</span>
+<span class="n">beautify_plot</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span><span class="s2">&quot;PCA on the $2$D dataset&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span><span class="s2">&quot;$x_1$&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span><span class="s2">&quot;$x_2$&quot;</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../../_images/dimensionality reduction_6_0.svg" src="../../../_images/dimensionality reduction_6_0.svg" /></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">eig_values</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[ 2.08357687  0.00525835]
+</pre></div>
+</div>
+</div>
+</div>
+<p>PCA gives the one independent component oriented along the long and one along the short axis of the gaussian, with correspondng variances <span class="math notranslate nohighlight">\(\approx 2.08 \text{ and } 0.0053\)</span> respectively. The orientation of the components is just what we would expect from simply looking at the data. Now let’s apply the same idea to MNIST:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;mnist_images.npy&#39;</span><span class="p">)</span> <span class="c1"># load the MNIST images...</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;mnist_labels.npy&#39;</span><span class="p">)</span> <span class="c1"># ... and labels</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">y</span> <span class="o">==</span> <span class="mi">8</span><span class="p">)]</span> <span class="c1"># select all images of 8s</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">X</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="c1"># reshape images into vectors</span>
+
+<span class="n">eig_values</span><span class="p">,</span> <span class="n">eig_vectors</span> <span class="o">=</span> <span class="n">PCA</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="c1"># apply PCA</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>How is the reconstruction error affected by the number of components discarded in MNIST? Bellow we compute the mean reconstruction error due to discarding all components <span class="math notranslate nohighlight">\((M+1), (M+2) ..., D\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">eig_values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">eig_values</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])[::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">)</span>
+<span class="n">beautify_plot</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span><span class="s2">&quot;Mean reconstruction error&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span><span class="s2">&quot;Index of lowest discarded component $(M)$&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span><span class="s2">&quot;Error&quot;</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../../_images/dimensionality reduction_11_0.svg" src="../../../_images/dimensionality reduction_11_0.svg" /></div>
+</div>
+<p>The reconstruction error appears to be dominated by a few components. These components are equivalently the direction of maximum variance, meaning that the images of <span class="math notranslate nohighlight">\(8\)</span>’s vary mostly along these directions. We will visualise these components bellow:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">12</span><span class="p">):</span>
+    
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">eig_vectors</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:]),</span> <span class="n">cmap</span> <span class="o">=</span> <span class="s1">&#39;binary&#39;</span><span class="p">)</span>
+    <span class="n">remove_axes</span><span class="p">()</span>
+    
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../../_images/dimensionality reduction_13_0.svg" src="../../../_images/dimensionality reduction_13_0.svg" /></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">test_image</span> <span class="o">=</span> <span class="n">X</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">inner_products</span> <span class="o">=</span> <span class="p">(</span><span class="n">eig_vectors</span><span class="o">.</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">test_image</span><span class="p">)</span>
+<span class="n">no_components</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">100</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">no_components</span><span class="p">):</span>
+    <span class="n">weights</span> <span class="o">=</span> <span class="n">inner_products</span><span class="p">[:</span><span class="n">n</span><span class="p">]</span>
+    <span class="n">vectors</span> <span class="o">=</span> <span class="n">eig_vectors</span><span class="p">[:,</span> <span class="p">:</span><span class="n">n</span><span class="p">]</span>
+    <span class="n">reconstructed_img</span> <span class="o">=</span> <span class="n">vectors</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
+    
+    <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">reconstructed_img</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:]),</span> <span class="n">cmap</span> <span class="o">=</span> <span class="s1">&#39;binary&#39;</span><span class="p">)</span>
+    <span class="n">remove_axes</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">test_image</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:]),</span> <span class="n">cmap</span> <span class="o">=</span> <span class="s1">&#39;binary&#39;</span><span class="p">)</span>
+<span class="n">remove_axes</span><span class="p">()</span>
+    
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../../_images/dimensionality reduction_14_0.svg" src="../../../_images/dimensionality reduction_14_0.svg" /></div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./content/dimensionality_reduction/old-stuff"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        
+        <div class='prev-next-bottom'>
+            
+
+        </div>
+        
+        </div>
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Stratis Markou, Rich Turner<br/>
+        
+            &copy; Copyright 2021.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../../../_static/js/index.d3f166471bb80abb5163.js"></script>
+
+
+    
+  </body>
+</html>
