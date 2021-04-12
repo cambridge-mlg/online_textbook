@@ -22,4 +22,7 @@
         title: Classification case study
       - file: content/classification/classification-multiclass
         
+- file: content/dimensionality_reduction/dim-red-intro
+#   sections:
+#       - file: content/dimensionality_reduction/classification-logistic-regression-model
         
