@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Logistic classification &#8212; Probabilistic Modelling and Inference</title>
     
-  <link rel="stylesheet" href="../../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
+  <link rel="stylesheet" href="../../_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
 
     
   <link rel="stylesheet"
@@ -26,16 +26,17 @@
 
     
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx-book-theme.e7340bb3dbd8dde6db86f25597f54a1b.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom_style.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/.ipynb_checkpoints/custom_style-checkpoint.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
     
-  <link rel="preload" as="script" href="../../_static/js/index.d3f166471bb80abb5163.js">
+  <link rel="preload" as="script" href="../../_static/js/index.3da636dd464baa7582d2.js">
 
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
@@ -45,7 +46,9 @@
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="../../_static/sphinx-book-theme.7d483ff0a819d6edff12ce0b1ead3928.js"></script>
+    <script src="../../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
     <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
     <script >
         const thebe_selector = ".thebe"
@@ -53,8 +56,6 @@
         const thebe_selector_output = ".output"
     </script>
     <script async="async" src="../../_static/sphinx-thebe.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="Maximum likelihood fitting for classification" href="classification-logistic-regression-ML-fitting.html" />
@@ -157,7 +158,12 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="classification-multiclass.html">
-     Multi-class classification
+     Non-linear classification
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="classification-non-linear.html">
+     Non-linear classification
     </a>
    </li>
   </ul>
@@ -186,21 +192,21 @@
           
 <main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
     
-    <div class="topbar container-xl fixed-top">
-    <div class="topbar-contents row">
-        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
-        <div class="col pl-md-4 topbar-main">
-            
-            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
-                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
-                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
-                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
-                <i class="fas fa-bars"></i>
-                <i class="fas fa-arrow-left"></i>
-                <i class="fas fa-arrow-up"></i>
-            </button>
-            
-            
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        
 <div class="dropdown-buttons-trigger">
     <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
             class="fas fa-download"></i></button>
@@ -218,16 +224,16 @@
     </div>
 </div>
 
-            <!-- Source interaction buttons -->
+        <!-- Source interaction buttons -->
 
 
-            <!-- Full screen (wrap in <a> to have style consistency -->
-            <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
-                    data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
-                    title="Fullscreen mode"><i
-                        class="fas fa-expand"></i></button></a>
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
 
-            <!-- Launch buttons -->
+        <!-- Launch buttons -->
 
 <div class="dropdown-buttons-trigger">
     <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
@@ -246,14 +252,13 @@
     </div>
 </div>
 
-        </div>
+    </div>
 
-        <!-- Table of contents -->
-        <div class="d-none d-md-block col-md-2 bd-toc show">
-            
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        
         <div class="tocsection onthispage pt-5 pb-3">
-            <i class="fas fa-list"></i>
-            Contents
+            <i class="fas fa-list"></i> Contents
         </div>
         <nav id="bd-toc-nav">
             <ul class="nav section-nav flex-column">
@@ -276,7 +281,6 @@
 
         </nav>
         
-        </div>
     </div>
 </div>
     <div id="main-content" class="row">
@@ -309,12 +313,23 @@ p(y_n = 1 | \mathbf{x}_n, \mathbf{w}) = \sigma(a_n)  = \frac{1}{1 + \text{exp}({
 <h2>Understanding the model<a class="headerlink" href="#understanding-the-model" title="Permalink to this headline">¶</a></h2>
 <p>Let’s understand the two steps in the logistic classifiction model. The first step is the only one that includes parameters. If we break the inputs into components that are parallel and perpedicular to the weight <span class="math notranslate nohighlight">\(\mathbf{w}\)</span> so that <span class="math notranslate nohighlight">\(\mathbf{x} =  \mathbf{x}_\parallel + \mathbf{x}_\bot\)</span>, then it is clear that the linear stage retains only the parallel component of the input. In other words, the weights define a direction in input space onto which the input is projected.</p>
 <p>Below we visualise the activation for a two-dimensional input space as we change the weights. We do not use a bias. The weights are a two-dimensional vector. To begin with we rotate the direction of the weight which changes the orientation of the activation function in the input space. Then we change the magnitude of the weight vector, which changes the slope of the activation function.</p>
-<p><img alt="" src="../../_images/linear_neuron.gif" /></p>
+<div class="cell tag_center-output tag_hide-input docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Image</span><span class="p">(</span><span class="s2">&quot;img/linear-neuron.gif&quot;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;IPython.core.display.Image object&gt;
+</pre></div>
+</div>
+</div>
+</div>
 <p>The second stage maps the activation - which is a real-valued linear projection of the input - to a valid probability with a value between <span class="math notranslate nohighlight">\(0\)</span> and <span class="math notranslate nohighlight">\(1\)</span>. Here’s a plot of the logistic function <span class="math notranslate nohighlight">\(\sigma(a) = \frac{1}{1 + \text{exp}(-a)}\)</span> which is monotonically increasing, takes the value 1/2 when <span class="math notranslate nohighlight">\(a = 0\)</span>, and asymptotes to zero for large input magnitudes.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">7</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
-<span class="n">sigma</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">))</span>
+<span class="n">sigma</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">a</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -322,7 +337,7 @@ p(y_n = 1 | \mathbf{x}_n, \mathbf{w}) = \sigma(a_n)  = \frac{1}{1 + \text{exp}({
 <div class="cell tag_center-output tag_hide-input docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">sigma</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Logistic function&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">&quot;$a$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">&quot;$\sigma(a)$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
@@ -332,7 +347,7 @@ p(y_n = 1 | \mathbf{x}_n, \mathbf{w}) = \sigma(a_n)  = \frac{1}{1 + \text{exp}({
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/classification-logistic-regression-model_3_0.svg" src="../../_images/classification-logistic-regression-model_3_0.svg" /></div>
+<img alt="../../_images/classification-logistic-regression-model_6_0.svg" src="../../_images/classification-logistic-regression-model_6_0.svg" /></div>
 </div>
 <p>Now let’s compose the two stages and visualise the input-output function of logistic classification, <span class="math notranslate nohighlight">\(p(y_n = 1 | \mathbf{x}_n, \mathbf{w})\)</span>, as we change the direction and magnitude of the weights in our two dimensional example. The direction of the weights encodes the orientation of the boundary between the two classes and the magnitude encodes the steepness of the boundary.</p>
 <p><img alt="" src="../../_images/single_neuron.gif" /></p>
@@ -394,7 +409,7 @@ p(y_n = 1 | \mathbf{x}_n, \mathbf{w},c_n=0) = 0.99 \times \frac{1}{1 + \text{exp
 <summary>Answer</summary>
 <p>As we move from right to left across the input space the data initially belong to class 1, then class 0, then class 1 again and finally back to class 0.<br></p>
 <p>Let’s contrast this behvious to the model. The linear logistic classification model will fit a logistic function to this data with <span class="math notranslate nohighlight">\(w_0\)</span> determining the shift of the function and <span class="math notranslate nohighlight">\(w_1\)</span> the steepness. As the logistic function is monotonically increasing, it can only handle 1D datasets that start with one class and end with another as we traverse the input space.<br></p>
-<p>One way to improve the model would be to include non-linear basis functions. For example, a set of Gaussian basis functions with centres spread across the input domain would work well. For more about these models see the notebook on <a class="reference internal" href="classification_non-linear.html"><span class="doc std std-doc">non-linear logistic classification</span></a>.</p>
+<p>One way to improve the model would be to include non-linear basis functions. For example, a set of Gaussian basis functions with centres spread across the input domain would work well. For more about these models see the notebook on <span class="xref myst">non-linear logistic classification</span>.</p>
 </details>
 <br> </li>
 </ol>
@@ -433,15 +448,15 @@ p(y_n = 1 | \mathbf{x}_n, \mathbf{w},c_n=0) = 0.99 \times \frac{1}{1 + \text{exp
 
               </div>
               
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
         
-        <div class='prev-next-bottom'>
-            
     <a class='left-prev' id="prev-link" href="classification-intro.html" title="previous page">Classification</a>
     <a class='right-next' id="next-link" href="classification-logistic-regression-ML-fitting.html" title="next page">Maximum likelihood fitting for classification</a>
 
-        </div>
-        
-        </div>
     </div>
     <footer class="footer mt-5 mt-md-0">
     <div class="container">
@@ -460,7 +475,7 @@ p(y_n = 1 | \mathbf{x}_n, \mathbf{w},c_n=0) = 0.99 \times \frac{1}{1 + \text{exp
     </div>
 
     
-  <script src="../../_static/js/index.d3f166471bb80abb5163.js"></script>
+  <script src="../../_static/js/index.3da636dd464baa7582d2.js"></script>
 
 
     

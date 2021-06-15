@@ -1,0 +1,929 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Overfitting in classification &#8212; Probabilistic Modelling and Inference</title>
+    
+  <link rel="stylesheet" href="../../_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+  <link rel="stylesheet"
+    href="../../_static/vendor/open-sans_all/1.44.1/index.css">
+  <link rel="stylesheet"
+    href="../../_static/vendor/lato_latin-ext/1.44.1/index.css">
+
+    
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom_style.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/.ipynb_checkpoints/custom_style-checkpoint.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../../_static/js/index.3da636dd464baa7582d2.js">
+
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+
+
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+<a class="navbar-brand text-wrap" href="../../index.html">
+  
+  <img src="../../_static/logo.png" class="logo" alt="logo">
+  
+  
+  <h1 class="site-logo" id="site-title">Probabilistic Modelling and Inference</h1>
+  
+</a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form>
+<nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <ul class="nav sidenav_l1">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../home.html">
+   Online Inference Textbook
+  </a>
+ </li>
+</ul>
+<ul class="nav sidenav_l1">
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="../regression/regression-intro.html">
+   Regression
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="../regression/regression-linear.html">
+     Linear regression
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../regression/regression-nonlinear.html">
+     Non-linear basis regression
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../regression/regression-overfitting.html">
+     Overfitting
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../regression/regression-regularisation.html">
+     Regularisation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../regression/regression-bayesian.html">
+     Bayesian Regression
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../regression/regression-bayesian-online-visualisations.html">
+     Bayesian Online Learning
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1 collapsible-parent">
+  <a class="reference internal" href="classification-intro.html">
+   Classification
+  </a>
+  <ul class="collapse-ul">
+   <li class="toctree-l2">
+    <a class="reference internal" href="classification-logistic-regression-model.html">
+     Logistic classification
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="classification-logistic-regression-ML-fitting.html">
+     Maximum likelihood fitting
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="classification-gradient-case-study.html">
+     Classification case study
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="classification-multiclass.html">
+     Non-linear classification
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="classification-non-linear.html">
+     Non-linear classification
+    </a>
+   </li>
+  </ul>
+  <i class="fas fa-chevron-down">
+  </i>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../dimensionality_reduction/dim-red-intro.html">
+   Dimensionality Reduction
+  </a>
+ </li>
+</ul>
+
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../../_sources/content/classification/classification-overfitting.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+        <!-- Source interaction buttons -->
+
+
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
+
+        <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/cambridge-mlg/online_textbook/master?urlpath=tree/./content/classification/classification-overfitting.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
+    </div>
+
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        
+        <div class="tocsection onthispage pt-5 pb-3">
+            <i class="fas fa-list"></i> Contents
+        </div>
+        <nav id="bd-toc-nav">
+            <ul class="nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#example-1-overfitting-in-linear-binary-logistic-classification">
+   Example 1: Overfitting in linear binary logistic classification
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#example-2-overfitting-in-non-linear-binary-logistic-classification">
+   Example 2: Overfitting in non-linear binary logistic classification
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#summary">
+   Summary
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#questions">
+   Questions
+  </a>
+ </li>
+</ul>
+
+        </nav>
+        
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="section" id="overfitting-in-classification">
+<h1>Overfitting in classification<a class="headerlink" href="#overfitting-in-classification" title="Permalink to this headline">¶</a></h1>
+<p>We have previously encountered <span class="xref myst">linear classification models</span> and their <span class="xref myst">non-linear generalisation</span>. Both the linear and non-linear variants of these models can overfit to the training data. You may have noticed signs of this on some of the examples previously presented. In this section we will look at a couple of clear examples of this phenomenum using test-train splits to diagnose the problem as we did for <span class="xref myst">regression</span>.</p>
+<div class="section" id="example-1-overfitting-in-linear-binary-logistic-classification">
+<h2>Example 1: Overfitting in linear binary logistic classification<a class="headerlink" href="#example-1-overfitting-in-linear-binary-logistic-classification" title="Permalink to this headline">¶</a></h2>
+<p>Although over-fitting is most problematic for non-linear models, it can still occur in linear models. The 2D Iris dataset we have used before is shown below with the data split into 75% for training and 25% for testing.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;iris_inputs_full.npy&#39;</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;iris_labels.npy&#39;</span><span class="p">)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_not</span><span class="p">(</span><span class="n">y</span> <span class="o">==</span> <span class="mi">2</span><span class="p">))[</span><span class="mi">0</span><span class="p">]]</span> 
+<span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_not</span><span class="p">(</span><span class="n">y</span> <span class="o">==</span> <span class="mi">2</span><span class="p">))[</span><span class="mi">0</span><span class="p">]]</span> <span class="c1"># removing the datapoints of class 2</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:,</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> 
+
+<span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">no_test</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">1</span><span class="p">)</span><span class="o">//</span><span class="mi">4</span>
+<span class="n">x_test</span><span class="p">,</span> <span class="n">x_train</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">y_train</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:</span><span class="n">no_test</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="n">no_test</span><span class="p">:],</span> <span class="n">y</span><span class="p">[:</span><span class="n">no_test</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="n">no_test</span><span class="p">:]</span>
+
+<span class="n">class_0_train</span><span class="p">,</span> <span class="n">class_1_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">y_train</span> <span class="o">==</span> <span class="mi">0</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">y_train</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_train</span><span class="p">[</span><span class="n">class_0_train</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">x_train</span><span class="p">[</span><span class="n">class_0_train</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">15</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;class 0, train&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_train</span><span class="p">[</span><span class="n">class_1_train</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">x_train</span><span class="p">[</span><span class="n">class_1_train</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">15</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;class 1, train&#39;</span><span class="p">)</span>
+
+<span class="n">class_0_test</span><span class="p">,</span> <span class="n">class_1_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">y_test</span> <span class="o">==</span> <span class="mi">0</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">y_test</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+
+
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_test</span><span class="p">[</span><span class="n">class_0_test</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">x_test</span><span class="p">[</span><span class="n">class_0_test</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;class 0, test&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_test</span><span class="p">[</span><span class="n">class_1_test</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">x_test</span><span class="p">[</span><span class="n">class_1_test</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;class 1, test&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">beautify_plot</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span><span class="sa">r</span><span class="s2">&quot;2D binary Iris dataset&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span><span class="s2">&quot;$x_1$&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span><span class="s2">&quot;$x_2$&quot;</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+
+<span class="n">toggle_code</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;2D Iris Dataset&quot;</span><span class="p">,</span> <span class="n">on_load_hide</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/classification-overfitting_2_0.svg" src="../../_images/classification-overfitting_2_0.svg" /><div class="output text_html">
+    <script>
+      function get_new_label(butn, hide) {
+          var shown = $(butn).parents("div.cell.code_cell").find('div.input').is(':visible');
+          var title = $(butn).val().substr($(butn).val().indexOf(" ") + 1)
+          return ((shown) ? 'Show ' : 'Hide ') + title
+      }
+      function code_toggle(butn, hide) {
+        $(butn).val(get_new_label(butn,hide));
+        $(hide).slideToggle();
+      };
+    </script>
+    <input type="submit" value='initiated' class='toggle_button'>
+    <script>
+        var hide_area = $(".toggle_button[value='initiated']").parents('div.cell').prevAll().addBack().slice(-1)
+        hide_area = $(hide_area).find("div.input").add($(hide_area).filter("div.text_cell"))
+        $(".toggle_button[value='initiated']").prop("hide_area", hide_area)
+        $(".toggle_button[value='initiated']").click(function(){
+            code_toggle(this, $(this).prop("hide_area"))
+        }); 
+$(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($(".toggle_button[value='initiated']").parents("div.output").find('div.output_area').first());
+    var shown = $(".toggle_button[value='initiated']").parents("div.cell.code_cell").find('div.input').is(':visible');
+    var title = ((shown) ? 'Hide ' : 'Show ') + '2D Iris Dataset'; 
+     $(".toggle_button[value='initiated']").addClass("init_show");
+            $(hide_area).addClass("init_hidden");  $(".toggle_button[value='initiated']").val(title);
+    </script></div></div>
+</div>
+<p>We will now run the code that fits the model using maximum-likelihood estimation through gradient ascent. Before running the code, take a moment to consider the following questions:</p>
+<ol class="simple">
+<li><p><strong>Where will the decision boundary lie after running many iterations?</strong></p></li>
+<li><p><strong>What will the magnitude of the weights be?</strong></p></li>
+<li><p><strong>What will be the held out log-likelihood of the resulting model</strong> i.e. <span class="math notranslate nohighlight">\(\prod_{n=1}^{N_{\text{test}}} p(y_n^{\ast} | \mathbf{w},x_n^{\ast})\)</span>?</p></li>
+</ol>
+<p>If the answer to this questions is not obvious, you may like to experiment with the code to allow, varying the number of iterations to form a picture about what’s happening.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">sig</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    
+    <span class="k">return</span> <span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">))</span> <span class="c1"># define logistic function for convenience</span>
+
+<span class="k">def</span> <span class="nf">gradient_ascent</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">init_weights</span><span class="p">,</span> <span class="n">no_steps</span><span class="p">,</span> <span class="n">stepsize</span><span class="p">):</span> <span class="c1"># x: train inputs, y: train labels, rest self explanatory</span>
+    
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">x</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="c1"># add 1&#39;s to the inputs as usual</span>
+    <span class="n">x_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">x_test</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="c1"># add 1&#39;s to the inputs as usual</span>
+    
+    <span class="n">w</span> <span class="o">=</span> <span class="n">init_weights</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="c1"># copy weights (to prevent changing init_weights as a side-effect - don&#39;t dwell on this)</span>
+    
+    <span class="n">w_history</span><span class="p">,</span> <span class="n">log_liks</span><span class="p">,</span> <span class="n">log_liks_test</span> <span class="o">=</span> <span class="p">[],[],[]</span> <span class="c1"># arrays for storing weights and log-liklihoods at each step</span>
+    
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">no_steps</span><span class="p">):</span> <span class="c1"># in this part we optimise log-lik w.r.t. w</span>
+        
+        <span class="n">log_liks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">y</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">sig</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">)))</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">sig</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">)))))</span> <span class="c1"># record current log-lik</span>
+        <span class="n">log_liks_test</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">y_test</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">sig</span><span class="p">(</span><span class="n">x_test</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">)))</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">y_test</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">sig</span><span class="p">(</span><span class="n">x_test</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">)))))</span> <span class="c1"># record current log-lik</span>
+
+        <span class="n">w_history</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span> <span class="c1"># record current weights (use w.copy() to prevent aliasing - don&#39;t dwell on this)</span>
+    
+        <span class="n">sigs</span> <span class="o">=</span> <span class="n">sig</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w</span><span class="p">))</span> <span class="c1"># using our neat convenience function</span>
+        
+        <span class="n">dL_dw</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">((</span><span class="n">y</span> <span class="o">-</span> <span class="n">sigs</span><span class="p">)</span><span class="o">*</span><span class="n">x</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="c1"># calculate gradient of log-likelihood w.r.t. w</span>
+        
+        <span class="n">w</span> <span class="o">+=</span> <span class="n">stepsize</span> <span class="o">*</span> <span class="n">dL_dw</span> <span class="c1"># update weights and repeat</span>
+    
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">w_history</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">log_liks</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">log_liks_test</span><span class="p">)</span>
+
+<span class="n">toggle_code</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;Logistic and gradient ascent function&quot;</span><span class="p">,</span> <span class="n">on_load_hide</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">
+    <script>
+      function get_new_label(butn, hide) {
+          var shown = $(butn).parents("div.cell.code_cell").find('div.input').is(':visible');
+          var title = $(butn).val().substr($(butn).val().indexOf(" ") + 1)
+          return ((shown) ? 'Show ' : 'Hide ') + title
+      }
+      function code_toggle(butn, hide) {
+        $(butn).val(get_new_label(butn,hide));
+        $(hide).slideToggle();
+      };
+    </script>
+    <input type="submit" value='initiated' class='toggle_button'>
+    <script>
+        var hide_area = $(".toggle_button[value='initiated']").parents('div.cell').prevAll().addBack().slice(-1)
+        hide_area = $(hide_area).find("div.input").add($(hide_area).filter("div.text_cell"))
+        $(".toggle_button[value='initiated']").prop("hide_area", hide_area)
+        $(".toggle_button[value='initiated']").click(function(){
+            code_toggle(this, $(this).prop("hide_area"))
+        }); 
+$(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($(".toggle_button[value='initiated']").parents("div.output").find('div.output_area').first());
+    var shown = $(".toggle_button[value='initiated']").parents("div.cell.code_cell").find('div.input').is(':visible');
+    var title = ((shown) ? 'Hide ' : 'Show ') + 'Logistic and gradient ascent function'; 
+     $(".toggle_button[value='initiated']").addClass("init_show");
+            $(hide_area).addClass("init_hidden");  $(".toggle_button[value='initiated']").val(title);
+    </script></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">w_init</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">4</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="o">-</span><span class="mi">11</span><span class="p">]</span>  <span class="c1"># use a good initialisation to speed up simulation: </span>
+                      <span class="c1"># there is a unique optimum, so poorer initialisations will just entail waiting for longer</span>
+
+<span class="n">w_history</span><span class="p">,</span> <span class="n">log_liks_train</span><span class="p">,</span> <span class="n">log_liks_test</span> <span class="o">=</span> <span class="n">gradient_ascent</span><span class="p">(</span><span class="n">x_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">w_init</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+
+<span class="n">x1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mf">7.5</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+<span class="n">x2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">1.5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+
+<span class="n">test_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">),</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+
+<span class="n">test_grid</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">test_grid</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">test_grid</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">pred</span> <span class="o">=</span> <span class="n">sig</span><span class="p">(</span><span class="n">test_grid</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w_history</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">)</span>
+
+
+<span class="n">fig</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span> <span class="mi">80</span><span class="p">)</span>
+
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">x1</span><span class="p">,</span> <span class="n">x2</span><span class="p">,</span><span class="n">pred</span><span class="p">,</span> <span class="n">cmap</span> <span class="o">=</span> <span class="s1">&#39;coolwarm&#39;</span><span class="p">,</span> <span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">origin</span> <span class="o">=</span> <span class="s1">&#39;lower&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_train</span><span class="p">[</span><span class="n">class_0_train</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">x_train</span><span class="p">[</span><span class="n">class_0_train</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_train</span><span class="p">[</span><span class="n">class_1_train</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">x_train</span><span class="p">[</span><span class="n">class_1_train</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">10</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_test</span><span class="p">[</span><span class="n">class_0_test</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">x_test</span><span class="p">[</span><span class="n">class_0_test</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">15</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_test</span><span class="p">[</span><span class="n">class_1_test</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">x_test</span><span class="p">[</span><span class="n">class_1_test</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">15</span><span class="p">)</span>
+<span class="n">beautify_plot</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span><span class="sa">r</span><span class="s2">&quot;Predictions&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span><span class="s2">&quot;$x_1$&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span><span class="s2">&quot;$x_2$&quot;</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">([</span><span class="mf">4.50747563</span><span class="p">],</span> <span class="p">[</span><span class="mf">2.30301912</span><span class="p">],</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">180</span><span class="p">,</span><span class="n">facecolors</span><span class="o">=</span><span class="s1">&#39;none&#39;</span><span class="p">)</span>
+
+
+<span class="n">ax2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">log_liks_train</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;train log-likelihood&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">log_liks_test</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;test log-likelihood&#39;</span><span class="p">)</span>
+<span class="n">beautify_plot</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span><span class="sa">r</span><span class="s2">&quot;Optimisation of $\mathcal</span><span class="si">{L}</span><span class="s2">$&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span><span class="s2">&quot;iteration #&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span><span class="s2">&quot;$\mathcal</span><span class="si">{L}</span><span class="s2">$&quot;</span><span class="p">})</span>
+<span class="n">ax2</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Final training log-likelihood = </span><span class="si">{0:.2f}</span><span class="s2"> nats&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">log_liks_train</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Final test log-likelihood = </span><span class="si">{0:.2f}</span><span class="s2"> nats&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">log_liks_test</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+
+<span class="n">toggle_code</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;2D overfitting example&quot;</span><span class="p">,</span> <span class="n">on_load_hide</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/classification-overfitting_5_0.svg" src="../../_images/classification-overfitting_5_0.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Final training log-likelihood = -0.98 nats
+Final test log-likelihood = -3.54 nats
+</pre></div>
+</div>
+<div class="output text_html">
+    <script>
+      function get_new_label(butn, hide) {
+          var shown = $(butn).parents("div.cell.code_cell").find('div.input').is(':visible');
+          var title = $(butn).val().substr($(butn).val().indexOf(" ") + 1)
+          return ((shown) ? 'Show ' : 'Hide ') + title
+      }
+      function code_toggle(butn, hide) {
+        $(butn).val(get_new_label(butn,hide));
+        $(hide).slideToggle();
+      };
+    </script>
+    <input type="submit" value='initiated' class='toggle_button'>
+    <script>
+        var hide_area = $(".toggle_button[value='initiated']").parents('div.cell').prevAll().addBack().slice(-1)
+        hide_area = $(hide_area).find("div.input").add($(hide_area).filter("div.text_cell"))
+        $(".toggle_button[value='initiated']").prop("hide_area", hide_area)
+        $(".toggle_button[value='initiated']").click(function(){
+            code_toggle(this, $(this).prop("hide_area"))
+        }); 
+$(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($(".toggle_button[value='initiated']").parents("div.output").find('div.output_area').first());
+    var shown = $(".toggle_button[value='initiated']").parents("div.cell.code_cell").find('div.input').is(':visible');
+    var title = ((shown) ? 'Hide ' : 'Show ') + '2D overfitting example'; 
+     $(".toggle_button[value='initiated']").addClass("init_show");
+            $(hide_area).addClass("init_hidden");  $(".toggle_button[value='initiated']").val(title);
+    </script></div></div>
+</div>
+<p>The training data above are linearly separable. For this reason there are a set of maximum-likelihood solutions. Each solution places the linear decision boundary so that it divides the two classes (there are many ways to do this) and then makes the logistic function as steep as possible - i.e. a step function - so that the probability of each datapoint goes to 1 and the training log-likelihood goes to zero. Numerical problems may be encountered before this limit is reached as this behaviour causes the magnitude of the weights to go to infinity.</p>
+<p>Whilst the training likelihood of the maximum-likelihood solution is one, the test likelihood is zero. The blue test point in the bottom left (indicated by a green circle) is classified as being in class 1 which is incorrect. Worse still, it makes this prediction with probability 1 as the point is below the hard decision boundary, which zeros the likelihood.</p>
+<p>Clearly this is an instance of overfitting as the training likelihood is as high as it can possibly be and the test log-likelihood is as low as it can possibly be. The model is overconfident. Notice that this behaviour is very likely to happen for small numbers of datapoints which will often be linearly separable by chance.</p>
+</div>
+<div class="section" id="example-2-overfitting-in-non-linear-binary-logistic-classification">
+<h2>Example 2: Overfitting in non-linear binary logistic classification<a class="headerlink" href="#example-2-overfitting-in-non-linear-binary-logistic-classification" title="Permalink to this headline">¶</a></h2>
+<p>Let’s consider a second example. Here we will use the 1D dataset below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;class_1d_inputs.npy&#39;</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;class_1d_labels.npy&#39;</span><span class="p">)</span>
+
+<span class="n">x_train</span><span class="p">,</span> <span class="n">x_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:</span><span class="mi">20</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">20</span><span class="p">:],</span> <span class="n">y</span><span class="p">[:</span><span class="mi">20</span><span class="p">],</span> <span class="n">y</span><span class="p">[</span><span class="mi">20</span><span class="p">:]</span>
+
+<span class="n">class_0_train</span><span class="p">,</span> <span class="n">class_1_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">y_train</span> <span class="o">==</span> <span class="mi">0</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">y_train</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dpi</span><span class="o">=</span> <span class="mi">80</span><span class="p">)</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_train</span><span class="p">[</span><span class="n">class_0_train</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">class_0_train</span><span class="p">))),</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">15</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;class 0, train&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_train</span><span class="p">[</span><span class="n">class_1_train</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">class_1_train</span><span class="p">))),</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">15</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;class 1, train&#39;</span><span class="p">)</span>
+
+<span class="n">class_0_test</span><span class="p">,</span> <span class="n">class_1_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">y_test</span> <span class="o">==</span> <span class="mi">0</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">y_test</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+
+
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_test</span><span class="p">[</span><span class="n">class_0_test</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">class_0_test</span><span class="p">))),</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;class 0, test&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_test</span><span class="p">[</span><span class="n">class_1_test</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">class_1_test</span><span class="p">))),</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;class 1, test&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">get_yaxis</span><span class="p">()</span><span class="o">.</span><span class="n">set_ticks</span><span class="p">([])</span>
+
+<span class="n">beautify_plot</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span><span class="sa">r</span><span class="s2">&quot;1D binary Iris dataset&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span><span class="s2">&quot;$x_1$&quot;</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">toggle_code</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;1D Iris Dataset&quot;</span><span class="p">,</span> <span class="n">on_load_hide</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/classification-overfitting_7_0.svg" src="../../_images/classification-overfitting_7_0.svg" /><div class="output text_html">
+    <script>
+      function get_new_label(butn, hide) {
+          var shown = $(butn).parents("div.cell.code_cell").find('div.input').is(':visible');
+          var title = $(butn).val().substr($(butn).val().indexOf(" ") + 1)
+          return ((shown) ? 'Show ' : 'Hide ') + title
+      }
+      function code_toggle(butn, hide) {
+        $(butn).val(get_new_label(butn,hide));
+        $(hide).slideToggle();
+      };
+    </script>
+    <input type="submit" value='initiated' class='toggle_button'>
+    <script>
+        var hide_area = $(".toggle_button[value='initiated']").parents('div.cell').prevAll().addBack().slice(-1)
+        hide_area = $(hide_area).find("div.input").add($(hide_area).filter("div.text_cell"))
+        $(".toggle_button[value='initiated']").prop("hide_area", hide_area)
+        $(".toggle_button[value='initiated']").click(function(){
+            code_toggle(this, $(this).prop("hide_area"))
+        }); 
+$(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($(".toggle_button[value='initiated']").parents("div.output").find('div.output_area').first());
+    var shown = $(".toggle_button[value='initiated']").parents("div.cell.code_cell").find('div.input').is(':visible');
+    var title = ((shown) ? 'Hide ' : 'Show ') + '1D Iris Dataset'; 
+     $(".toggle_button[value='initiated']").addClass("init_show");
+            $(hide_area).addClass("init_hidden");  $(".toggle_button[value='initiated']").val(title);
+    </script></div></div>
+</div>
+<p>We will now fit a non-linear logistic classification model. We will use 100 Gaussian basis functions <span class="math notranslate nohighlight">\(\phi_{d}(x) = \exp(-\frac{1}{2 l^2} ( \mathbf{x} - \mu_{d})^2)\)</span> evaluating the test and training likelihoods for  basis function length-scales  that range from <span class="math notranslate nohighlight">\(l=0.1\)</span> to <span class="math notranslate nohighlight">\(l=3\)</span>.</p>
+<p><strong>What do you expect the plot of the two likelihood functions to look like?</strong>
+<strong>What will happen to the model at the long length-scales?</strong>
+<strong>What will happen at the model at the short length-scales?</strong></p>
+<p>WARNING: this code takes a little while to run as it is fitting many models.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">no_lengthscales</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">lengthscales</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span><span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="mf">0.1</span><span class="p">),</span><span class="n">no_lengthscales</span><span class="p">)</span>
+<span class="n">no_basis</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">mu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">2.5</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="n">no_basis</span><span class="p">)</span>
+
+<span class="n">N_train</span> <span class="o">=</span> <span class="n">y_train</span><span class="o">.</span><span class="n">size</span>
+<span class="n">N_test</span> <span class="o">=</span> <span class="n">y_test</span><span class="o">.</span><span class="n">size</span>
+<span class="n">ll_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">no_lengthscales</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">ll_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">no_lengthscales</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>                   
+
+
+<span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">no_lengthscales</span><span class="p">):</span>
+        
+    <span class="n">lengthscale</span> <span class="o">=</span> <span class="n">lengthscales</span><span class="p">[</span><span class="n">l</span><span class="p">]</span>
+    <span class="n">phi_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N_train</span><span class="p">,</span><span class="n">no_basis</span><span class="p">))</span>
+    <span class="n">phi_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N_test</span><span class="p">,</span><span class="n">no_basis</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N_train</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">no_basis</span><span class="p">):</span>   
+            <span class="n">phi_train</span><span class="p">[</span><span class="n">n</span><span class="p">,</span><span class="n">d</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">lengthscale</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">mu</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="o">-</span> <span class="n">x_train</span><span class="p">[</span><span class="n">n</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N_test</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">no_basis</span><span class="p">):</span>   
+            <span class="n">phi_test</span><span class="p">[</span><span class="n">n</span><span class="p">,</span><span class="n">d</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">lengthscale</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">mu</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="o">-</span> <span class="n">x_test</span><span class="p">[</span><span class="n">n</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="n">w_init</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">no_basis</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,))</span>
+     
+    <span class="n">w_history</span><span class="p">,</span> <span class="n">log_liks_train</span><span class="p">,</span> <span class="n">log_liks_test</span> <span class="o">=</span> <span class="n">gradient_ascent</span><span class="p">(</span><span class="n">phi_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">phi_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">w_init</span><span class="p">,</span> <span class="mi">5000</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+
+    <span class="n">ll_test</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="o">=</span> <span class="n">log_liks_test</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">ll_train</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="o">=</span> <span class="n">log_liks_train</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                    
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">lengthscales</span><span class="p">,</span><span class="n">ll_train</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;train $\mathcal</span><span class="si">{L}</span><span class="s1">$&#39;</span><span class="p">)</span> <span class="c1"># plot train log likelihoods\</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">lengthscales</span><span class="p">,</span><span class="n">ll_test</span><span class="p">,</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;test $\mathcal</span><span class="si">{L}</span><span class="s1">$&#39;</span><span class="p">)</span> <span class="c1"># plot test log likelihoods</span>
+<span class="n">beautify_plot</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span><span class="sa">r</span><span class="s2">&quot;Training and test log-likelihoods&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span><span class="s2">&quot;length-scale&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span><span class="s2">&quot;Log-likelihood $\mathcal</span><span class="si">{L}</span><span class="s2">$&quot;</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">toggle_code</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;Test and train log-likelihoods on the 1D Iris Dataset&quot;</span><span class="p">,</span> <span class="n">on_load_hide</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/classification-overfitting_9_0.svg" src="../../_images/classification-overfitting_9_0.svg" /><div class="output text_html">
+    <script>
+      function get_new_label(butn, hide) {
+          var shown = $(butn).parents("div.cell.code_cell").find('div.input').is(':visible');
+          var title = $(butn).val().substr($(butn).val().indexOf(" ") + 1)
+          return ((shown) ? 'Show ' : 'Hide ') + title
+      }
+      function code_toggle(butn, hide) {
+        $(butn).val(get_new_label(butn,hide));
+        $(hide).slideToggle();
+      };
+    </script>
+    <input type="submit" value='initiated' class='toggle_button'>
+    <script>
+        var hide_area = $(".toggle_button[value='initiated']").parents('div.cell').prevAll().addBack().slice(-1)
+        hide_area = $(hide_area).find("div.input").add($(hide_area).filter("div.text_cell"))
+        $(".toggle_button[value='initiated']").prop("hide_area", hide_area)
+        $(".toggle_button[value='initiated']").click(function(){
+            code_toggle(this, $(this).prop("hide_area"))
+        }); 
+$(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($(".toggle_button[value='initiated']").parents("div.output").find('div.output_area').first());
+    var shown = $(".toggle_button[value='initiated']").parents("div.cell.code_cell").find('div.input').is(':visible');
+    var title = ((shown) ? 'Hide ' : 'Show ') + 'Test and train log-likelihoods on the 1D Iris Dataset'; 
+     $(".toggle_button[value='initiated']").addClass("init_show");
+            $(hide_area).addClass("init_hidden");  $(".toggle_button[value='initiated']").val(title);
+    </script></div></div>
+</div>
+<p>Notice the following:</p>
+<ol class="simple">
+<li><p><strong>For small length-scales the training log-likelihood is at its highest</strong>. As the length-scale is increased the training log-likelihood monotonically decreases.</p></li>
+<li><p>The test log-likelihood is always below the training log-likelihood. This is typical for any inferential procedure (even for Bayesian inference) as the model has been directly fit to the training data, so the predictions on these data are almost bound to be best.</p></li>
+<li><p><strong>For small length-scales the test log-likelihood is at its lowest</strong>. As the length-scale is increased the test log-likelihood increases to a maximum around <span class="math notranslate nohighlight">\(l=1.5\)</span> and thereafter decreases slightly.</p></li>
+</ol>
+<p>Let’s try and understand this behaviour. Let’s start by plotting the fit at the maximum of the <strong>test likelihood</strong> of the length-scale  <span class="math notranslate nohighlight">\(l\approx 1.5\)</span>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lengthscale</span> <span class="o">=</span> <span class="mf">1.5</span>
+<span class="n">no_basis</span> <span class="o">=</span> <span class="mi">100</span>
+
+<span class="n">mu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">2.5</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="n">no_basis</span><span class="p">)</span>
+
+<span class="n">N_train</span> <span class="o">=</span> <span class="n">y_train</span><span class="o">.</span><span class="n">size</span>
+<span class="n">N_test</span> <span class="o">=</span> <span class="n">y_test</span><span class="o">.</span><span class="n">size</span>
+
+<span class="n">phi_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N_train</span><span class="p">,</span><span class="n">no_basis</span><span class="p">))</span>
+<span class="n">phi_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N_test</span><span class="p">,</span><span class="n">no_basis</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N_train</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">no_basis</span><span class="p">):</span>   
+        <span class="n">phi_train</span><span class="p">[</span><span class="n">n</span><span class="p">,</span><span class="n">d</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">lengthscale</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">mu</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="o">-</span> <span class="n">x_train</span><span class="p">[</span><span class="n">n</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N_test</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">no_basis</span><span class="p">):</span>   
+        <span class="n">phi_test</span><span class="p">[</span><span class="n">n</span><span class="p">,</span><span class="n">d</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">lengthscale</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">mu</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="o">-</span> <span class="n">x_test</span><span class="p">[</span><span class="n">n</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">w_init</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">no_basis</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,))</span>
+     
+<span class="n">w_history</span><span class="p">,</span> <span class="n">log_liks_train</span><span class="p">,</span> <span class="n">log_liks_test</span> <span class="o">=</span> <span class="n">gradient_ascent</span><span class="p">(</span><span class="n">phi_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">phi_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">w_init</span><span class="p">,</span> <span class="mi">5000</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">N_eval</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span>
+<span class="n">xs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">mu</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">mu</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">N_eval</span><span class="p">)</span>
+
+<span class="n">phi_eval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N_eval</span><span class="p">,</span><span class="n">no_basis</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N_eval</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">no_basis</span><span class="p">):</span>   
+        <span class="n">phi_eval</span><span class="p">[</span><span class="n">n</span><span class="p">,</span><span class="n">d</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">lengthscale</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">mu</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="o">-</span> <span class="n">xs</span><span class="p">[</span><span class="n">n</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">phi_eval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">phi_eval</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">phi_eval</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="c1"># add 1&#39;s to the inputs as usual</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_train</span><span class="p">[</span><span class="n">class_0_train</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">class_0_train</span><span class="p">))),</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">15</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;class 0, train&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_train</span><span class="p">[</span><span class="n">class_1_train</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">class_1_train</span><span class="p">))),</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">15</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;class 1, train&#39;</span><span class="p">)</span>
+
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">sig</span><span class="p">(</span><span class="n">phi_eval</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w_history</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,:])),</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">zorder</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;p(y|x,w)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_test</span><span class="p">[</span><span class="n">class_0_test</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="mf">0.1</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">class_0_test</span><span class="p">))),</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;class 0, test&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_test</span><span class="p">[</span><span class="n">class_1_test</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="mf">1.1</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">class_1_test</span><span class="p">))),</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;class 1, test&#39;</span><span class="p">)</span>
+
+<span class="n">beautify_plot</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span><span class="sa">r</span><span class="s2">&quot;Fit for the maximum-likelihood length-scale&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span><span class="s2">&quot;$x$&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span><span class="s2">&quot;$p(y = 1|\mathbf</span><span class="si">{w}</span><span class="s2">, x)$&quot;</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Final training log-likelihood = </span><span class="si">{0:.2f}</span><span class="s2"> nats&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">log_liks_train</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Final test log-likelihood = </span><span class="si">{0:.2f}</span><span class="s2"> nats&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">log_liks_test</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+<span class="n">toggle_code</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;Maximum likelihood length-scale&quot;</span><span class="p">,</span> <span class="n">on_load_hide</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/classification-overfitting_11_0.svg" src="../../_images/classification-overfitting_11_0.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Final training log-likelihood = -6.58 nats
+Final test log-likelihood = -8.86 nats
+</pre></div>
+</div>
+<div class="output text_html">
+    <script>
+      function get_new_label(butn, hide) {
+          var shown = $(butn).parents("div.cell.code_cell").find('div.input').is(':visible');
+          var title = $(butn).val().substr($(butn).val().indexOf(" ") + 1)
+          return ((shown) ? 'Show ' : 'Hide ') + title
+      }
+      function code_toggle(butn, hide) {
+        $(butn).val(get_new_label(butn,hide));
+        $(hide).slideToggle();
+      };
+    </script>
+    <input type="submit" value='initiated' class='toggle_button'>
+    <script>
+        var hide_area = $(".toggle_button[value='initiated']").parents('div.cell').prevAll().addBack().slice(-1)
+        hide_area = $(hide_area).find("div.input").add($(hide_area).filter("div.text_cell"))
+        $(".toggle_button[value='initiated']").prop("hide_area", hide_area)
+        $(".toggle_button[value='initiated']").click(function(){
+            code_toggle(this, $(this).prop("hide_area"))
+        }); 
+$(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($(".toggle_button[value='initiated']").parents("div.output").find('div.output_area').first());
+    var shown = $(".toggle_button[value='initiated']").parents("div.cell.code_cell").find('div.input').is(':visible');
+    var title = ((shown) ? 'Hide ' : 'Show ') + 'Maximum likelihood length-scale'; 
+     $(".toggle_button[value='initiated']").addClass("init_show");
+            $(hide_area).addClass("init_hidden");  $(".toggle_button[value='initiated']").val(title);
+    </script></div></div>
+</div>
+<p>Here we have separated the test and the train data to help assess the model. This looks like a reasonable fit that takes into account the indistinct bounday between the two classes. Plots for larger length-scales look similar to this, but they over-smooth the boundary slightly, reducing the associated test likelihood.</p>
+<p>Now let’s find out what’s happening at those very low length-scales which actually <strong>maximise the training likelihood</strong> by plotting the fit for <span class="math notranslate nohighlight">\(l=0.1\)</span>:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lengthscale</span> <span class="o">=</span> <span class="mf">0.1</span> <span class="c1"># you may need to alter the learning rate and the number of iterations if you change this value </span>
+<span class="n">no_basis</span> <span class="o">=</span> <span class="mi">100</span>
+
+<span class="n">mu</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">2.5</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="n">no_basis</span><span class="p">)</span>
+
+<span class="n">N_train</span> <span class="o">=</span> <span class="n">y_train</span><span class="o">.</span><span class="n">size</span>
+<span class="n">N_test</span> <span class="o">=</span> <span class="n">y_test</span><span class="o">.</span><span class="n">size</span>
+
+<span class="n">phi_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N_train</span><span class="p">,</span><span class="n">no_basis</span><span class="p">))</span>
+<span class="n">phi_test</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N_test</span><span class="p">,</span><span class="n">no_basis</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N_train</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">no_basis</span><span class="p">):</span>   
+        <span class="n">phi_train</span><span class="p">[</span><span class="n">n</span><span class="p">,</span><span class="n">d</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">lengthscale</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">mu</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="o">-</span> <span class="n">x_train</span><span class="p">[</span><span class="n">n</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N_test</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">no_basis</span><span class="p">):</span>   
+        <span class="n">phi_test</span><span class="p">[</span><span class="n">n</span><span class="p">,</span><span class="n">d</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">lengthscale</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">mu</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="o">-</span> <span class="n">x_test</span><span class="p">[</span><span class="n">n</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">w_init</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">no_basis</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,))</span>
+     
+<span class="n">w_history</span><span class="p">,</span> <span class="n">log_liks_train</span><span class="p">,</span> <span class="n">log_liks_test</span> <span class="o">=</span> <span class="n">gradient_ascent</span><span class="p">(</span><span class="n">phi_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">phi_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">w_init</span><span class="p">,</span> <span class="mi">5000</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span> <span class="o">=</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">N_eval</span> <span class="o">=</span> <span class="mi">500</span><span class="p">;</span>
+<span class="n">xs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">mu</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">mu</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span><span class="n">N_eval</span><span class="p">)</span>
+
+<span class="n">phi_eval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N_eval</span><span class="p">,</span><span class="n">no_basis</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N_eval</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">no_basis</span><span class="p">):</span>   
+        <span class="n">phi_eval</span><span class="p">[</span><span class="n">n</span><span class="p">,</span><span class="n">d</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">lengthscale</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">mu</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="o">-</span> <span class="n">xs</span><span class="p">[</span><span class="n">n</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">phi_eval</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">phi_eval</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">)),</span> <span class="n">phi_eval</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span> <span class="c1"># add 1&#39;s to the inputs as usual</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_train</span><span class="p">[</span><span class="n">class_0_train</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">class_0_train</span><span class="p">))),</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">15</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;class 0, train&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_train</span><span class="p">[</span><span class="n">class_1_train</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">class_1_train</span><span class="p">))),</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">15</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;class 1, train&#39;</span><span class="p">)</span>
+
+
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xs</span><span class="p">,</span> <span class="n">sig</span><span class="p">(</span><span class="n">phi_eval</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w_history</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">,:])),</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">zorder</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="s1">&#39;p(y|x,w)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_test</span><span class="p">[</span><span class="n">class_0_test</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="mf">0.1</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">class_0_test</span><span class="p">))),</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;class 0, test&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">x_test</span><span class="p">[</span><span class="n">class_1_test</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="mf">1.1</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="n">class_1_test</span><span class="p">))),</span> <span class="n">color</span> <span class="o">=</span> <span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="n">marker</span> <span class="o">=</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">s</span> <span class="o">=</span><span class="mi">20</span><span class="p">,</span><span class="n">label</span><span class="o">=</span><span class="s1">&#39;class 1, test&#39;</span><span class="p">)</span>
+
+<span class="n">beautify_plot</span><span class="p">({</span><span class="s2">&quot;title&quot;</span><span class="p">:</span><span class="sa">r</span><span class="s2">&quot;Fit for the short length-scale&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span><span class="s2">&quot;$x$&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span><span class="s2">&quot;$p(y = 1|\mathbf</span><span class="si">{w}</span><span class="s2">, x)$&quot;</span><span class="p">})</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Final training log-likelihood = </span><span class="si">{0:.2f}</span><span class="s2"> nats&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">log_liks_train</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Final test log-likelihood = </span><span class="si">{0:.2f}</span><span class="s2"> nats&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">log_liks_test</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+<span class="n">toggle_code</span><span class="p">(</span><span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;Short length-scale&quot;</span><span class="p">,</span> <span class="n">on_load_hide</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/classification-overfitting_13_0.svg" src="../../_images/classification-overfitting_13_0.svg" /><div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Final training log-likelihood = -0.44 nats
+Final test log-likelihood = -37.61 nats
+</pre></div>
+</div>
+<div class="output text_html">
+    <script>
+      function get_new_label(butn, hide) {
+          var shown = $(butn).parents("div.cell.code_cell").find('div.input').is(':visible');
+          var title = $(butn).val().substr($(butn).val().indexOf(" ") + 1)
+          return ((shown) ? 'Show ' : 'Hide ') + title
+      }
+      function code_toggle(butn, hide) {
+        $(butn).val(get_new_label(butn,hide));
+        $(hide).slideToggle();
+      };
+    </script>
+    <input type="submit" value='initiated' class='toggle_button'>
+    <script>
+        var hide_area = $(".toggle_button[value='initiated']").parents('div.cell').prevAll().addBack().slice(-1)
+        hide_area = $(hide_area).find("div.input").add($(hide_area).filter("div.text_cell"))
+        $(".toggle_button[value='initiated']").prop("hide_area", hide_area)
+        $(".toggle_button[value='initiated']").click(function(){
+            code_toggle(this, $(this).prop("hide_area"))
+        }); 
+$(".toggle_button[value='initiated']").parents("div.output_area").insertBefore($(".toggle_button[value='initiated']").parents("div.output").find('div.output_area').first());
+    var shown = $(".toggle_button[value='initiated']").parents("div.cell.code_cell").find('div.input').is(':visible');
+    var title = ((shown) ? 'Hide ' : 'Show ') + 'Short length-scale'; 
+     $(".toggle_button[value='initiated']").addClass("init_show");
+            $(hide_area).addClass("init_hidden");  $(".toggle_button[value='initiated']").val(title);
+    </script></div></div>
+</div>
+<p>We can now see the source of the bad behaviour: the model is contorting itself so that it assigns a probability that is close to one for each of the training points. The model can now do this as the length-scale of the basis functions is very shot. The predictions on the test data are poor. This is second example of over-fitting and an example of <strong>a failure of maximum likelihood training</strong>.</p>
+</div>
+<div class="section" id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">¶</a></h2>
+<p>Overfitting occurs in classification when the model can contort itself to assign probability one to each training datapoint. This then results in confident predictions that are often wrong when evaluated on the test set. This behaviour can manifest itself in different ways depending on the data, model, and the method of fitting the parameters:</p>
+<ol class="simple">
+<li><p>Linear classification methods trained by maximising the training likelihood will overfit in cases where the training data classes are perfectly separable by a linear decision boundary.</p></li>
+<li><p>Non-linear logistic classification with RBF basis functions trained by maximising the training likelihood will overfit when a large number of basis functions are used and the length-scales are short. The resulting model will be overl complex.</p></li>
+</ol>
+<p>Overfitting can be identified using train / test splits of the data. When the training likelihood is increasing and the test likelihood is decreasing it is likely that overfitting is occurring.</p>
+<p>In <span class="xref myst">section 3.5</span> we will look at using MAP inference, rather than maximum likelihood estimation, can regularise the solution and mitigate overfitting.</p>
+</div>
+<div class="section" id="questions">
+<h2>Questions<a class="headerlink" href="#questions" title="Permalink to this headline">¶</a></h2>
+<p><strong>1. Extrapolation in radial basis function logistic classification</strong></p>
+<p>Consider the second example above where radial basis functions <span class="math notranslate nohighlight">\(\phi_{d}(x) = \exp(-\frac{1}{2 l^2} ( \mathbf{x} - \mu_{d})^2)\)</span> with length-scale <span class="math notranslate nohighlight">\(l\)</span> were used for non-linear logisitic classification. A test point lies five length-scales away from its closest training point.</p>
+<p>a) Estimate the prediction at this point <span class="math notranslate nohighlight">\(p(y_n^{\ast} = 1 | \mathbf{w},x_n^{\ast})\)</span>.</p>
+<p>b) Would this estimate change if a basis-functions were placed in this region?</p>
+<p>c) What implications does this have for the ability of this model to generalise away from the training data?</p>
+<p>You can, of course, alter the code if this helps to answer these questions.</p>
+<details>
+<summary>Answer</summary>
+<div>
+a) Let's consider the situation where the basis functions are only located in the region of the training data. After 5 length-scales the closest radial basis function to the test point has fallen to $\exp(-25/2) \approx 5 \times 10^{-6}$ and so the training data provide essentially no useful information about this region of input space and the prediction is $p(y_n^{\ast} = 1 | \mathbf{w},x_n^{\ast}) \approx 1/2$. <br><br>
+<p>b) Even if basis functions are placed around the the test point, since each training datapoint only provides information about the weights on radial basis functions that are ‘close’ to them, the weights of RBFs around the test datapoint will remain at whatever value they are initialised at: the predictions at the training data are not affected by their value.<br><br></p>
+<p>c) Models that employ radial basis functions can only generalise one or two length-scales outside the region of the training data. You can think of these models as simply smoothing the data. This observation is the motivation for considering richer classes of basis function that can be learned from data. Neural networks can be viewed through this lens.</p>
+</div>
+</details>
+</div>
+</details>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./content/classification"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
+        
+
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By Stratis Markou, Rich Turner<br/>
+        
+            &copy; Copyright 2021.<br/>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+
+    
+  <script src="../../_static/js/index.3da636dd464baa7582d2.js"></script>
+
+
+    
+  </body>
+</html>

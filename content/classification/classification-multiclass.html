@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Multi-class classification &#8212; Probabilistic Modelling and Inference</title>
     
-  <link rel="stylesheet" href="../../_static/css/index.f658d18f9b420779cfdf24aa0a7e2d77.css">
+  <link rel="stylesheet" href="../../_static/css/index.73d71520a4ca3b99cfee5594769eaaae.css">
 
     
   <link rel="stylesheet"
@@ -26,16 +26,17 @@
 
     
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="../../_static/sphinx-book-theme.e7340bb3dbd8dde6db86f25597f54a1b.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/sphinx-book-theme.40e2e510f6b7d1648584402491bb10fe.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom_style.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/.ipynb_checkpoints/custom_style-checkpoint.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
     
-  <link rel="preload" as="script" href="../../_static/js/index.d3f166471bb80abb5163.js">
+  <link rel="preload" as="script" href="../../_static/js/index.3da636dd464baa7582d2.js">
 
     <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
     <script src="../../_static/jquery.js"></script>
@@ -45,7 +46,9 @@
     <script src="../../_static/clipboard.min.js"></script>
     <script src="../../_static/copybutton.js"></script>
     <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="../../_static/sphinx-book-theme.7d483ff0a819d6edff12ce0b1ead3928.js"></script>
+    <script src="../../_static/sphinx-book-theme.d31b09fe5c1d09cb49b26a786de4a05d.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
     <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
     <script >
         const thebe_selector = ".thebe"
@@ -53,11 +56,9 @@
         const thebe_selector_output = ".output"
     </script>
     <script async="async" src="../../_static/sphinx-thebe.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Dimensionality Reduction" href="../dimensionality_reduction/dim-red-intro.html" />
+    <link rel="next" title="Non-linear classification" href="classification-non-linear.html" />
     <link rel="prev" title="Logistic regression on the Iris dataset" href="classification-gradient-case-study.html" />
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -157,7 +158,12 @@
    </li>
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
-     Multi-class classification
+     Non-linear classification
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="classification-non-linear.html">
+     Non-linear classification
     </a>
    </li>
   </ul>
@@ -186,21 +192,21 @@
           
 <main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
     
-    <div class="topbar container-xl fixed-top">
-    <div class="topbar-contents row">
-        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
-        <div class="col pl-md-4 topbar-main">
-            
-            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
-                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
-                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
-                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
-                <i class="fas fa-bars"></i>
-                <i class="fas fa-arrow-left"></i>
-                <i class="fas fa-arrow-up"></i>
-            </button>
-            
-            
+    <div class="row topbar fixed-top container-xl">
+    <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show">
+    </div>
+    <div class="col pl-2 topbar-main">
+        
+        <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+            data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+            aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+            title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+            <i class="fas fa-bars"></i>
+            <i class="fas fa-arrow-left"></i>
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        
+        
 <div class="dropdown-buttons-trigger">
     <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
             class="fas fa-download"></i></button>
@@ -218,16 +224,16 @@
     </div>
 </div>
 
-            <!-- Source interaction buttons -->
+        <!-- Source interaction buttons -->
 
 
-            <!-- Full screen (wrap in <a> to have style consistency -->
-            <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
-                    data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
-                    title="Fullscreen mode"><i
-                        class="fas fa-expand"></i></button></a>
+        <!-- Full screen (wrap in <a> to have style consistency -->
+        <a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+                data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+                title="Fullscreen mode"><i
+                    class="fas fa-expand"></i></button></a>
 
-            <!-- Launch buttons -->
+        <!-- Launch buttons -->
 
 <div class="dropdown-buttons-trigger">
     <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
@@ -246,14 +252,13 @@
     </div>
 </div>
 
-        </div>
+    </div>
 
-        <!-- Table of contents -->
-        <div class="d-none d-md-block col-md-2 bd-toc show">
-            
+    <!-- Table of contents -->
+    <div class="d-none d-md-block col-md-2 bd-toc show">
+        
         <div class="tocsection onthispage pt-5 pb-3">
-            <i class="fas fa-list"></i>
-            Contents
+            <i class="fas fa-list"></i> Contents
         </div>
         <nav id="bd-toc-nav">
             <ul class="nav section-nav flex-column">
@@ -290,7 +295,6 @@
 
         </nav>
         
-        </div>
     </div>
 </div>
     <div id="main-content" class="row">
@@ -317,7 +321,7 @@ p(y_{n} = k |\mathbf{x}_n, \{\mathbf{w}_k\}_{k=1}^K) = \frac{\exp(a_{n,k})}{\sum
 <p>In this way, the softmax parameterises a <a class="reference external" href="https://en.wikipedia.org/wiki/Categorical_distribution">categorical distribution</a> over the output variable, whereas the logistic function parameterised a <a class="reference external" href="https://en.wikipedia.org/wiki/Bernoulli_distribution">Bernoulli distribution</a>.</p>
 <div class="section" id="visualising-softmax-models">
 <h3>Visualising softmax models<a class="headerlink" href="#visualising-softmax-models" title="Permalink to this headline">¶</a></h3>
-<p>Let’s plot some examples of this model for <span class="math notranslate nohighlight">\(K = 3\)</span> classes and <span class="math notranslate nohighlight">\(D = 2\)</span> dimensional inputs. Each column of the plot below corresponds to a different softmax model each with its own weights <span class="math notranslate nohighlight">\(W^{(m)} = [\mathbf{w}_1^{(m)},\mathbf{w}_2^{(m)},\mathbf{w}^{(m)}_3]\)</span>. Each row shows how the probability of one of the three classes varies across the input space. The probability contours are not linear, however it turns out that the decision boundaries are. For more insight into the softmax function, see <a class="reference external" href="#Questions">question 1</a> below. First we implement the <code class="docutils literal notranslate"><span class="pre">softmax</span></code> function for convenience. We then draw four different random realisations of the matrix <span class="math notranslate nohighlight">\(W^{(m)}, m = 1, 2, ...\)</span> and plot the corresponding softmax probabilities for each of the three classes, over a grid of input locations.</p>
+<p>Let’s plot some examples of this model for <span class="math notranslate nohighlight">\(K = 3\)</span> classes and <span class="math notranslate nohighlight">\(D = 2\)</span> dimensional inputs. First we implement the <code class="docutils literal notranslate"><span class="pre">softmax</span></code> function for convenience. We then draw four different random realisations of a softmax classification model. Each random realisation has its own weights <span class="math notranslate nohighlight">\(W^{(m)} = [\mathbf{w}_1^{(m)},\mathbf{w}_2^{(m)},\mathbf{w}^{(m)}_3]\)</span>. Each row in the plots below shows the softmax probabilities for the three classes of a random softmax model, as a function of the input variables. The three columns correspond to the three classes.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">softmax</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
@@ -328,7 +332,10 @@ p(y_{n} = k |\mathbf{x}_n, \{\mathbf{w}_k\}_{k=1}^K) = \frac{\exp(a_{n,k})}{\sum
 </div>
 <div class="cell tag_center-output tag_hide-input docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Number of points in each dimension for grid discretisation</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set random seed</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="c1"># Number of points in each dimension for grid discretisation</span>
 <span class="n">num_grid_pts</span> <span class="o">=</span> <span class="mi">100</span>
 
 <span class="c1"># Number of softmax samples to draw</span>
@@ -375,7 +382,7 @@ p(y_{n} = k |\mathbf{x}_n, \{\mathbf{w}_k\}_{k=1}^K) = \frac{\exp(a_{n,k})}{\sum
             <span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">([])</span>
             
         <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Sampled model </span><span class="si">{</span><span class="n">c</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Class </span><span class="si">{</span><span class="n">c</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">hspace</span> <span class="o">=</span> <span class="mf">0.4</span><span class="p">,</span><span class="n">wspace</span> <span class="o">=</span> <span class="mf">0.3</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -527,7 +534,8 @@ s_{n,k} = p(y_{n} = k |\mathbf{x}_n, \{\mathbf{w}_k\}_{k=1}^K) = \text{exp}(\mat
 <span class="c1"># Compute predictive probabilities at input locations</span>
 <span class="n">probs</span> <span class="o">=</span> <span class="n">softmax</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">w_history</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">200</span><span class="p">,</span> <span class="mi">200</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
 <span class="n">rgb_colors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">probs</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">axis</span>  <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">datapoint_colors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="s1">&#39;g&#39;</span><span class="p">])[</span><span class="n">y</span><span class="p">[:</span><span class="n">no_train</span><span class="p">]]</span>
+<span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">y_train</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">datapoint_colors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="s1">&#39;g&#39;</span><span class="p">])[</span><span class="n">idx</span><span class="p">]</span>
 
 <span class="c1"># Figure to plot on</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
@@ -629,7 +637,7 @@ s_{n,k} = p(y_{n} = k |\mathbf{x}_n, \{\mathbf{w}_k\}_{k=1}^K) = \text{exp}(\mat
 \[\begin{align}
 p(y_{n} = k |\mathbf{x}_n, \{\mathbf{w}_k\}_{k=1}^K) = \frac{\text{exp}(\mathbf{w}_k^\top \mathbf{x}_n)}{\sum_{k'} \exp(\mathbf{w}_{k'}^\top \mathbf{x}_n)}.
 \end{align}\]</div>
-<p>The log-likelihood and its derivatives can be compactly written using a one-hot encoding of the training data’s outputs. Gradient ascent can then be used to numerically optimise the log-likelihood. In the <span class="xref myst">next section</span> we will look at how to generalise this method to non-linear classification.</p>
+<p>The log-likelihood and its derivatives can be compactly written using a one-hot encoding of the training data’s outputs. Gradient ascent can then be used to numerically optimise the log-likelihood. In the <a class="reference internal" href="classification-non-linear.html"><span class="doc std std-doc">next section</span></a> we will look at how to generalise this method to non-linear classification.</p>
 </div>
 </div>
 <div class="section" id="questions">
@@ -744,15 +752,15 @@ y_1(x, W) &amp;= \frac{e^{w_1^\top x}}{e^{w_1^\top x} + e^{w_2^\top x}} \\
 
               </div>
               
+        </div>
+    </div>
+    
+    
+    <div class='prev-next-bottom'>
         
-        <div class='prev-next-bottom'>
-            
     <a class='left-prev' id="prev-link" href="classification-gradient-case-study.html" title="previous page">Logistic regression on the Iris dataset</a>
-    <a class='right-next' id="next-link" href="../dimensionality_reduction/dim-red-intro.html" title="next page">Dimensionality Reduction</a>
+    <a class='right-next' id="next-link" href="classification-non-linear.html" title="next page">Non-linear classification</a>
 
-        </div>
-        
-        </div>
     </div>
     <footer class="footer mt-5 mt-md-0">
     <div class="container">
@@ -771,7 +779,7 @@ y_1(x, W) &amp;= \frac{e^{w_1^\top x}}{e^{w_1^\top x} + e^{w_2^\top x}} \\
     </div>
 
     
-  <script src="../../_static/js/index.d3f166471bb80abb5163.js"></script>
+  <script src="../../_static/js/index.3da636dd464baa7582d2.js"></script>
 
 
     
