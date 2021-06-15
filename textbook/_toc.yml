@@ -1,0 +1,28 @@
+- file: content/home
+
+- file: content/regression/regression-intro
+  sections:
+      - file: content/regression/regression-linear
+      - file: content/regression/regression-nonlinear
+      - file: content/regression/regression-overfitting
+        title: Overfitting
+      - file: content/regression/regression-regularisation
+        title: Regularisation
+      - file: content/regression/regression-bayesian
+        title: Bayesian Regression
+      - file: content/regression/regression-bayesian-online-visualisations
+        title: Bayesian Online Learning
+        
+- file: content/classification/classification-intro
+  sections:
+      - file: content/classification/classification-logistic-regression-model
+      - file: content/classification/classification-logistic-regression-ML-fitting
+        title: Maximum likelihood fitting
+      - file: content/classification/classification-gradient-case-study
+        title: Classification case study
+      - file: content/classification/classification-multiclass
+        
+- file: content/dimensionality_reduction/dim-red-intro
+#   sections:
+#       - file: content/dimensionality_reduction/classification-logistic-regression-model
+        

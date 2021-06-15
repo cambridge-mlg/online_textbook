@@ -1,0 +1,48 @@
+#######################################################################################
+# A default configuration that will be loaded for all jupyter books
+# Users are expected to override these values in their own `_config.yml` file.
+# This is also the "master list" of all allowed keys and values.
+
+#######################################################################################
+# Book settings
+title                       : "Probabilistic Modelling and Inference"
+author                      : Stratis Markou, Rich Turner
+copyright                   : "2021"
+logo                        : "assets/logo.png"
+exclude_patterns            : []
+
+#######################################################################################
+# Execution settings
+execute:
+  execute_notebooks         : 'off'
+  exclude_patterns          : []
+
+#######################################################################################
+# HTML-specific settings
+html:
+  favicon                   : "assets/favicon.ico"
+  navbar_number_sections    : False
+  navbar_footer_text        : ''
+  google_analytics_id       : ""
+  home_page_in_navbar       : true
+  use_edit_page_button      : false
+  baseurl                   : ""
+
+#######################################################################################
+# Launch button settings
+launch_buttons:
+  notebook_interface        : "classic"
+  binderhub_url             : "https://mybinder.org"
+  jupyterhub_url            : ""
+  thebelab                  : false
+
+repository:
+  url                       : "https://github.com/cambridge-mlg/online_textbook"
+  path_to_book              : "./"
+  branch                    : "master"
+
+#######################################################################################
+# Advanced and power-user settings
+sphinx:
+  extra_extensions          : ""
+  config                    : ""
