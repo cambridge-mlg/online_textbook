@@ -23,6 +23,7 @@
       - file: content/classification/classification-multiclass
         title: Non-linear classification
       - file: content/classification/classification-non-linear
+      - file: content/classification/classification-overfitting
         
 - file: content/dimensionality_reduction/dim-red-intro
 #   sections:
