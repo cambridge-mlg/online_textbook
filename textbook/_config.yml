@@ -44,5 +44,6 @@ repository:
 #######################################################################################
 # Advanced and power-user settings
 sphinx:
-  extra_extensions          : ""
+  extra_extensions:
+    - sphinx_proof
   config                    : ""
